@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="CtGKDR01071Service"
+    targetNamespace="http://www.ctgkdr01071.com/soap/wsdl/CtGKDR01071RemoteInterface"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:binding="http://www.ctgkdr01071.com/definitions/CtGKDR01071RemoteInterface"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://www.ctgkdr01071.com/soap/wsdl/CtGKDR01071RemoteInterface"
+    xmlns:xsd1="http://www.ctgkdr01071.com/schemas/CtGKDR01071RemoteInterface">
+    
+<types>
+<schema attributeFormDefault="qualified" elementFormDefault="qualified"
+    targetNamespace="http://www.ctgkdr01071.com/schemas/CtGKDR01071RemoteInterface"
+    xmlns="http://www.w3.org/2001/XMLSchema">
+    <complexType name="prkd.j.DGConfResp">
+        <all>
+            <element name="rslt_cd" nillable="true" type="string"/>
+            <element name="rsn_cd" nillable="true" type="string"/>
+        </all>
+    </complexType>
+    <complexType name="prkd.j.DGConfReq">
+        <all>
+            <element name="cp_cd" nillable="true" type="string"/>
+            <element name="tran_id" nillable="true" type="string"/>
+        </all>
+    </complexType>
+</schema>
+</types>
+
+    <message name="trx_DGConfReqRequest">
+        <part name="request" type="xsd1:prkd.j.DGConfReq"/>
+    </message>
+    <message name="trx_DGConfReqResponse">
+        <part name="result" type="xsd1:prkd.j.DGConfResp"/>
+    </message>
+    <portType name="CtGKDR01071">
+        <operation name="trx_DGConfReq" parameterOrder="request">
+            <input message="tns:trx_DGConfReqRequest" name="trx_DGConfReqRequest"/>
+            <output message="tns:trx_DGConfReqResponse" name="trx_DGConfReqResponse"/>
+        </operation>
+    </portType>
+    <binding name="CtGKDR01071Binding" type="tns:CtGKDR01071">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="trx_DGConfReq">
+            <soap:operation soapAction="" style="rpc"/>
+            <input name="trx_DGConfReqRequest">
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://session.collect.kddi.com/DGConfReq" use="encoded"/>
+            </input>
+            <output name="trx_DGConfReqResponse">
+                <soap:body
+                    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://session.collect.kddi.com/DGConfReq" use="encoded"/>
+            </output>
+        </operation>
+    </binding>
+    
+    <service name="CtGKDR01071Service">
+        <port binding="tns:CtGKDR01071Binding" name="CtGKDR01071Port">
+            <soap:address location="https://session-stg.collect.kddi.com/soap/rpcrouter"/>
+        </port>
+    </service>
+</definitions>

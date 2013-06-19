@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../css/import.css" media="all" />
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="../js/search-list.js"></script>
+<script type="text/javascript" src="../js/disabled.js"></script>
+<script type="text/javascript" >
+	// プロジェクトの絞り込み機能追加
+	creatSearchListText('now_project', '1' , '70%', 'now_project_keyword');
+	creatSearchListText('end_project', '1' , '70%', 'end_project_keyword');
+</script>
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>工数入力画面</h2>
+<br />
+
+ {if $_res == 1}
+<span style="color:#FF6060;"><b>登録しました。</span></b><br />
+ {elseif $_res == 2}
+<span style="color:#FF6060;"><b>削除しました。</span></b><br />
+ {elseif $_res == 3}
+<span style="color:#FF6060;"><b>
+{foreach from=$_error item=error_item}
+{$error_item}<br />
+{foreachelse}
+{$_error}
+{/foreach}
+</span></b>
+ {/if}
+
+<form name="manhour" action="confirm.html" method="post">
+
+{*<!--....ヘッダ部分.....-->*}
+<div id="thead">
+<div>
+<!-- /#thead div -->
+</div>
+<!-- /div#thead -->
+</div>
+
+<div id="tbody">
+<div>
+<div id="matches">
+　編集日付：
+<select name="work_year" onchange="this.form.action='index';submit(this.form);">
+{section name=cnt start=$start_year loop=$loop_year}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_work_year} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>年
+<select name="work_month" onchange="this.form.action='index';submit(this.form);">
+{section name=cnt start=1 loop=13}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_work_month} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>月
+<select name="work_day" onchange="this.form.action='index';submit(this.form);">
+{section name=cnt start=1 loop=32}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_work_day} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>日
+
+{if $holidays[$_work_day]=='2' || $holidays[$_work_day]=='3'}
+<font style="color:#ff8888">
+{elseif $holidays[$_work_day]=='1'}
+<font style="color:#6666ff">
+{else}
+<font style="color:#5C5C5C">
+{/if}
+{$arr_youbi}曜日{if $holidays[$_work_day]!='0'}[休日]{/if}
+</font>
+<br />
+<!-- /div#matches -->
+</div>
+<!-- /#tbody div -->
+</div>
+<!-- /div#tbody -->
+</div>
+
+<div id=tfoot>
+<div>
+<!-- /#tfoot div -->
+</div>
+<!-- /div#tfoot -->
+</div>
+
+<div id="TAttr">
+
+{*<!-- 編集種別 -->*}
+<div style="margin-top: 15px;" >
+<font color="#7C7C7C">
+{if $new_flg}
+<div style="text-align:right;" >
+<span id="matches" style="float: left;">【新規登録】</span>
+<span>
+引用表示を使用：
+<label><input type="radio" name="ref_type" class="js_disable_parent" value="1" style="vertical-align:middle;" {if $_ref_type==1}checked="checked"{/if} />所属プロジェクトから引用</label>
+　<label><input type="radio" name="ref_type" class="js_disable_parent" value="2" style="vertical-align:middle;" {if $_ref_type==2}checked="checked"{/if} />日付を指定して引用</label>
+<select name="ref_year" class="js_disabled_child">
+{section name=cnt start=$start_year loop=$loop_year}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_ref_year} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>年
+<select name="ref_month" class="js_disabled_child">
+{section name=cnt start=1 loop=13}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_ref_month} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>月
+<select name="ref_day" class="js_disabled_child">
+{section name=cnt start=1 loop=32}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_ref_day} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>日
+<input type="hidden" name="ref_flg" value="0">
+　⇒<a href="#" class="dl" onclick="document.manhour.ref_flg.value='1';document.manhour.action='index';document.manhour.submit();return false;">引用初期表示</a>
+（※編集中の内容は破棄されます）
+</span>
+</div>
+{else}
+<span id="matches">【修正登録】</span>
+{/if}
+</font>
+</div>
+
+{*<!--....工数入力部分.....-->*}
+<table width="100%">
+{**<!-- 見出し -->**}
+ <tr>
+ <th width="10%" height="30">PJコード</th>
+ <th width="23%" height="30">顧客名</th>
+ <th width="29%">プロジェクト名</th>
+ <th width="5%">時間</th>
+ <th width="28%">備考</th>
+ <th width="5%">行操作</th>
+ </tr>
+
+{**<!-- 表示情報 -->**}
+{foreach from=$view_list item=list key=list_key name=list}
+<tr>
+{*<!-- PJ情報 -->*}
+ <td>{if $list.project_id}{$project_list[$list.project_id].project_code}{/if}</td>
+ <td>{if $list.client_name}{$list.client_name}{else}不明な顧客{/if}</td>
+ <td>
+ {if $list.project_name}
+  {if $project_list[$list.project_id].project_type==$smarty.const.PROJECT_TYPE_BACK}{* 後発作業用コードの時 *}
+   {$list.project_name}<br />⇒
+   {if $project_list[$list.end_project_id]}<a href="../list/project?project_id={$list.end_project_id}&date_Year={$_work_year}&date_Month={$_work_month}">{$project_list[$list.end_project_id].name}</a>
+   {else}不明なプロジェクト{/if}
+  {else}{* 後発以外の時 *}
+   <a href="../list/project?project_id={$list.project_id}&date_Year={$_work_year}&date_Month={$_work_month}">{$list.project_name}</a>
+   {if $project_list[$list.project_id].project_type==$smarty.const.PROJECT_TYPE_REMOVAL}<br /><span style="color:#FF0000;">※廃止プロジェクト</span>
+   {elseif (!empty($project_list[$list.project_id].end_unixtime) && ($date_unixtime > $project_list[$list.project_id].end_unixtime))}<br /><span style="color:#FF0000;">※終了プロジェクト</span>{/if}
+  {/if}
+ {else}不明なプロジェクト{/if}
+ <input type="hidden" name="project_id[{$list.line}]" value="{$list.project_id}">
+ <input type="hidden" name="end_project_id[{$list.line}]" value="{$list.end_project_id}">
+ </td>
+{* 工数 *}
+ <td class="cel_r"><input type=text name="man_hour[{$list.line}]" size=3 value="{$list.man_hour}"></td>
+{* 備考 *}
+ <td><input type="text" name="memo[{$list.line}]" value="{$list.memo}" size=31 maxlength="{$smarty.const.USER_MANHOUR_MEMO_MAX}">
+ {if $project_list[$list.project_id].memo_flg}
+ <span style="color:#FF0000;">※必須</span>
+ {/if}
+ </td>
+
+{*<!-- 操作 -->*}
+ <td>
+ <a href="#" class="del" onclick="document.manhour.del_index_no.value='{$list.line}';document.manhour.action='dellist';document.manhour.submit();return false;">行削除</a>
+ </td>
+</tr>
+{/foreach}
+<input type="hidden" name="del_index_no" value="">
+
+{**<!-- 新規行 -->**}
+<tr>
+{*<!-- プロジェクト選択 -->*}
+ <td colspan="5">
+ <b>プロジェクト選択</b>&nbsp;&nbsp;&nbsp;
+ <input type="checkbox" id="end_check" name="end_check" value="1" >&nbsp;終了案件表示
+ <br /><br />
+ {* 通常案件プルダウン *}
+ <input type="text" id="now_project_keyword" name="now_project_keyword" value="" placeholder="キーワード検索" style="padding:1px;" >
+ <select name="now_project" id="now_project" style="width:70%; display:none;">
+  <option value="0">▼選択</option>
+{foreach from=$now_project item=list name=list key=key}
+{if $list|is_array}
+  <option value="{$list.pid}">{if $list.cname}{$list.cname}{else}不明な顧客({$list.pcid}){/if}/{$list.pname}</option>
+{else}
+  <option value="{$key}">{$list}</option>
+{/if}
+{/foreach}
+ </select>
+ {* 終了案件プルダウン *}
+ <input type="text" id="end_project_keyword" name="end_project_keyword" value="" placeholder="キーワード検索" style="padding:1px;" >
+ <select name="end_project" id="end_project" style="width:70%; display:none;">
+ <option value="0">▼選択</option>
+{foreach from=$end_project item=list name=list key=key}
+{if $list|is_array}
+  <option value="{$list.pid}">{if $list.cname}{$list.cname}{else}不明な顧客({$list.pcid}){/if}/{$list.pname}</option>
+{else}
+  <option value="{$key}">{$list}</option>
+{/if}
+{/foreach}
+ </select>
+ </td>
+{*<!-- 操作 -->*}
+ <td>
+ <a href="#" class="add" onclick="document.manhour.action='pushlist';document.manhour.submit();return false;">行追加</a>
+ </td>
+</tr>
+
+</table>
+
+<br />
+<input name="search" type="image" class="send" src="../img/button_entry.gif" alt="登録" width="63" height="22" border="0">
+<!-- /div#TAttr -->
+</div>
+
+</form>
+
+
+<!--....当月工数一覧.....-->
+<br /><br />
+<div id="matches">
+<div style="padding:6px;">
+<a href="../list/member?date_Year={$_work_year}&date_Month={$_work_month}">{$_work_year}年{$_work_month}月の工数照会へ</a>
+</div>
+</div>
+
+<table border="0" cellspacing="0" cellpadding="0">
+<tr><td>
+<div id="TAttr">
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<th>日</th>
+{foreach from=$holidays key=day_key item=day_item}
+<th align="center" {if $holidays[$day_key] == 1}id="blue"{elseif ($holidays[$day_key] == 2) || ($holidays[$day_key] == 3)}id="red"{/if} nowrap><a href="index.html?work_year={$_work_year}&work_month={$_work_month}&work_day={$day_key}">{$day_key}</a></th>
+{/foreach}
+</tr>
+<tr>
+<th>時間</th>
+{foreach from=$holidays key=day_key2 item=day_item2}
+<td nowrap {if $_work_day == $day_key2}style="background-color: #CCFFCC;"{/if}>
+{if $arr_manhour[$day_key2]}{$arr_manhour[$day_key2]}{else}　{/if}
+</td>
+{/foreach}
+</tr>
+</table>
+<!-- /div#TAttr -->
+</div>
+</td></tr>
+</table>
+
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+<script type="text/javascript" >
+{literal}
+$(document).ready(function()
+{
+	// 引用日付のdisabled制御
+	// 初期表示
+	changeRadioButton('js_disable_parent', 'js_disabled_child','1');
+	// ラジオボタンにイベント割り当て
+	$(".js_disable_parent").click(function() {
+		 changeRadioButton('js_disable_parent', 'js_disabled_child','1');
+ 	});
+
+	// プロジェクト新規追加行の制御
+ 	// 初期表示は通常案件のプルダウンを表示
+	$("#end_project_searched").css("display","none");
+	$("#end_project_keyword").css("display","none");
+	// 後発表示チェックボックスにイベント割り当て
+	$("#end_check").click(function() {
+		if(this.checked){
+			// 後発表示にチェック
+			$("#now_project_keyword").css("display","none");
+			$("#now_project_searched").css("display","none");
+			$("#end_project_keyword").show();
+			$("#end_project_searched").show();
+		}
+		else {
+			// 後発表示にチェックを外す
+			$("#now_project_keyword").show();
+			$("#now_project_searched").show();
+			$("#end_project_keyword").css("display","none");
+			$("#end_project_searched").css("display","none");
+		};
+	});
+});
+{/literal}
+</script>
+</body>
+</html>

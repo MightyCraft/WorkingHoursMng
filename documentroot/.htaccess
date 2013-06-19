@@ -1,0 +1,22 @@
+Options FollowSymlinks
+
+RewriteEngine on
+RewriteRule ^robots.txt - [L]
+RewriteRule ^entry.php/ - [L]
+RewriteRule ^link/(.*)(\.gif|\.png|\.jpg|\.jpeg|\.css|\.js)$ - [L]
+
+RewriteRule ^(.*)(\.gif|\.png|\.jpg|\.jpeg|\.css|\.js)$ link/$1$2 [QSA,L]
+RewriteRule ^development/(.*) - [QSA,L]
+RewriteRule ^(.*)$ entry.php/$1 [QSA,L]
+
+php_flag session.auto_start Off
+php_flag session.use_trans_sid Off
+
+php_flag session.use_only_cookies 1
+php_flag session.use_cookies 1
+
+php_flag magic_quotes_gpc Off
+php_flag register_globals Off
+
+php_value variables_order GPCS
+php_value date.timezone Asia/Tokyo

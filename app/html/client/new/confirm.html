@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../../css/import2.css" media="all" />
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>クライアント管理　クライアント情報　【新規追加】</h2>
+<br />
+以下の内容で宜しければ登録ボタンを押してください<br />
+<div id="TAttr">
+<table width="100%">
+<tr>
+<th class="cel_r" style="width: 200px">クライアント名</th>
+<td class="cel_l">{$_name}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">備考</th>
+<td class="cel_l">{$_memo|nl2br}</td>
+</tr>
+</table>
+<!-- /div#TAttr -->
+</div>
+<table>
+<tr>
+<td>
+<form name="form2" method="post" action="index.html">
+<input type="image" border="0" name="imageField2" src="../../img/button_back.gif" alt="戻る" class="send" onClick="CloseWin()">
+<input type="hidden" name="submit" value="2">
+<input type="hidden" name="name" value="{$_name}">
+<input type="hidden" name="memo" value="{$_memo}">
+</form>
+</td>
+<td>
+<form name="form1" method="post" action="do">
+<input type="image" border="0" name="imageField1" src="../../img/button_entry.gif" alt="登録" class="send">
+<input type="hidden" name="submit" value="1">
+<input type="hidden" name="name" value="{$_name}">
+<input type="hidden" name="memo" value="{$_memo}">
+</form>
+</td>
+</tr>
+</table>
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

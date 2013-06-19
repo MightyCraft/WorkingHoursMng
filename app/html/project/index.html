@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../css/import.css" media="all" />
+<script type="text/javascript" src="../js/SetPointer.js"></script>
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>プロジェクト管理　プロジェクト情報
+{if $_type == 'now'}（既存案件）{else if $_type == 'end'}（終了案件）{/if}</h2>
+
+
+<div id="thead">
+<div>
+<!-- /#thead div -->
+</div>
+<!-- /div#thead -->
+</div>
+<div id="tbody">
+<div>
+
+ {if $_error}
+<div style="color:#ff0000;padding-left:15px;padding-top:5px;padding-bottom:5px;">
+  {foreach from=$_error item=error_item}
+{$error_item}<br />
+  {foreachelse}
+{$_error}
+  {/foreach}
+</div>
+ {/if}
+
+<form action="../project/index" name="search" method="post">
+<table width="100%">
+<tr>
+<th align="left" colspan="2">{html_radios name="radio" options=$radio_list selected=$radio_id separator="<br />"}</th>
+</tr>
+<tr>
+<td colspan="2"><input type="text" name="key_word" style="width:300px" value="{$_key_word}" >　（指定無しで全検索）</td>
+</tr>
+<tr>
+<th width="15%" align="left">担当営業</th>
+<td width="85%">
+<select name="member_id">
+   <option value="0">▼選択</option>
+{foreach from=$member_by_post_sales item=member_list_item key=member_list_key}
+   <option value="{$member_list_item.id}"{if $member_list_item.id == $_member_id} selected{/if}>{$member_list_item.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<th width="15%" align="left">総予算未設定</th>
+<td width="85%">
+{html_checkboxes name="total_budget_chk" values=1 selected=$total_budget_chk output="" separator="<br />"}
+</td>
+</tr>
+<tr>
+<th width="15%" align="left">タイプ</th>
+<td width="85%">
+{html_radios name="project_type" options=$project_type_list selected=$project_type style="vertical-align:middle;" separator=" "}
+</td>
+</tr>
+<tr>
+<th width="15%" align="left">表示対象</th>
+<td width="85%">
+{html_radios name="display_type" options=$display_type_list selected=$display_type style="vertical-align:middle;" separator=" "}
+</td>
+</tr>
+<tr>
+<td colspan="2"><input src="../img/button_search.gif" name="searchbutton" type="image" class="send" alt="検索" width="63" height="22" border="0" value="search"></td>
+</tr>
+</table>
+<input type="hidden" name="page" value="1" >
+</form>
+
+<!-- /#tbody div -->
+</div>
+<!-- /div#tbody -->
+</div>
+<div id=tfoot>
+<div>
+<!-- /#tfoot div -->
+</div>
+<!-- /div#tfoot -->
+</div>
+
+<a href="new/index.html"><img src="../img/button_newadd.gif" alt="新規追加"></a>
+<div id="topic-path">
+{if $total > 0 && $list}
+{$now_page}/{$last_page}ページ　{$total}件
+{/if}
+<!-- /div#topic-path -->
+</div>
+<br />
+<!--.....ページ送り..... -->
+<div id="topic-path">
+{if $pager.back}{$pager.back} | {/if}{if $pager.pages}{$pager.pages}{/if}{if $pager.next} | {$pager.next}{/if}
+<!-- /div#topic-path -->
+</div>
+
+ {if $list}
+<div id="TAttr">
+<table width="100%">
+<tr>
+<th><a href="?column=project_type{if $_column == 'project_type' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">タイプ{if $_column == 'project_type'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=id{if $_column == 'id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">ID{if $_column == 'id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=project_code{if $_column == 'project_code' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">PJコード{if $_column == 'project_code'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=name{if $_column == 'name' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">プロジェクト名{if $_column == 'name'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=client_id{if $_column == 'client_id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">顧客名{if $_column == 'client_id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=total_budget_manhour{if $_column == 'total_budget_manhour' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">総割当工数{if $_column == 'total_budget_manhour'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=total_budget{if $_column == 'total_budget' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">総予算{if $_column == 'total_budget'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=project_end_date{if $_column == 'project_end_date' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">開発終了日付{if $_column == 'project_end_date'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=end_date{if $_column == 'end_date' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">案件終了予定{if $_column == 'end_date'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=member_id{if $_column == 'member_id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">担当営業{if $_column == 'member_id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th>更新</th>
+<th>削除</th>
+</tr>
+
+<!-- アカウントリストを表示 -->
+{foreach from=$list key=project_key item=project_item}
+
+{if $project_item.delete_flg}
+<tr onmouseover="setPointer(this, {$item.id}, 'over', '#AAAAAA', '#CCFFCC', '#FFCC99');" onmouseout="setPointer(this, {$item.id}, 'out', '#AAAAAA', '#CCFFCC', '#FFCC99');" bgcolor="#AAAAAA">
+{else}
+{if $project_item.project_type==$smarty.const.PROJECT_TYPE_REMOVAL}
+<tr onmouseover="setPointer(this, {$item.id}, 'over', '#dddddd', '#CCFFCC', '#FFCC99');" onmouseout="setPointer(this, {$item.id}, 'out', '#dddddd', '#CCFFCC', '#FFCC99');" bgcolor="#dddddd">
+{else}
+<tr {if $project_item.project_type == $project_type_informal}bgcolor="#F5C5C5"{else}onmouseover="setPointer(this, {$project_item.id}, 'over', '#F5F5F5', '#CCFFCC', '#FFCC99');" onmouseout="setPointer(this, {$project_item.id}, 'out', '#F5F5F5', '#CCFFCC', '#FFCC99');" bgcolor="#F5F5F5"{/if}>
+{/if}
+
+{/if}
+
+<td class="cel_l" align="center" nowrap>{if $project_item.project_type==$smarty.const.PROJECT_TYPE_INFORMAL}仮{elseif $project_item.project_type==$smarty.const.PROJECT_TYPE_BACK}後{elseif $project_item.project_type==$smarty.const.PROJECT_TYPE_REMOVAL}廃{/if}</td>
+<td class="cel_l" nowrap>{$project_item.id}</td>
+<td class="cel_l" nowrap>{$project_item.project_code}</td>
+<td class="cel_l"><a href="../list/project?project_id={$project_item.id}">{$project_item.name}</a></td>
+<td class="cel_l" nowrap>{if $client_list[$project_item.client_id]}{$client_list[$project_item.client_id].name}{else}不明な顧客{/if}</td>
+<td class="cel_l" align="right" nowrap>{$project_item.total_budget_manhour}</td>
+<td class="cel_l" align="right" nowrap>{$project_item.total_budget|number_format}</td>
+<td class="cel_l" nowrap>{$project_item.project_end_date}</td>
+<td class="cel_l" nowrap>{$project_item.end_date}</td>
+<td class="cel_l">{if $member_list[$project_item.member_id]}{$member_list[$project_item.member_id].name}{else}未指定{/if}</td>
+<td class="cel_l" nowrap>{if !$project_item.delete_flg}<a href="edit/index.html?id={$project_item.id}" id="edit">編集</a>{/if}</td>
+<td class="cel_l" nowrap>{if !$project_item.delete_flg}<a href="delete/confirm.html?id={$project_item.id}" id="del">削除</a><br/>{else if}削除済{/if}</td>
+</tr>
+{/foreach}
+</table>
+<!-- /div#TAttr -->
+</div>
+ {else}
+<div style="color:#ff0000;padding-top:20px;">プロジェクト情報を取得できませんでした。</div>
+ {/if}
+
+<!--.....ページ送り..... -->
+<div id="topic-path">
+{if $pager.back}{$pager.back} | {/if}{if $pager.pages}{$pager.pages}{/if}{if $pager.next} | {$pager.next}{/if}
+<!-- /div#topic-path -->
+</div>
+
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

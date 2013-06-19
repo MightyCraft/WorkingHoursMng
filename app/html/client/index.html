@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../css/import.css" media="all" />
+<script type="text/javascript" src="../js/SetPointer.js"></script>
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>クライアント管理　クライアント情報</h2>
+
+{** 検索 **}
+<div id="thead">
+<div>
+<!-- /#thead div -->
+</div>
+<!-- /div#thead -->
+</div>
+<div id="tbody">
+<div>
+
+ {if $_error}
+<div style="color:#ff0000;padding-left:15px;padding-top:5px;padding-bottom:5px;">
+  {foreach from=$_error item=error_item}
+{$error_item}<br />
+  {foreachelse}
+{$_error}
+  {/foreach}
+</div>
+ {/if}
+
+<form action="../client/index" name="search" method="post">
+<table width="100%">
+
+<tr><th align="left" colspan="2"><label>
+	<label>
+      キーワード（クライアント名）
+    </label>
+  </th>
+</tr>
+<tr>
+<td><input type="text" name="key_word" style="width:300px" value="{$_key_word}" >　（指定無しで全検索）</td>
+</tr>
+<tr>
+<td align="left"><input src="../img/button_search.gif" name="searchbutton" type="image" class="send" alt="検索" width="63" height="22" border="0"></td>
+</tr>
+</table>
+<input type="hidden" name="page" value="1" >
+</form>
+
+<!-- /#tbody div -->
+</div>
+<!-- /div#tbody -->
+</div>
+<div id=tfoot>
+<div>
+<!-- /#tfoot div -->
+</div>
+<!-- /div#tfoot -->
+</div>
+
+<a href="new/index.html"><img src="../img/button_newadd.gif" alt="新規追加"></a>
+
+{** 一覧 **}
+ {if $member_all}
+
+<div id="topic-path">
+{$_page}/{$last_page}ページ　{$all_num}件
+<!-- /div#topic-path -->
+</div>
+<br />
+<!--.....ページ送り..... -->
+<div id="topic-path">
+{if $pager.back}{$pager.back} | {/if}{if $pager.pages}{$pager.pages}{/if}{if $pager.next} | {$pager.next}{/if}
+<!-- /div#topic-path -->
+</div>
+
+<div id="TAttr">
+<table width="100%">
+<tr>
+<th>クライアントID</th>
+<th>クライアント名</th>
+<th>登録日</th>
+<th>更新日</th>
+<th>更新</th>
+<th>削除</th>
+</tr>
+
+<!-- クライアントリストを表示 -->
+{foreach from=$member_all key="key" item="item"}
+<tr onmouseover="setPointer(this, {$item.id}, 'over', '#F5F5F5', '#CCFFCC', '#FFCC99');" onmouseout="setPointer(this, {$item.id}, 'out', '#F5F5F5', '#CCFFCC', '#FFCC99');" bgcolor="#F5F5F5">
+<td style="text-align:center;">{$item.id}</td>
+<td>{$item.name}</td>
+<td style="text-align:center;">{$item.regist_date}</td>
+<td style="text-align:center;">{$item.update_date}</td>
+<td style="text-align:center;"><a href="edit/index.html?id={$item.id}" id="edit">編集</a></td>
+<td style="text-align:center;"><a href="delete/confirm.html?id={$item.id}" id="del">削除</a></td>
+</tr>
+{/foreach}
+</table>
+<!-- /div#TAttr -->
+</div>
+
+ {else}
+
+<div style="color:#ff0000;padding-top:20px;">クライアント情報を取得できませんでした。</div>
+
+ {/if}
+
+<!--.....ページ送り..... -->
+<div id="topic-path">
+{if $pager.back}{$pager.back} | {/if}{if $pager.pages}{$pager.pages}{/if}{if $pager.next} | {$pager.next}{/if}
+<!-- /div#topic-path -->
+</div>
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<div id="thead">
+<div>
+<!-- /#thead div -->
+</div>
+<!-- /div#thead -->
+</div>
+<div id="tbody">
+<div>
+
+<form action="{if $_search_box == 'project'}../list/project.html{elseif $_search_box == 'member'}../list/member.html{else}../list/index.html{/if}" name="search" method="post">
+<table width="100%">
+
+{** プロジェクト検索 **}
+{if $_search_box == 'all' || $_search_box == 'project'}
+
+{* プロジェクト指定 *}
+ {if $project_list_by_client_id|is_array}
+<tr>
+<th align="left" width="15%">プロジェクト名</th>
+<td>
+ <input type="text" id="project_id_keyword" name="project_id_keyword" value="{$project_id_keyword}" placeholder="キーワード検索" style="padding:1px;" >
+ <select name="project_id" id="project_id" style="width:70%; display:none;">
+  <option value="0">▼選択</option>
+{foreach from=$project_list_by_client_id item=list name=list key=key}
+  <option value="{$key}" {if $project_id == $key}selected{/if}>{$list.cname}/{$list.name}</option>
+{/foreach}
+ </select>
+ </td>
+</tr>
+ {/if}
+{/if}
+
+{** 社員検索検索(呼び出し元の方で連動設定) **}
+{if $_search_box == 'all' || $_search_box == 'member'}
+<tr>
+<th align="left" width="15%">所属</th>
+<td>
+<select name="post_id" id="post_data" >
+<option value="0">全て</option>
+{foreach from=$post_list key=post_key item=post_data}
+<option value="{$post_data.id}"{if $post_data.id == $_post_id} selected="selected"{/if}>{$post_data.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<th align="left" width="15%">社員名</th>
+<td>
+<select name="member_id" id="member_data" >
+<option value="0" member_post="0">▼選択</option>
+ {foreach from=$member_list item=member_data key=member_key name=member_list_by_post}
+ {if $member_data.delete_flg == 1}{assign var=name_color value='color: #AAAAAA;'}{else}{assign var=name_color value='color: #000000;'}{/if}
+<option value="{$member_data.id}"  member_post="{$member_data.post}" style="{$name_color}"{if $member_data.id==$_member_id} selected{/if}>{$member_data.name}</option>
+ {/foreach}
+</select>
+</tr>
+{/if}
+
+{** 年月検索 **}
+<tr>
+<th align="left" width="15%">年月</th>
+<td>{html_select_date_time_plus  prefix='date_' time=$smarty.now|date_format:"%D" start_year='-5' month_format='%m' display_days=false field_order='YMD' field_separator='／' time_format=$set_time}</td>
+</tr>
+<tr>
+<td><input src="../img/button_search.gif" name="searchbutton" type="image" class="send" alt="検索" width="63" height="22" border="0" value="search"></td>
+</tr>
+</table>
+</form>
+
+<!-- /#tbody div -->
+</div>
+<!-- /div#tbody -->
+</div>
+<div id=tfoot>
+<div>
+<!-- /#tfoot div -->
+</div>
+<!-- /div#tfoot -->
+</div>

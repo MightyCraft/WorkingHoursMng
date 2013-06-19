@@ -1,0 +1,106 @@
+﻿@charset "UTF-8";
+/*--------------------------------------
+	ヘッダー
+--------------------------------------*/
+div#header {
+    height: 40px;
+	background:#ffffff;
+}
+
+div#header H1 {
+	background: url(../img/logo_header.gif) repeat-x;
+	position: absolute;
+	top: 9px;
+	left: 10px
+}
+
+div#header H1 A{
+	display: block;
+	width: 220px;
+	height: 24px;
+	font-size: 1px;
+	text-decoration: none;
+	text-indent: -9999px;
+}
+
+	/* ロゴ画像無い場合は↑の#header H1、#header H1 A　を消して下記のみ設定
+	div#header H1 {
+		position: absolute;
+		top: 13px;
+		left: 10px
+	}
+
+	div#header H1 A{
+		color: #435465;
+		font-size: 14px;
+		font-weight: bold;
+		text-decoration: none;
+	}
+ */
+
+div#header IMG {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+div#header P {
+	position: absolute;
+	top: 14px;
+	right: 75px;
+	text-align: right;
+	color: #4C4C4C;
+}
+
+/*--------------------------------------
+	ヘッダー2
+--------------------------------------*/
+div#header2 {
+    height: 40px;
+	background:#EAEAEA;
+}
+
+div#header2 H1 {
+	background: url(../img/logo_header.gif) repeat-x;
+	position: absolute;
+	top: 9px;
+	left: 10px
+}
+
+div#header2 H1 A{
+	display: block;
+	width: 220px;
+	height: 24px;
+	font-size: 1px;
+	text-decoration: none;
+	text-indent: -9999px;
+}
+
+	/* ロゴ画像無い場合は↑の#header H1、#header H1 A　を消して下記のみ設定
+	div#header H1 {
+		position: absolute;
+		top: 13px;
+		left: 10px
+	}
+
+	div#header H1 A{
+		color: #435465;
+		font-size: 14px;
+		font-weight: bold;
+		text-decoration: none;
+	}
+ */
+
+div#header2 IMG {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+div#header2 P {
+	position: absolute;
+	top: 14px;
+	right: 75px;
+	text-align: right;
+	color: #4C4C4C;
+}

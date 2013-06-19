@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../../../css/import.css" media="all" />
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>ＰＪコード一括変換画面</h2>
+<br />
+<div id="matches">
+以下の内容で宜しければ登録ボタンを押してください。<br />
+<div style="color: #FF6060;">なお備考欄の修正は行いません。現在の入力内容のまま(空欄時は空欄のまま)となります。</div>
+</div>
+
+<div id="TAttr">
+<div id="matches">■変更内容</div>
+<div style="padding-left:20px;">
+対象社員：{$member_data.name}<br />
+<table border="0" cellspacing="0" cellpadding="0">
+<tr><th></th><th colspan=2 >変更前</th><th colspan=2>変更後</th></tr>
+<tr>
+<th>プロジェクト</th>
+<td style="background-color: #dddddd;">{$befor_project.project_code}</td><td style="background-color: #dddddd;">{$befor_project.name}</td>
+<td>{$after_project.project_code}</td><td>{$after_project.name}</td>
+</tr>
+<tr>
+<th>クライアント</th>
+<td style="background-color: #dddddd;" colspan=2 >{$befor_client.name}</td>
+<td colspan=2 >{$after_client.name}</td>
+</tr>
+</table>
+</div>
+</div>
+
+<br />
+
+{* 修正日付指定 *}
+<div id="TAttr">
+<div id="matches">■変更対象日付</div><br />
+<div style="font-weight: bold;">【 対象年月：{$_date_Year}年{$_date_Month}月 】</div>
+<table border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
+<tr>
+<th style="width: 50px;">日付</th>
+{foreach name=calender from=$calendar key=date item=week}
+<th style="width: 20px;" {if $week == 1}id="blue"{elseif ($week == 2) || ($week == 3)}id="red"{/if} nowrap>{$date}</th>
+{/foreach}
+</tr>
+<tr>
+<th>変更前工数</th>
+{foreach name=monhour from=$calendar key=date item=week}
+{if !empty($monhour_list[$date])}<td style="{if $monhour_list[$date].befor_end_flg}color: #FF6060;{/if} {if $monhour_list[$date].change_flg}font-weight: bold;{/if}">{$monhour_list[$date].man_hour}</td>{else}<td></td>{/if}
+{/foreach}
+</tr>
+<tr>
+<th>変更対象</th>
+{foreach name=select from=$calendar key=date item=week}
+{if $monhour_list[$date].change_flg}<td style="{if $monhour_list[$date].after_end_flg}color: #6060FF;{/if}">●{else}<td>{/if}</td>
+{/foreach}
+</tr>
+</table>
+<div style="color: #FF6060;">※「変更前工数」：変更対象のプロジェクトに該当する日毎の工数です。赤字は［変更前］に終了案件扱いとなっている工数です。</div>
+<div style="color: #6060FF;">※「変更対象」：今回変更対象となる日付であることを示します。青字は［変更後］に終了案件扱いになる工数です。</div>
+</div><!-- /div#TAttr -->
+<table>
+<tr><td>
+<form action="index.html" method="post">
+<input type="image" class="send"  src="../../../img/button_back.gif" alt="戻る" width="63" height="22" border="0">
+<input type="hidden" name="befor_project_id" value="{$_befor_project_id}" />
+<input type="hidden" name="after_project_id" value="{$_after_project_id}" />
+<input type="hidden" name="date_Year" value="{$_date_Year}" />
+<input type="hidden" name="date_Month" value="{$_date_Month}" />
+{foreach name=change_days from=$_change_day key=key item=day}
+<input type="hidden" name="change_day[]" value={$day} />
+{/foreach}
+</form>
+</td><td>
+<form action="do.html" method="post">
+<input type="image" class="send" src="../../../img/button_entry.gif" alt="登録" width="63" height="22" border="0">
+<input type="hidden" name="befor_project_id" value="{$_befor_project_id}" />
+<input type="hidden" name="after_project_id" value="{$_after_project_id}" />
+<input type="hidden" name="date_Year" value="{$_date_Year}" />
+<input type="hidden" name="date_Month" value="{$_date_Month}" />
+{foreach name=change_days from=$_change_day key=key item=day}
+<input type="hidden" name="change_day[]" value={$day} />
+{/foreach}
+</form>
+</tr></td>
+</table>
+
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

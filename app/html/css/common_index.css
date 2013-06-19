@@ -1,0 +1,84 @@
+﻿@charset "UTF-8";
+/*--------------------------------------
+	全体共通
+--------------------------------------*/
+*{ 
+	margin: 0;
+	padding: 0;
+} 
+
+HTML{ 
+	height: 100%;
+
+} 
+
+BODY {
+	font-family: "ＭＳ ゴシック", "Osaka－等幅", Verdana, Arial, sans-serif, helvetica;
+	background : #FFFFFF;
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+	color: #4C4C4C;
+	height: 100%;
+}
+
+BODY > #Container{ 
+	height: auto; 
+}
+
+IMG {
+	margin: 0;
+	padding: 0;
+	vertical-align: bottom;
+	border: none;
+}
+
+H1,H2,H3,H4,H5 {
+	margin: 0;
+	padding: 0;
+	font-weight: normal;
+}
+
+UL,LI {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+P {
+	margin: 0 10px 10px;
+	padding: 0;
+}
+
+DIV#clear {
+	clear: both;
+}
+
+
+/*--------------------------------------
+	リンク
+--------------------------------------*/
+A {text-decoration: underline; color: #4A78B7;}
+A:active {text-decoration: none; color: #4A78B7;}
+A:visited {text-decoration: underline; color: #4A78B7;}
+A:hover {text-decoration: none; color: #B70000;}
+
+/*--------------------------------------
+	メニュー下からフッター手前まで
+--------------------------------------*/
+#container {
+	height:100%;
+	min-height: 100%;
+	width: 100%;
+	/* margin:0 auto;  ←センタリングする際はコメントアウト外す */
+}
+
+
+/* Mac safari only CSSハック \*/
+
+html:\66irst-child BODY {
+	font-size: 12px;
+}
+
+/* Mac safari only CSSハック ここまで \*/
+

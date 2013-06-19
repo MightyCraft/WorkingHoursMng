@@ -1,0 +1,217 @@
+﻿{assign var='project_type_informal' value=$smarty.const.PROJECT_TYPE_INFORMAL}
+{literal}
+<script type="text/javascript">
+<!--
+function changeProjectStartDateDisabled(checkbox) {
+	var	project_start_year	= document.formProject.project_start_date_year;
+	var	project_start_month	= document.formProject.project_start_date_month;
+	var	project_start_day	= document.formProject.project_start_date_day;
+	if(checkbox.checked == true){
+		project_start_year.disabled		= true;
+		project_start_month.disabled	= true;
+		project_start_day.disabled		= true;
+	} else {
+		project_start_year.disabled		= false;
+		project_start_month.disabled	= false;
+		project_start_day.disabled		= false;
+	}
+}
+function changeProjectEndDateDisabled(checkbox) {
+	var	project_end_year	= document.formProject.project_end_date_year;
+	var	project_end_month	= document.formProject.project_end_date_month;
+	var	project_end_day		= document.formProject.project_end_date_day;
+	if(checkbox.checked == true){
+		project_end_year.disabled	= true;
+		project_end_month.disabled	= true;
+		project_end_day.disabled	= true;
+	} else {
+		project_end_year.disabled	= false;
+		project_end_month.disabled	= false;
+		project_end_day.disabled	= false;
+	}
+}
+function changeEndDateDisabled(checkbox) {
+	var	end_year	= document.formProject.end_date_year;
+	var	end_month	= document.formProject.end_date_month;
+	if(checkbox.checked == true){
+		end_year.disabled	= true;
+		end_month.disabled	= true;
+	} else {
+		end_year.disabled	= false;
+		end_month.disabled	= false;
+	}
+}
+
+function changeProjectCodeDisabled(selectoption) {
+	var	project_code	= document.formProject.project_code;
+	if(selectoption.selectedIndex == {/literal}{$project_type_informal}{literal}){
+		project_code.disabled	= true;
+	} else {
+		project_code.disabled	= false;
+	}
+}
+
+function formProjectSubmit() {
+	var	project_code		= document.formProject.project_code;
+	project_code.disabled	= false;
+	document.formProject.submit();
+}
+//-->
+</script>
+{/literal}
+<form name="formProject" method="post" action="{$_action}">
+<div id="TAttr">
+<table width="100%">
+{if $_id}
+<tr>
+<th class="cel_r" style="width: 200px">管理ID</th>
+<td class="cel_l">{$_id}<input type="hidden" name="id" value="{$_id}"></td>
+</tr>
+{/if}
+<tr>
+<th class="cel_r" style="width: 200px">PJコード</th>
+<td class="cel_l"><input type="text" name="project_code" style="width:300px" value="{$_project_code}" maxlength="{$smarty.const.USER_PROJECT_CODE_MAX}" {if $project_type_informal == $_project_type} disabled{/if}>{$guide_message_project_code}<span style="font-size:10px;color:red;">※仮登録コードで空白の場合はランダムに生成</span></td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">プロジェクト名</th>
+<td class="cel_l"><input type="text" name="name" style="width:300px" value="{$_name}" maxlength="{$smarty.const.USER_PROJECT_NAME_MAX}">（最大{$smarty.const.USER_PROJECT_NAME_MAX}文字）</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">顧客名</th>
+<td class="cel_l">
+<select name="client_id">
+   <option value="0">▼選択</option>
+{foreach from=$client_list item=client_list_item key=client_list_key}
+   <option value="{$client_list_item.id}"{if $client_list_item.id == $_client_id} selected{/if}>{$client_list_item.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">PJコードタイプ</th>
+<td class="cel_l">
+<select name="project_type" onchange="changeProjectCodeDisabled(this);">
+{foreach from=$array_project_type item=array_project_type_item key=array_project_type_key}
+   <option value="{$array_project_type_key}"{if $array_project_type_key == $_project_type} selected{/if}>{$array_project_type_item}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">総予算</th>
+<td class="cel_l">￥<input type="text" name="total_budget" style="width:100px" value="{$_total_budget}" maxlength="255">（半角数字）</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">総割当工数</th>
+<td class="cel_l">{if $_total_budget_manhour}{$_total_budget_manhour}{else}0{/if}時間　（自動計算）</td>
+</tr>
+
+<tr>
+<th class="cel_r" style="width: 200px">開発開始日付</th>
+<td class="cel_l">
+<select name="project_start_date_year">
+{section name=cnt start=$start_year loop=$end_year}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_project_start_date_year} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>年
+<select name="project_start_date_month">
+{section name=cnt start=1 loop=13}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_project_start_date_month} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>月
+<select name="project_start_date_day">
+{section name=cnt start=1 loop=32}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_project_start_date_day} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>日
+&nbsp;&nbsp;未定<input type="checkbox" name="project_pending_start_date" value="1" onclick="changeProjectStartDateDisabled(this);"{if $_project_pending_start_date} checked{/if}>
+</td>
+</tr>
+
+<tr>
+<th class="cel_r" style="width: 200px">開発終了日付</th>
+<td class="cel_l">
+<select name="project_end_date_year">
+{section name=cnt start=$start_year loop=$end_year}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_project_end_date_year} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>年
+<select name="project_end_date_month">
+{section name=cnt start=1 loop=13}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_project_end_date_month} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>月
+<select name="project_end_date_day">
+{section name=cnt start=1 loop=32}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_project_end_date_day} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>日
+&nbsp;&nbsp;未定<input type="checkbox" name="project_pending_end_date" value="1" onclick="changeProjectEndDateDisabled(this);"{if $_project_pending_end_date} checked{/if}>
+</td>
+</tr>
+
+<tr>
+<th class="cel_r" style="width: 200px">案件終了月</th>
+<td class="cel_l">
+<select name="end_date_year">
+{section name=cnt start=$start_year loop=$end_year}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_end_date_year} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>年
+<select name="end_date_month">
+{section name=cnt start=1 loop=13}
+<option value="{$smarty.section.cnt.index}"{if $smarty.section.cnt.index == $_end_date_month} selected{/if}>{$smarty.section.cnt.index}</option>
+{/section}
+</select>月
+&nbsp;&nbsp;未定<input type="checkbox" name="pending_end_date" value="1" onclick="changeEndDateDisabled(this);"{if $_pending_end_date} checked{/if}>
+　（翌月以降が終了案件扱いになります）
+</td>
+</tr>
+
+<tr>
+<th class="cel_r" style="width: 200px">納期</th>
+<td class="cel_l"><input type="text" name="nouki" style="width:200px" value="{$_nouki}" maxlength="{$smarty.const.USER_PROJECT_NOUKI_MAX}">（最大{$smarty.const.USER_PROJECT_NOUKI_MAX}文字）</td>
+</tr>
+
+<tr>
+<th class="cel_r" style="width: 200px">工数入力時の備考入力必須</th>
+<td class="cel_l"><input type="checkbox" name="memo_flg" value="1" {if $_memo_flg}checked{/if}>（備考が必須な場合にチェックを入れてください）</td>
+</tr>
+
+<tr>
+<th class="cel_r" style="width: 200px">担当営業</th>
+<td class="cel_l">
+<select name="member_id">
+   <option value="0">▼選択</option>
+{foreach from=$member_list item=member_list_item key=member_list_key}
+   <option value="{$member_list_item.id}"{if $member_list_item.id == $_member_id} selected{/if}>{$member_list_item.name}</option>
+{foreachelse}
+{/foreach}
+</td>
+</tr>
+
+<tr>
+<th class="cel_r" style="width: 200px">備考</th>
+<td class="cel_l">
+<textarea name="memo" rows="20" cols="50" wrap="soft">{$_memo}</textarea><br />
+(最大{$smarty.const.USER_PROJECT_MEMO_MAX}文字)</td>
+</td>
+</tr>
+
+</table>
+ <!-- /div#TAttr -->
+</div>
+<input type="image" border="0" name="imageField" src="../../img/button_confirm.gif" alt="確認" class="send" onclick="formProjectSubmit();return;">
+</form>
+{literal}
+<script type="text/javascript">
+<!--
+//初期状態の指定
+changeProjectStartDateDisabled(document.formProject.project_pending_start_date);
+changeProjectEndDateDisabled(document.formProject.project_pending_end_date);
+changeEndDateDisabled(document.formProject.pending_end_date);
+//-->
+</script>
+{/literal}

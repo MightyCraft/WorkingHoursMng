@@ -1,0 +1,102 @@
+﻿<form name="form2" method="post" action="{$_action}">
+<div id="TAttr">
+<table width="100%">
+{if $_id}
+<tr>
+<th class="cel_r" style="width: 200px">管理ID</th>
+<td class="cel_l">{$_id}<input type="hidden" name="id" value="{$_id}"></td>
+</tr>
+{/if}
+<tr>
+<th class="cel_r" style="width: 200px">PJコード</th>
+<td class="cel_l">{$_project_code}<input type="hidden" name="project_code" value="{$_project_code}"></td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">プロジェクト名</th>
+<td class="cel_l">{$_name}<input type="hidden" name="name" value="{$_name}"></td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">顧客名</th>
+<td class="cel_l">{if $client_data.name}{$client_data.name}{else}不明な顧客{/if}<input type="hidden" name="client_id" value="{$_client_id}"></td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">PJコードタイプ確認</th>
+<td class="cel_l">{$array_project_type[$_project_type]}<input type="hidden" name="project_type" value="{$_project_type}"></td>
+</tr>
+<tr>
+<tr>
+<th class="cel_r" style="width: 200px">総予算</th>
+<td class="cel_l">￥{$_total_budget|number_format}<input type="hidden" name="total_budget" value="{$_total_budget}"></td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">総割当工数</th>
+<td class="cel_l">{$_total_budget_manhour}時間<input type="hidden" name="total_budget_manhour" value="{$_total_budget_manhour}"></td>
+</tr>
+
+<tr>
+<th class="cel_r" style="width: 200px">開発開始日付</th>
+<td class="cel_l">{if $_project_pending_start_date}未定{else}{$_project_start_date_year}年{$_project_start_date_month}月{$_project_start_date_day}日{/if}
+<input type="hidden" name="project_start_date_year" value="{$_project_start_date_year}">
+<input type="hidden" name="project_start_date_month" value="{$_project_start_date_month}">
+<input type="hidden" name="project_start_date_day" value="{$_project_start_date_day}">
+<input type="hidden" name="project_pending_start_date" value="{$_project_pending_start_date}">
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">開発終了日付</th>
+<td class="cel_l">{if $_project_pending_end_date}未定{else}{$_project_end_date_year}年{$_project_end_date_month}月{$_project_end_date_day}日{/if}
+<input type="hidden" name="project_end_date_year" value="{$_project_end_date_year}">
+<input type="hidden" name="project_end_date_month" value="{$_project_end_date_month}">
+<input type="hidden" name="project_end_date_day" value="{$_project_end_date_day}">
+<input type="hidden" name="project_pending_end_date" value="{$_project_pending_end_date}">
+</td>
+
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">案件終了予定</th>
+<td class="cel_l">{if $_pending_end_date}未定{else}{$_end_date_year}年{$_end_date_month}月{$_end_date_day}日{/if}
+<input type="hidden" name="end_date_year" value="{$_end_date_year}">
+<input type="hidden" name="end_date_month" value="{$_end_date_month}">
+<input type="hidden" name="end_date_day" value="{$_end_date_day}">
+<input type="hidden" name="pending_end_date" value="{$_pending_end_date}">
+</td>
+</tr>
+
+<tr>
+<th class="cel_r" style="width: 200px">納期</th>
+<td class="cel_l">{$_nouki}<input type="hidden" name="nouki" value="{$_nouki}"></td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">工数登録時の備考入力必須</th>
+<td class="cel_l">{if $_memo_flg}備考必須{else}未入力OK{/if}<input type="hidden" name="memo_flg" value="{$_memo_flg}"></td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">担当営業</th>
+<td class="cel_l">{if $member_list[$_member_id]}{$member_list[$_member_id].name}{else}未指定{/if}<input type="hidden" name="member_id" value="{$_member_id}"></td>
+</tr>
+
+<tr>
+<th class="cel_r" style="width: 200px">備考</th>
+<td class="cel_l">{$_memo|nl2br}<input type="hidden" name="memo" value="{$_memo}"></td>
+</tr>
+</table>
+<!-- /div#TAttr -->
+</div>
+{if $_delete}
+<table border="0">
+<tr valign="top"><td>
+<input type="image" border="0" name="imageBack" src="../../img/button_back.gif" alt="戻る" onclick="this.form.action='../index';" class="send">
+<td>
+<input type="image" border="0" name="imageDelete" src="../../img/button_execution.gif" alt="削除実行" class="send">
+</td></tr>
+</table>
+{else}
+<table border="0">
+<tr valign="top"><td>
+<input type="image" border="0" name="imageBack" src="../../img/button_back.gif" alt="戻る" onclick="this.form.action='index';" class="send">
+<td>
+<input type="image" border="0" name="imageDo" src="../../img/button_entry.gif" alt="登録" class="send">
+</td></tr>
+</table>
+{/if}
+</form>

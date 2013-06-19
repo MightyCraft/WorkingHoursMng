@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../css/import.css" media="all" />
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="../js/search-list.js"></script>
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>エクセル管理　エクセル工数表</h2>
+
+<div id="thead">
+<div>
+<!-- /#thead div -->
+</div>
+<!-- /div#thead -->
+</div>
+
+<div id="tbody">
+<div>
+<form name="search" method="post" action="do">
+<table width="100%">
+{if $member_list}
+<tr>
+<th align="left" width="15%">所属</th>
+<td>
+<select name="post_id" id="post_data">
+<option value="0" member_post="0">全て</option>
+{foreach from=$post_list key=post_key item=post_data}
+<option value="{$post_data.id}"{if $post_data.id == $_post_id} selected="selected"{/if}>{$post_data.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<th align="left" width="15%">社員名</th>
+<td>
+<select name="member_id" id="member_data">
+<option value="0" member_post="0">全て</option>
+{foreach from=$member_list key=member_key item=member_data}
+ {if $member_data.delete_flg == 1}{assign var=name_color value='color: #AAAAAA;'}{else}{assign var=name_color value='color: #000000;'}{/if}
+ <option value="{$member_data.id}" style="{$name_color}" member_post="{$member_data.post}" {if $member_data.id == $_member_id}selected="selected"{/if}>{$member_data.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+{/if}
+<tr>
+<th align="left" width="15%">年月</th>
+<td>{html_select_date_time_plus prefix='date_' time=$smarty.now|date_format:"%D" start_year='-5' month_format='%m' display_days=false field_order='YMD' field_separator='／' time_format=$set_time}</td>
+</tr>
+<tr>
+<td><br /><input type="image" border="0" name="imageField" src="../img/button_dl.gif" alt="ダウンロード" class="send"></td>
+</tr>
+</table>
+</form>
+<!-- /#tbody div -->
+</div>
+<!-- /div#tbody -->
+</div>
+
+<div id=tfoot>
+<div>
+<!-- /#tfoot div -->
+</div>
+<!-- /div#tfoot -->
+</div>
+
+
+{if isset($_error)}
+<br /><br />
+<span id="matches"  style="color: #ff9090;">{$_error}</span>
+{/if}
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+
+<script type="text/javascript" >
+{literal}
+$(document).ready(function()
+{
+	// 検索するプルダウンのoption要素の初期データ(=全データ)を保持
+	saveSearchList('member_data');
+
+	// 親プルダウンにプルダウンの連動設定
+	$("#post_data").change(function() {
+		// 親プルダウンのIDに応じて子プルダウンの絞り込みをする処理をセット
+		createSearchListId('post_data','member_data','member_post','0','0');
+	});
+});
+{/literal}
+</script>
+
+</body>
+</html>

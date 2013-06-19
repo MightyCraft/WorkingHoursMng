@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../css/import.css" media="all" />
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="../js/search-list.js"></script>
+<script type="text/javascript" >
+	{literal}
+		$(document).ready(function()
+		{
+			// 検索するプルダウンのoption要素の初期データ(=全データ)を保持
+			saveSearchList('member_data');
+
+			// 親プルダウンにプルダウンの連動設定
+			$("#post_data").change(function() {
+				// 親プルダウンのIDに応じて子プルダウンの絞り込みをする処理をセット
+				createSearchListId('post_data','member_data','member_post','0','0');
+			});
+		});
+	{/literal}
+</script>
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>工数照会画面</h2>
+
+{include file="common/_list_search.html" _search_box='member'}
+
+{if empty($monhour_data)}
+{* <!-- 工数データが存在しない時 --> *}
+<div id="TAttr">
+<div id="matches">■{$_date_Year}年{$_date_Month}月  社員名：{$member.name}</div>
+<div id="matches" style="color: #ff9090;">登録データがありません。</div>
+<!-- /div#TAttr -->
+</div>
+
+{else}
+{* <!-- 工数データが存在する時 --> *}
+<div id="TAttr">
+<div id="matches">■{$_date_Year}年{$_date_Month}月  社員名：{$member.name}</div>
+<table border="1">
+{* 項目名 *}
+<tr>
+{if $self_flg}
+<th nowrap>PJ一括変更</th>
+{/if}
+<th nowrap>顧客名</th>
+<th nowrap>PJコード</th>
+<th nowrap>プロジェクト名</th>
+{foreach from=$weekends_holidays key=calendar_key item=calendar_data}
+{strip}
+<th {if $calendar_data == 1}id="blue"{elseif ($calendar_data == 2) || ($calendar_data == 3)}id="red"{/if} nowrap>
+{if $self_flg}<a href="../input/index.html?work_year={$_date_Year}&work_month={$_date_Month}&work_day={$calendar_key}">{$calendar_key}</a>{else}{$calendar_key}{/if}
+</th>
+{/strip}
+{/foreach}
+<th nowrap>合計</th>
+{if $auth_manhour_flg}
+<th nowrap>総残工数</th>
+<th nowrap>総割当工数</th>
+{/if}
+</tr>
+
+{* 工数情報(8時間越えたら青字/総割り当て工数は権限付き) *}
+{foreach from=$monhour_data key=project_key item=project_data}
+<tr>
+{if $self_flg}
+ {if !empty($project_data.project_id)}<td nowrap style="text-align:center;"><a href="member/change_pj/index.html?befor_project_id={$project_data.project_id}&date_Year={$_date_Year}&date_Month={$_date_Month}">確認</a></td>
+ {else}<td style="text-align:center;">-</td>{/if}
+{/if}
+<td nowrap>{$project_data.client_name}</td>
+<td nowrap>{$project_data.project_code}</td>
+<td nowrap>{if !empty($project_data.project_id)}<a href="project?project_id={$project_data.project_id}&date_Year={$_date_Year}&date_Month={$_date_Month}">{$project_data.project_name}</a>{else}{$project_data.project_name}{/if}</td>
+ {foreach from=$weekends_holidays key=calendar_key item=calendar_data}
+<td nowrap {if $project_data[$calendar_key].man_hour > 8}style="color: #0000FF;"{/if}>{if !empty($project_data[$calendar_key].man_hour)}{$project_data[$calendar_key].man_hour}{/if}</td>
+ {/foreach}
+<td nowrap style="text-align:right;">{$project_data.total_manhour}</td>
+{if $auth_manhour_flg}
+ {* 総割当工数が未設定の時：グレーで未設定表示、プロジェクトマスタ無しの時：グレーで「-」表示 *}
+ {if ($project_data.total_budget_manhour==false) || ($project_data.total_budget_manhour=='0')}
+  {assign var=leftover_color value='color: #AAAAAA;'}
+  {assign var=total_color value='color: #AAAAAA;'}
+ {else}
+  {if (int)$project_data.leftover_budget_manhour_now < 0}{assign var=leftover_color value='color: #FF0000;'}{else}{assign var=leftover_color value=''}{/if}
+  {assign var=total_color value=''}
+ {/if}
+ <td nowrap style="text-align:right; {$leftover_color}">{if $project_data.total_budget_manhour=='0'}未設定 {elseif $project_data.total_budget_manhour== false}- {else}{$project_data.leftover_budget_manhour_now}{/if}</td>
+ <td nowrap style="text-align:right;{$total_color}">{if $project_data.total_budget_manhour=='0'}未設定 {elseif $project_data.total_budget_manhour==false}- {else}{$project_data.total_budget_manhour}{/if}</td>
+{/if}
+</tr>
+{/foreach}
+
+{* 縦合計行 *}
+<tr>
+{if $self_flg}<td></td>{/if}
+<td></td><td></td>
+<td style="text-align: right">【日計】</td>
+ {foreach from=$weekends_holidays key=calendar_key item=calendar_data}
+<td nowrap {if $daily_total_data[$calendar_key].man_hour > 8}style="color: #0000FF;"{/if}>{if !empty($daily_total_data[$calendar_key].man_hour)}{$daily_total_data[$calendar_key].man_hour}{else}0{/if}</td>
+ {/foreach}
+<td nowrap style="text-align:right;">{$daily_total_data.total_man_hour}</td>
+{if $auth_manhour_flg}
+<td nowrap colspan="2">（上記は案件全体/全期間の合計値です）</td>
+{/if}
+</tr>
+</table>
+<!-- /div#TAttr -->
+</div>
+
+<br /><br />
+
+{* <!-- グラフ --> *}
+{assign var=blue_bar value='../img/chart_blue.gif'}
+{assign var=red_bar value='../img/chart_red.gif'}
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td>{* <!-- 日別グラフ --> *}
+ <div id="TAttr">
+ <table border="0" cellspacing="0" cellpadding="0">
+ <tr>{* <!-- 縦軸（棒グラフ）部分 --> *}
+ <td id="verticalchartnumber" valign="top" height="200" nowrap>(時間)</td>
+ {foreach from=$weekends_holidays key=calendar_key item=calendar_data}
+ <td id="verticalchart" valign="bottom" height="200" width="16">
+ {if !empty($daily_total_data[$calendar_key].percent)}
+  {if $daily_total_data[$calendar_key].man_hour >= 10}
+   {html_image file=$red_bar width=16 height=$daily_total_data[$calendar_key].percent|cat:'%'}
+  {else}
+   {html_image file=$blue_bar width=16 height=$daily_total_data[$calendar_key].percent|cat:'%'}
+  {/if}
+ {/if}
+ </td>
+ {/foreach}
+ </tr>
+ <tr>{* <!-- 横軸（日付）部分 --> *}
+ <th>日</th>
+ {foreach from=$weekends_holidays key=calendar_key item=calendar_data}
+ <th  nowrap align="center" {if $calendar_data == 1}id="blue"{elseif ($calendar_data == 2) || ($calendar_data == 3)}id="red"{/if} >{$calendar_key}</th>
+ {/foreach}
+ </tr>
+ </table>
+ </div><!-- /div#TAttr -->
+</td>
+<td valign="bottom">{* <!-- グラフ説明 --> *}
+ <div id="TAttr">
+ <table border="0" cellspacing="0" cellpadding="0">
+ <tr>
+ <td>{html_image file=$blue_bar width=10 height=100}</td>
+ <td>{html_image file=$red_bar width=10 height=100}</td>
+ </tr>
+ <tr>
+ <th>10<br />時<br />間<br />未<br />満</th>
+ <th>10<br />時<br />間<br />以<br />上</th>
+ </tr>
+ </table>
+ </div><!-- /div#TAttr -->
+</td>
+</tr>
+</table>
+{/if}
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

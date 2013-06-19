@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../css/import.css" media="all" />
+<script type="text/javascript" src="../js/SetPointer.js"></script>
+
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>アカウント管理　アカウント情報</h2>
+
+
+<div id="thead">
+<div>
+<!-- /#thead div -->
+</div>
+<!-- /div#thead -->
+</div>
+<div id="tbody">
+<div>
+
+ {if $_error}
+<div style="color:#ff0000;padding-left:15px;padding-top:5px;padding-bottom:5px;">
+  {foreach from=$_error item=error_item}
+{$error_item}<br />
+  {foreachelse}
+{$_error}
+  {/foreach}
+</div>
+ {/if}
+
+<form action="../user/index" name="search" method="post">
+<table width="100%">
+<tr>
+<th align="left" colspan="2">キーワード（名前）</th>
+</tr>
+<tr>
+<td colspan="2"><input type="text" name="keyword_name" style="width:300px" value="{$keyword_name}" >　（指定無しで全検索）</td>
+</tr>
+<tr>
+<th width="15%" align="left">所属</th>
+<td width="85%">
+<select name="post">
+   <option value="0">▼選択</option>
+{foreach from=$array_post item=post_list key=post_list_key}
+   <option value="{$post_list.id}"{if $post_list.id == $post} selected{/if}>{$post_list.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<th width="15%" align="left">表示対象</th>
+<td width="85%" >
+{html_radios name="display_type" options=$display_type_list selected=$display_type style="vertical-align:middle;" separator=" "}
+</td>
+</tr>
+<tr>
+<td colspan="2"><input src="../img/button_search.gif" name="searchbutton" type="image" class="send" alt="検索" width="63" height="22" border="0" value="search"></td>
+</tr>
+</table>
+<input type="hidden" name="page" value="1" >
+</form>
+
+<!-- /#tbody div -->
+</div>
+<!-- /div#tbody -->
+</div>
+<div id=tfoot>
+<div>
+<!-- /#tfoot div -->
+</div>
+<!-- /div#tfoot -->
+</div>
+
+
+
+<a href="new/start.html"><img src="../img/button_newadd.gif" alt="新規追加"></a>
+
+<div id="topic-path">
+{$_page}/{$last_page}ページ　{$all_num}件
+<!-- /div#topic-path -->
+</div>
+<br />
+<!--.....ページ送り..... -->
+<div id="topic-path">
+{if $pager.back}{$pager.back} | {/if}{if $pager.pages}{$pager.pages}{/if}{if $pager.next} | {$pager.next}{/if}
+<!-- /div#topic-path -->
+</div>
+
+{if $member_all}
+<div id="TAttr">
+<table width="100%">
+<tr>
+<th><a href="?column=id{if $_column == 'id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">ID{if $_column == 'id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=member_code{if $_column == 'member_code' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">社員コード{if $_column == 'member_code'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=name{if $_column == 'name' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">名前{if $_column == 'name'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=auth_lv{if $_column == 'auth_lv' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">権限{if $_column == 'auth_lv'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=post{if $_column == 'post' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">所属{if $_column == 'post'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=position{if $_column == 'position' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">役職{if $_column == 'position'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=regist_date{if $_column == 'regist_date' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">登録日{if $_column == 'regist_date'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=update_date{if $_column == 'update_date' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">更新日{if $_column == 'update_date'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th>更新</th>
+<th>削除</th>
+</tr>
+
+<!-- アカウントリストを表示 -->
+{foreach from=$member_all key="key" item="item"}
+
+
+{if $item.delete_flg}
+<tr onmouseover="setPointer(this, {$item.id}, 'over', '#AAAAAA', '#CCFFCC', '#FFCC99');" onmouseout="setPointer(this, {$item.id}, 'out', '#AAAAAA', '#CCFFCC', '#FFCC99');" bgcolor="#AAAAAA">
+{else}
+<tr onmouseover="setPointer(this, {$item.id}, 'over', '#F5F5F5', '#CCFFCC', '#FFCC99');" onmouseout="setPointer(this, {$item.id}, 'out', '#F5F5F5', '#CCFFCC', '#FFCC99');" bgcolor="#F5F5F5">
+{/if}
+
+<td style="text-align:center;">{$item.id}</td>
+<td>{$item.member_code}</td>
+<td><a href="../list/member?member_id={$item.id}">{$item.name}</a></td>
+<td style="text-align:center;">{$array_auth_lv[$item.auth_lv]}</td>
+<td style="text-align:center;">{$array_post[$item.post].name}</td>
+<td style="text-align:center;">{$array_position[$item.position].name}</td>
+<td style="text-align:center;">{$item.regist_date}</td>
+<td style="text-align:center;">{$item.update_date}</td>
+<td style="text-align:center;">{if !$item.delete_flg}<a href="edit/start.html?id={$item.id}" id="edit">編集</a><br/>{/if}</td>
+<td style="text-align:center;">{if !$item.delete_flg}<a href="delete/confirm.html?id={$item.id}" id="del">削除</a><br/>{else if}削除済{/if}</td>
+</tr>
+{/foreach}
+</table>
+<!-- /div#TAttr -->
+</div>
+{else}
+<div style="color:#ff0000;padding-top:20px;">アカウント情報を取得できませんでした。</div>
+{/if}
+
+<!--.....ページ送り..... -->
+<div id="topic-path">
+{if $pager.back}{$pager.back} | {/if}{if $pager.pages}{$pager.pages}{/if}{if $pager.next} | {$pager.next}{/if}
+<!-- /div#topic-path -->
+</div>
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+{literal}
+<script language="JavaScript">
+<!--
+chMenu=0;
+function subopen(tName){
+	tMenu=(document.all)?document.all(tName).style:document.getElementById(tName).style;
+	if(chMenu)chMenu.display="none";
+	if(chMenu==tMenu){
+		chMenu=0;
+	}
+	else{
+		chMenu=tMenu;
+		tMenu.display="block";
+	}
+}
+//-->
+</script>
+{/literal}
+
+<!--.....ローカルナビ.....-->
+<div id="localnav2-area">
+<div id="local-nav2">
+
+<dl>
+<dt><div><div><div><a href="../input/index.html">工数入力</a></div></div></div></dt>
+</dl>
+
+<dl>
+<dt><div><div><div>工数照会</div></div></div></dt>
+<dd><a href="../list/member">社員毎</a></dd>
+<dd><a href="../list/project">ﾌﾟﾛｼﾞｪｸﾄ毎</a></dd>
+</dl>
+
+<dl>
+<dt><div><div><div>ｱｶｳﾝﾄ管理</div></div></div></dt>
+{if $session.manhour.member.auth.account}
+<dd><a href="../user/index">ｱｶｳﾝﾄ一覧</a></dd>
+{/if}
+<dd><a href="../user/edit/start?id={$session.manhour.member.id}">ﾏｲｱｶｳﾝﾄ編集</a></dd>
+</dl>
+{if $session.manhour.member.auth.project}
+<dl>
+<dt><div><div><div>ﾌﾟﾛｼﾞｪｸﾄ管理</div></div></div></dt>
+<dd><a href="../project/index?type=now">既存案件一覧</a></dd>
+<dd><a href="../project/index?type=end">終了案件一覧</a></dd>
+</dl>
+{/if}
+{if $session.manhour.member.auth.client}
+<dl>
+<dt><div><div><div><a href="../client/index">ｸﾗｲｱﾝﾄ管理</a></div></div></div></dt>
+</dl>
+{/if}
+
+{if $session.manhour.member.auth.holiday || $session.manhour.member.auth.post}
+<dl>
+<dt><div><div><div>その他ﾏｽﾀ管理</div></div></div></dt>
+{if $session.manhour.member.auth.post}
+<dd><a href="../post/index">部署管理</a></dd>
+<dd><a href="../position/index">役職管理</a></dd>
+{/if}
+{if $session.manhour.member.auth.holiday}
+<dd><a href="../holiday/index">休日管理</a></dd>
+{/if}
+</dl>
+{/if}
+
+<dl>
+<dt><div><div><div><a href="../excel/index">ｴｸｾﾙ工数表</a></div></div></div></dt>
+</dl>
+
+<!-- /div#local-nav2 -->
+</div>
+
+<!-- /div#localnav2-area -->
+</div>

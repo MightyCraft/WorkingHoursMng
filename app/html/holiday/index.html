@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../css/import.css" media="all" />
+
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>休日設定画面</h2>
+
+{* 年月選択 *}
+<div id="thead">
+<div>
+<!-- /#thead div -->
+</div>
+<!-- /div#thead -->
+</div>
+<div id="tbody">
+<div>
+
+<form action="../holiday/index/" name="search" method="post">
+<table width="100%">
+<tr>
+<th align="left" width="15%">年月</th>
+<td>{html_select_date_time_plus onchange="submit(this.form)" prefix='date_' time=$smarty.now|date_format:"%D" start_year='-5' end_year='+5' month_format='%m' display_days=false field_order='YMD' field_separator='／' time_format=$set_month}</td>
+</tr>
+</table>
+</form>
+
+<!-- /#tbody div -->
+</div>
+<!-- /div#tbody -->
+</div>
+<div id=tfoot>
+<div>
+<!-- /#tfoot div -->
+</div>
+<!-- /div#tfoot -->
+</div>
+
+{* 休日設定 *}
+<div id="TAttr" >
+<br /><br />
+設定を変更する日付をクリックして下さい<br />
+<br />
+
+<table border="1">
+
+<tr>
+<th id="red" nowrap>日</th>
+<th nowrap>月</th>
+<th nowrap>火</th>
+<th nowrap>水</th>
+<th nowrap>木</th>
+<th nowrap>金</th>
+<th id="blue" nowrap>土</th>
+</tr>
+
+
+{foreach from=$arr_view_date.day key=k item=date_data name=date}
+
+ {if $smarty.foreach.date.first}
+
+<tr>
+{section name=befor start=0  loop=$arr_view_date.youbi[$k]}
+<td id="calendar"></td>
+{/section}
+{if $arr_holiday[$k] == "1"}
+<td id="calendar" style="color:#6666ff" nowrap>{$date_data}</td>
+{elseif ($arr_holiday[$k] == "2") || ($arr_holiday[$k]=="3")}
+<td id="calendar" style="color:#ff8888" nowrap>{$date_data}</td>
+{elseif $arr_holiday[$k] == "4"}
+<td id="cred" nowrap><a href="../holiday/do/?date_Year={$_date_Year}&date_Month={$_date_Month}&date_Day={$date_data}&flg_holiday=0">{$date_data}</a></td>
+{else}
+<td id="cblack" nowrap><a href="../holiday/do/?date_Year={$_date_Year}&date_Month={$_date_Month}&date_Day={$date_data}&flg_holiday=1">{$date_data}</a></td>
+{/if}
+
+ {else}
+
+{if $arr_view_date.youbi[$smarty.foreach.date.iteration]==0}
+<tr>
+{/if}
+{if $arr_holiday[$k] == "1"}
+<td id="calendar" style="color:#6666ff" nowrap>{$date_data}</td>
+{elseif ($arr_holiday[$k] == "2") || ($arr_holiday[$k]=="3")}
+<td id="calendar" style="color:#ff8888" nowrap>{$date_data}</td>
+{elseif $arr_holiday[$k] == "4"}
+<td id="cred" nowrap><a href="../holiday/do/?date_Year={$_date_Year}&date_Month={$_date_Month}&date_Day={$date_data}&flg_holiday=0">{$date_data}</a></td>
+{else}
+<td id="cblack" nowrap><a href="../holiday/do/?date_Year={$_date_Year}&date_Month={$_date_Month}&date_Day={$date_data}&flg_holiday=1">{$date_data}</a></td>
+{/if}
+
+ {/if}
+
+
+ {if $smarty.foreach.date.last}
+
+{section name=befor start=$arr_view_date.youbi[$smarty.foreach.date.iteration] loop=6}
+<td id="calendar" ></td>
+{/section}
+</tr>
+
+ {else}
+
+{if $arr_view_date.youbi[$smarty.foreach.date.iteration]==6}
+</tr>
+{/if}
+
+ {/if}
+
+{/foreach}
+
+</table>
+
+<!-- /div#TAttr -->
+</div>
+
+<!-- /div#content-main -->
+</div>
+{include file="common/_footer.html"}
+<!-- /div#content -->
+</div>
+
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

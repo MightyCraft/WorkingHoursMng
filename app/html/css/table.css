@@ -1,0 +1,341 @@
+@charset "UTF-8";
+/*--------------------------------------
+   TABLE 設定
+--------------------------------------*/
+TABLE {
+	margin: 0;
+	/*	margin: 10px 0; */
+}
+
+TD {
+	font-size: 12px;
+	padding: 1px 10px 3px 10px;
+}
+
+TD.cel_bottom {
+	padding-bottom: 10px;
+}
+
+TH {
+	font-weight: bold;
+}
+
+TH.cel_r {
+	text-align: right;
+}
+
+TH.cel_color {
+	width:100%;
+	background:#D2D8DD;
+}
+
+
+
+#TAttr {
+	margin: 5px 0;
+	width: 100%;   /* IE以外に適用 */
+	_width: 99%;   /* 【CSSハック】IEのみに適用。100%にすると崩れるため */
+  border-collapse: collapse;
+}
+
+#TAttr TABLE {
+  border-collapse: collapse;
+	margin-top: 5px;
+}
+
+#TAttr TD {
+	border: #c9d1da 1px solid;
+	padding: 5px 4px;
+	word-wrap: break-word;
+/*	background: #F5F5F5; */
+}
+
+#TAttr TD#verticalchart{
+	background-image: url(../img/chart_scale.gif);
+	background-repeat:   repeat;
+	background-position: right bottom;
+	border: #c9d1da 1px solid;
+	padding: 0px 2px;
+}
+#TAttr TD#verticalchartnumber{
+	background-image: url(../img/chart_scale_number.gif);
+	background-repeat:   no-repeat;
+	background-position: right bottom;
+	background-color: #759dd5;
+	border: #c9d1da 1px solid;
+	padding: 5px 2px 0px 2px;
+}
+
+#TAttr TD.all{
+	font-weight: bold;
+	padding-left:5px;
+	font-size:14px;
+}
+
+TD.cel_r {
+	text-align: right;
+}
+
+#TAttr TD#cel1 {
+	background: #D2D8DD;
+}
+
+#TAttr TD#cel2 {
+	background: #E6E9EC;
+}
+
+#TAttr TD#hide {
+	background: #CCCCCC;
+}
+
+#TAttr TD#text {
+	text-align: left;
+}
+
+#TAttr TD#nochart {
+	width: 20px;
+	background: #ffffff;
+	padding: 0px;
+	vertical-align: middle;
+}
+#TAttr TD#chart {
+	width: 20px;
+	background: #ffffff;
+	padding: 0px;
+	vertical-align: middle;
+}
+#TAttr TD#chart DIV {
+	background: #ccffcc;
+	height: 10px;
+}
+#TAttr TD#nochart DIV#operation {
+	background: #ff9999;
+	height: 5px;
+}
+#TAttr TD#chart DIV#operation {
+	background: #ff9999;
+	height: 5px;
+}
+
+
+/* 休日管理のカレンダー用に追加 */
+#TAttr TD#calendar{
+	font-size: 20px;
+	width: 50px;
+	height: 50px;
+	text-align: center;
+	vertical-align: middle;
+}
+#TAttr TD#cred{
+	font-size: 20px;
+	font-weight: bold;
+	width: 50px;
+	height: 50px;
+	text-align: center;
+	vertical-align: middle;
+}
+#TAttr TD#cred A {text-decoration:underline; color:#ff8888; font-size: 20px;}
+#TAttr TD#cred A:active {text-decoration:none}
+#TAttr TD#cred A:visited {text-decoration:underline; color:#ff8888;}
+#TAttr TD#cred A:hover {text-decoration:none}
+#TAttr TD#cblack{
+	font-size: 20px;
+	font-weight: bold;
+	width: 50px;
+	height: 50px;
+	text-align: center;
+	vertical-align: middle;
+}
+#TAttr TD#cblack A {text-decoration:underline; color:#4C4C4C;}
+#TAttr TD#cblack A:active {text-decoration:none}
+#TAttr TD#cblack A:visited {text-decoration:underline; color:#4C4C4C;}
+#TAttr TD#cblack A:hover {text-decoration:none}
+
+
+#TAttr TH {
+	border: #c9d1da 1px solid;
+	background: #759DD5;
+	padding: 5px 4px;
+	color: #FFF;
+	font-size: 12px;
+	font-weight: normal;
+	text-align: center;
+	word-wrap: break-word;
+    white-space: nowrap;
+}
+#TAttr TH#lightblue {
+	background: #95bDf5;
+}
+#TAttr TH#blue {
+	background: #6666ff;
+}
+#TAttr TH#red {
+	background: #ff8888;
+}
+
+#TAttr TH A {text-decoration:underline; color:#FFFFFF;}
+#TAttr TH A:active {text-decoration:none}
+#TAttr TH A:visited {text-decoration:underline; color:#FFFFFF;}
+#TAttr TH A:hover {text-decoration:none}
+
+#TAttr TH.all{
+	font-weight: bold;
+}
+
+/*--------------------------------------
+	フレーム組　TABLE
+--------------------------------------*/
+#TAttr_frame {
+	width: 100%;   /* IE以外に適用 */
+	_width: 99%;   /* 【CSSハック】IEのみに適用。100%にすると崩れるため */
+	border-collapse: collapse;
+}
+
+#TAttr_frame TABLE {
+	border-collapse: collapse;
+	margin: 5px;
+}
+
+#TAttr_frame TD {
+	border: #c9d1da 1px solid;
+	padding: 0px;
+	word-wrap: break-word;
+/*	background: #F5F5F5; */
+}
+
+#TAttr_frame TD TABLE {
+	margin: 0px;
+/*	background: #F5F5F5; */
+}
+
+#TAttr_frame TD TABLE TH {
+	border: 0px;
+	padding: 5px 4px;
+/*	background: #F5F5F5; */
+}
+
+#TAttr_frame TD TABLE TD {
+	border: 0px;;
+	padding: 5px 4px;
+/*	background: #F5F5F5; */
+}
+
+#TAttr_frame TH {
+	border: #c9d1da 1px solid;
+	background: #759DD5;
+	padding: 5px 4px;
+	color: #FFF;
+	font-size: 12px;
+	font-weight: normal;
+	text-align: center;
+	word-wrap: break-word;
+    white-space: nowrap;
+}
+
+#TAttr_frame TH#lightblue {
+	background: #95bDf5;
+}
+
+/*--------------------------------------
+	トップページ　色付きTABLE
+--------------------------------------*/
+#TAttr_index {
+	margin: 5px 0 20px 0;
+	width: 100%;
+  border-collapse: collapse;
+}
+
+#TAttr_index TABLE {
+  border-collapse: collapse;
+	margin: 0px;
+}
+
+#TAttr_index TD {
+	border: #FFF 1px solid;
+	padding: 5px 4px;
+	text-align: center;
+	word-wrap: break-word;
+	/* background: #F5F5F5; */
+}
+
+#TAttr_index TD#cel1 {
+	/* background: #D2D8DD; */
+}
+
+#TAttr_index TD#cel2 {
+	/* background: #E6E9EC; */
+}
+
+#TAttr_index TD.cel_l {
+	text-align: left;
+}
+
+#TAttr_index TH {
+	border: #c9d1da 1px solid;
+	background: #759DD5;
+	padding: 5px 4px;
+	color: #FFF;
+	font-size: 12px;
+	font-weight: normal;
+	text-align: center;
+	word-wrap: break-word;
+}
+
+#TAttr_index TH A {text-decoration:underline; color:#FFFFFF;}
+#TAttr_index TH A:active {text-decoration:none}
+#TAttr_index TH A:visited {text-decoration:underline; color:#FFFFFF;}
+#TAttr_index TH A:hover {text-decoration:none}
+
+
+
+/*--------------------------------------
+	色付きTABLE　入力フォームなど　Ajaxのフォーカスを入れない箇所
+--------------------------------------*/
+#TAttr_form {
+	margin: 10px 0;
+	width: 100%;   /* IE以外に適用 */
+	_width: 99%;   /* 【CSSハック】IEのみに適用。100%にすると崩れるため */
+  border-collapse: collapse;
+}
+
+#TAttr_form TABLE {
+  border-collapse: collapse;
+  margin: 0px;
+}
+
+#TAttr_form TD {
+	border: #c9d1da 1px solid;
+	padding: 5px 4px;
+	text-align: center;
+	word-wrap: break-word;
+	background: #F5F5F5;
+}
+
+#TAttr_form TD#cel1 {
+	background: #D2D8DD;
+}
+
+#TAttr_form TD#cel2 {
+	background: #E6E9EC;
+}
+
+#TAttr_form TD.cel_l {
+	text-align: left;
+}
+
+#TAttr_form TH {
+	border: #c9d1da 1px solid;
+	background: #759DD5;
+	padding: 5px 4px;
+	color: #FFF;
+	font-size: 12px;
+	font-weight: normal;
+	text-align: left;
+	word-wrap: break-word;
+}
+
+#TAttr_form TH A {text-decoration:underline; color:#FFFFFF;}
+#TAttr_form TH A:active {text-decoration:none}
+#TAttr_form TH A:visited {text-decoration:underline; color:#FFFFFF;}
+#TAttr_form TH A:hover {text-decoration:none}
+

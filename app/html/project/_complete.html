@@ -1,0 +1,67 @@
+﻿{if $data}
+<div id="TAttr">
+<table width="100%">
+<tr>
+<th class="cel_r" style="width: 200px">管理ID</th>
+<td class="cel_l">{$data.id}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">PJコード</th>
+<td class="cel_l">{$data.project_code}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">プロジェクト名</th>
+<td class="cel_l">{$data.name}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">顧客名</th>
+<td class="cel_l">{if $client_list[$data.client_id]}{$client_list[$data.client_id].name}{else}不明な顧客{/if}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">PJコードタイプ確認</th>
+<td class="cel_l">{$array_project_type[$data.project_type]}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">総予算</th>
+<td class="cel_l">￥{$data.total_budget|number_format}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">総割当工数</th>
+<td class="cel_l">{$data.total_budget_manhour}時間</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">開発開始日付</th>
+<td class="cel_l">{if $data.project_start_date}{$data.project_start_date}{else}未定{/if}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">開発終了日付</th>
+<td class="cel_l">{if $data.project_end_date}{$data.project_end_date}{else}未定{/if}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">案件終了予定</th>
+<td class="cel_l">{if $data.end_date}{$data.end_date}{else}未定{/if}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">納期</th>
+<td class="cel_l">{$data.nouki}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">工数登録時の備考入力必須</th>
+<td class="cel_l">{if $data.memo_flg}備考必須{else}未入力OK{/if}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">担当営業</th>
+<td class="cel_l">{if $member_list[$data.member_id]}{$member_list[$data.member_id].name}{else}未指定{/if}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">備考</th>
+<td class="cel_l">{$data.memo|nl2br}</td>
+</tr>
+</table>
+<!-- /div#TAttr -->
+</div>
+<a href="../project/index.html"><img src="../img/button_complete.gif" alt="完了"></a>
+{else}
+データがありません。
+{/if}
+

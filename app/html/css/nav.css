@@ -1,0 +1,269 @@
+﻿@charset "UTF-8";
+/*--------------------------------------
+	メインナビゲーション　レイアウト
+--------------------------------------*/
+#nav-area{
+	width:100%;
+    height:40px;
+    background:url(../img/texture_nav.gif) repeat-x;
+}
+
+#nav-area ul{
+    width:1200px;
+    height:40px;
+    background:url(../img/texture_nav.gif) repeat-x;
+	padding:0;
+	margin:0;
+    list-style:none;
+}
+
+#nav-area li{
+	display:block;
+	float:left;
+	margin:7px 0 0 0;
+	list-style:none;
+    height:28px;
+}
+
+#nav-area li a{
+	display:block;
+	float:left;
+    color: #435465;
+	font-size:12px;
+	font-weight:bold;
+	padding:0 0 0 5px;
+	background:url(../img/button_left.gif) no-repeat left;
+    text-decoration:none;
+}
+
+
+#nav-area li a div{
+    display:block;
+	float:left;
+	padding:0 0 0 5px;
+	background:url(../img/button_right.gif) no-repeat right;
+}
+
+#nav-area li a div.center{
+    display:block;
+	float:left;
+	padding:1px 0 0 0;
+	cursor: pointer;
+	background:url(../img/button_center.gif) no-repeat center;
+}
+
+/*  メインナビゲーション　オンマウス時
+--------------------------------------*/
+
+#nav-area li a:hover{
+	display:block;
+	float:left;
+    padding:0 0 0 5px;
+	background:url(../img/button_lefthover.gif) no-repeat left;
+}
+
+#nav-area li a:hover div{
+	display:block;
+	float:left;
+    padding:0 0 0 5px;
+	background:url(../img/button_righthover.gif) no-repeat right;
+	
+}
+
+
+#nav-area li a:hover div.center{
+    display:block;
+	float:left;
+	padding:1px 0 0 0;
+	background:url(../img/button_centerhover.gif) no-repeat center;
+}
+
+/*  メインナビゲーション　外部ページメニュー
+--------------------------------------*/
+
+#nav-area li a.other{
+	display:block;
+	float:left;
+	font-size:12px;
+    color:#0e7b93;
+	font-weight:bold;
+    padding:0 0 0 5px;
+	background:url(../img/button_leftother.gif) no-repeat left;
+    text-decoration:none;
+}
+
+#nav-area li a.other div{
+	display:block;
+	float:left;
+    padding:0 0 0 5px;
+	background:url(../img/button_rightother.gif) no-repeat right;
+}
+
+#nav-area li a.other div.center{
+    display:block;
+	float:left;
+	padding:1px 0 0 0;
+	cursor: pointer;
+	background:url(../img/button_centerother.gif) no-repeat center;
+}
+
+/*  外部ページメニュー　オンマウス時
+--------------------------------------*/
+
+#nav-area li a:hover.other{
+	display:block;
+	float:left;
+    padding:0 0 0 5px;			
+	background:url(../img/button_leftother_hover.gif) no-repeat left;
+}
+
+#nav-area li a:hover.other div{
+	display:block;
+	float:left;					
+	background:url(../img/button_rightother_hover.gif) no-repeat right;
+}
+
+#nav-area li a:hover.other div.center{
+	display:block;
+	float:left;
+    padding:0;
+    padding:1px 0 0 0;					
+	background:url(../img/button_centerother_hover.gif) no-repeat center;	
+}
+
+
+/*  メインナビゲーション　該当ページメニュー
+--------------------------------------*/
+#nav-area li a.current{
+	display:block;
+	float:left;
+	color:#ffffff;
+	font-size:12px;
+	font-weight:bold;
+	background:url(../img/button_leftactive.gif) no-repeat left;
+	padding:0 0 0 5px;
+	text-decoration:none;
+}
+
+#nav-area li a.current div{					
+	display:block;
+	float:left;
+	background:url(../img/button_rightactive.gif) no-repeat right;
+}
+
+#nav-area li a.current div.center{					
+	display:block;
+	float:left;
+	cursor: pointer;
+	background:url(../img/button_centeractive.gif) no-repeat center;
+	padding:1px 0 0 0;
+}
+
+#nav-area li a:hover.current{
+	display:block;
+	float:left;
+	color:#ffffff;
+	font-size:12px;
+	font-weight:bold;
+	background:url(../img/button_leftactive.gif) no-repeat left;
+	padding:0 0 0 5px;
+	text-decoration:none;
+}
+
+#nav-area li a:hover.current div{					
+	display:block;
+	float:left;
+	background:url(../img/button_rightactive.gif) no-repeat right;
+}
+
+#nav-area li a:hover.current div.center{					
+	display:block;
+	float:left;
+	background:url(../img/button_centeractive.gif) no-repeat center;
+	padding:1px 0 0 0;
+}
+
+
+
+
+/*  メインナビ　アイコン
+--------------------------------------*/
+#nav-area li a span.icon_pc{
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_pc.gif) top left no-repeat;
+}
+
+#nav-area li a span.icon_human {
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_human.gif) top left no-repeat;
+}
+
+#nav-area li a span.icon_mobile {
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_mobile.gif) top left no-repeat;
+}
+
+#nav-area li a span.icon_money {
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_money.gif) top left no-repeat;
+}
+
+#nav-area li a span.icon_graph {
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_graph.gif) top left no-repeat;
+}
+
+#nav-area li a span.icon_client {
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_client.gif) top left no-repeat;
+}
+
+#nav-area li a span.icon_gift {
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_gift.gif) top left no-repeat;
+}
+
+#nav-area li a span.icon_building {
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_building.gif) top left no-repeat;
+}
+
+#nav-area li a span.icon_mail {
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_mail.gif) top left no-repeat;
+}
+
+#nav-area li a span.icon_text {
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_text.gif) top left no-repeat;
+}
+
+#nav-area li a span.icon_point {
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_point.gif) top left no-repeat;
+}
+
+#nav-area li a span.icon_click {
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_click.gif) top left no-repeat;
+	padding-left: 15px;
+}
+
+#nav-area li a span.icon_friend {
+	line-height:33px;
+	padding:0px 13px 0 16px;
+	background:url(../img/icon_friend.gif) top left no-repeat;
+}
+

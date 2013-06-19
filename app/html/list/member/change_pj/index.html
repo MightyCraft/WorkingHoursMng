@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../../../css/import.css" media="all" />
+{* プロジェクト絞込みjs *}
+<script type="text/javascript" src="../../../js/jquery.min.js"></script>
+<script type="text/javascript" src="../../../js/search-list.js"></script>
+<script type="text/javascript" src="../../../js/checkbox.js"></script>
+<script type="text/javascript" >
+	// プロジェクトの絞り込み機能追加
+	creatSearchListText('after_project_id', '1' , '80%', 'project_keyword');
+</script>
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>ＰＪコード一括変換画面</h2>
+{if !empty($_errors)}
+	{foreach from=$_errors item=list name=list key=key}
+		{if $key == 'after_project_id'}
+			{if $list.0 == 'min'}
+				<br /><div id="matches" style="color: #FF6060;">変更後プロジェクトが未選択です。</div>
+			{elseif $list.0 == 'exists'}
+				<br /><div id="matches" style="color: #FF6060;">変更対象日付に変更後プロジェクトの工数情報が既に存在するため変更できません。</div>
+			{else}
+				<br /><div id="matches" style="color: #FF6060;">エラーがあります。</div>
+			{/if}
+		{elseif $key == 'change_day'}
+			<br /><div id="matches" style="color: #FF6060;">変更日付が未選択です。</div>
+		{else}
+			<br /><div id="matches" style="color: #FF6060;">エラーがあります。</div>
+		{/if}
+	{/foreach}
+{/if}
+
+<form action="confirm.html" method="post" id="checkbox-list">
+{* 変更プロジェクト選択 *}
+<div id="thead">
+<div></div><!-- /#thead div -->
+</div><!-- /div#thead -->
+<div id="tbody">
+<div>
+<table width="100%">
+<tr>
+<th class="cel_r" align="right" width="15%">変更後プロジェクト選択</th>
+<td nowrap>
+<input type="text"  name="project_keyword" id="project_keyword" value="{$_project_keyword}" placeholder="PJ名、PJコード検索" style="padding:1px;" >
+<select name="after_project_id" id="after_project_id">
+  <option value="0">▼選択</option>
+{foreach from=$project_list item=list name=list key=key}
+  <option value="{$list.id}" {if $list.id == $_after_project_id}selected{/if}>{$list.project_code} /　{$list.name}</option>
+{/foreach}
+</select>
+</td>
+</tr>
+</table>
+</div><!-- /#tbody div -->
+</div><!-- /div#tbody -->
+<div id=tfoot>
+<div></div><!-- /#tfoot div -->
+</div><!-- /div#tfoot -->
+
+{* 変更前情報 *}
+<div id="TAttr">
+<div id="matches">■変更前情報</div>
+<div style="padding-left:20px;">
+<table border="0" cellspacing="0" cellpadding="0">
+<tr><th>プロジェクト</th><td style="font-weight: bold;">{$befor_project_data.project_code}</td><td style="font-weight: bold;">{$befor_project_data.name}</td></tr>
+<tr><th>クライアント</th><td colspan=2 >{$befor_project_data.client_data.name}</td></tr>
+<tr><th>対象社員</th><td colspan=2 >{$member_data.name}</td></tr>
+</table>
+</div>
+</div>
+
+<br />
+
+{* 修正日付指定 *}
+<div id="TAttr">
+<div id="matches">■変更日付選択</div>
+<input type="button" id="select-check-on" value="　全て選択　" />　
+<input type="button" id="select-check-off" value="　選択を解除する　" />　
+<br /><br />
+<div style="font-weight: bold;">【 対象年月：{$_date_Year}年{$_date_Month}月 】</div>
+<table border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
+<tr>
+<th style="width: 30px;">日付</th>
+{foreach name=calender from=$calendar key=date item=week}
+<th style="width: 20px;" {if $week == 1}id="blue"{elseif ($week == 2) || ($week == 3)}id="red"{/if} nowrap>{$date}</th>
+{/foreach}
+</tr>
+<tr>
+<th>工数</th>
+{foreach name=monhour from=$calendar key=date item=week}
+{if !empty($monhour_list[$date])}<td {if $monhour_list[$date].end_flg}style="color: #FF6060;"{/if}>{$monhour_list[$date].man_hour}</td>{else}<td></td>{/if}
+{/foreach}
+</tr>
+<tr>
+<th>選択</th>
+{foreach name=select from=$calendar key=date item=week}
+{if !empty($monhour_list[$date])}<td><input type="checkbox" name="change_day[]" value="{$date}" {if in_array($date,$_change_day)}checked{/if} >{else}<td>{/if}</td>
+{/foreach}
+</tr>
+</table>
+<div style="color: #FF6060;">※赤字は終了案件扱いの工数です</div><br /><br />
+<input type="image" class="send" src="../../../img/button_confirm.gif" alt="確認" width="63" height="22" border="0">
+</div><!-- /div#TAttr -->
+
+<input type="hidden" name="befor_project_id" value="{$_befor_project_id}" />
+<input type="hidden" name="date_Year" value="{$_date_Year}" />
+<input type="hidden" name="date_Month" value="{$_date_Month}" />
+</form>
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+
+
+{* javascript *}
+<script type="text/javascript" >
+{literal}
+$(document).ready(function()
+{
+	// チェックボックスのON/OFFイベントセット
+	var trigger_check_on = '#select-check-on';
+	var trigger_check_off = '#select-check-off';
+
+	$(trigger_check_on).click(function(event){
+		turnCheckbox(true);
+	});
+	$(trigger_check_off).click(function(event){
+		turnCheckbox(false);
+	});
+});
+{/literal}
+</script>
+
+</body>
+</html>

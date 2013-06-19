@@ -1,0 +1,37 @@
+<?php
+session_name('S');
+
+//	テスト環境
+define('DEVELOPMENT', true);
+define('SERVER_ENCODING', 'UTF-8');
+
+define('URL_DOMAIN_ROOT',	'http://localhost/WorkingHoursMng/documentroot/');
+define('URL_SITE_ROOT',		'http://localhost/WorkingHoursMng/documentroot/');
+define('URL_FRAMEWORK_PHP',	'http://localhost/WorkingHoursMng/documentroot');
+
+define('DIR_LIB_ROOT',	'C:/pleiades/xampp/htdocs/WorkingHoursMng');
+define('DIR_APP',		DIR_LIB_ROOT . '/app');
+define('DIR_MCWEB',		DIR_LIB_ROOT . '/mcweb');
+define('DIR_CACHE',		DIR_LIB_ROOT . '/cache');
+define('DIR_LOG',		DIR_LIB_ROOT . '/log');
+define('DIR_DEFINE',	DIR_APP . '/define');
+define('DIR_HTML',		DIR_APP . '/html');
+define('DIR_ACTION',	DIR_APP . '/action');
+
+define('DIR_FILTER',	DIR_APP . '/filter');
+define('DIR_DATA',		DIR_APP . '/data');
+
+
+require(DIR_DEFINE . '/common.ini.php');
+require(DIR_DEFINE . '/filter.ini.php');
+
+DatabaseSetting::setMaster('mysql://user:pass@localhost/working_hours_mng?charset=utf8');
+DatabaseSetting::setSlaves(
+	array(
+		'mysql://user:pass@localhost/working_hours_mng?charset=utf8',
+		'mysql://user:pass@localhost/working_hours_mng?charset=utf8',
+		'mysql://user:pass@localhost/working_hours_mng?charset=utf8'
+	)
+);
+
+?>

@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../../css/import2.css" media="all" />
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>クライアント管理　クライアント情報　【編集】</h2>
+
+{if $_error}
+<div style="color:#ff0000;font-weight:bold;">
+{foreach from=$_error item=error_item}
+{$error_item}<br />
+{foreachelse}
+{$_error}
+{/foreach}
+</div>
+{/if}
+
+
+<form name="form1" method="post" action="confirm.html">
+<div id="TAttr">
+<table width="100%">
+<tr>
+<th class="cel_r" style="width: 200px">クライアント名</th>
+<td class="cel_l"><input type="text" name="name" style="width:300px" value="{$_name}" maxlength="{$smarty.const.USER_CLIENT_NAME_MAX}">(最大{$smarty.const.USER_CLIENT_NAME_MAX}文字)</td>
+<!-- カーソル初期位置 -->
+<SCRIPT>document.form1.name.focus();</SCRIPT>
+<!-- /カーソル初期位置 -->
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">備考</th>
+<td class="cel_l">
+<textarea name="memo" rows="20" cols="50" wrap="soft">{$_memo}</textarea><br />
+(最大{$smarty.const.USER_CLIENT_MEMO_MAX}文字)</td>
+</td>
+</tr>
+</table>
+ <!-- /div#TAttr -->
+</div>
+<input type="image" border="0" name="imageField" src="../../img/button_confirm.gif" alt="確認" class="send">
+<input type="hidden" name="id" value="{$_id}">
+</form>
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

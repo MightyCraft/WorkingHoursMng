@@ -1,0 +1,509 @@
+@charset "UTF-8";
+/*--------------------------------------
+	メインコンテンツ(左枠)　レイアウト
+--------------------------------------*/
+/*
+div#content{
+    position:relative;
+   width: 1024px;
+}
+
+div#content-main{
+    position: absolute;
+    width: 100%;
+	float: right;
+	padding: 20px 14px 14px 14px;
+	left: 190px;
+}
+
+div#content-main H2{
+	font-size: 20px;
+	font-weight: bold;
+	margin-top: 5px;
+    margin-left: 15px;
+	color: #3f94dd;
+}
+
+div#content-main H3{
+	font-size: 13px;
+	font-weight: bold;
+	color: #CC0000;
+}
+
+div#content-main IMG{
+	margin-top: 10px;
+}
+
+div#content-main INPUT.send{
+	margin-top: 10px;
+}
+
+div#content-main P{
+	margin-top: 10px;
+}
+
+div#content-main font.subject01{
+	color: #FF0000;
+    font-size: 11px;
+
+}
+
+div#content-main font.subject02 {
+	color: #0000FF;
+    font-size: 11px;
+}
+*/
+
+/*--------------------------------------
+	ローカルナビゲーション(左枠)　レイアウト
+--------------------------------------*/
+DIV#localnav-area {
+	float: left;
+	width: 190px;
+    margin:0px;
+	padding:0px;
+	background: url(../img/texture_localnav3.gif) no-repeat top;
+}
+
+
+DIV#local-nav {
+	width: 180px;
+    padding-top:5px;
+	margin-left: 5px;
+}
+
+#local-nav DIV {
+	background: url(../img/button_localnav.gif) no-repeat top;
+	display : block;
+	width: 180px;
+	height: 26px;
+}
+
+#local-nav DIV#simple {
+	background: url() no-repeat top; /* DIVの画像打消しの為に空にしておく */
+	display : block;
+	width: 180px;
+	height: 26px;
+}
+
+#local-nav SPAN {
+	display: block;
+	height: 19px;
+	padding-left: 20px;
+	padding-top: 6px;
+	cursor: pointer;
+}
+
+
+/*  ナビゲーションメニュー　簡易ツリー
+--------------------------------------*/
+DIV#localnav-area UL {
+	display: none;
+}
+
+.nav {
+	background: url(../img/texture_localnav2.gif) no-repeat top;  /* 白ベース上に付く陰 */
+	font-size : 95%;
+	z-index: 0;
+}
+
+.nav li {
+	margin: 0;
+	padding: 0 0 13px 0;
+	background: url(../img/texture_localnav4.gif) no-repeat bottom;  /* 白ベース下に付く陰 */
+	z-index: 1;
+}
+
+.nav A {
+	display: block;
+	text-decoration: none;
+/*	background: url(../img/icon_localnav.gif) no-repeat;*/
+	background-position: 10px 7px;
+	padding: 7px 0 0px 24px;
+}
+
+.nav A:visited {
+	text-decoration: none;
+	color: #4A78B7;
+	background-position: 10px 7px;
+}
+
+.nav A:hover {
+	text-decoration: underline;
+/*	background: url(../img/icon_localnav.gif) no-repeat;*/
+	background-position: 10px 7px;
+}
+
+/*--------------------------------------
+	サブウィンドウ用　レイアウト
+--------------------------------------*/
+div#content-sub{
+    background: #FFF;
+	padding: 10px 14px 14px 14px;
+}
+
+div#content-sub H2{
+	font-size: 14px;
+	font-weight: bold;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	padding: 4px 8px;
+	background: #014F7C;
+	color: #FFF;
+}
+
+div#content-sub H3{
+	font-size: 13px;
+	font-weight: bold;
+	color: #CC0000;
+	text-align: center;
+}
+
+div#content-sub IMG{
+	margin-top: 10px;
+}
+
+div#content-sub INPUT.send{
+	margin-top: 10px;
+}
+
+div#content-sub P {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+div#content-sub font.subject01{
+	color: #FF0000;
+    font-size: 11px;
+}
+
+div#content-sub font.subject02 {
+	color: #0000FF;
+    font-size: 11px;
+}
+
+/*  ページ送り
+--------------------------------------*/
+#topic-path {
+	text-align: center;
+}
+
+A.add {
+	background: url(../img/icon_add.gif) no-repeat;
+	padding-left: 17px;
+	padding-bottom: 1px;
+	white-space: pre;
+}
+
+A.edit {
+	background: url(../img/icon_edit.gif) no-repeat;
+	padding-left: 17px;
+	padding-bottom: 1px;
+	white-space: pre;
+}
+
+A.del {
+	background: url(../img/icon_del.gif) no-repeat;
+	padding-left: 18px;
+	padding-bottom: 1px;
+	white-space: pre;
+}
+
+A.dl {
+	background: url(../img/icon_dl.gif) no-repeat;
+	padding-left: 18px;
+	padding-bottom: 1px;
+	white-space: pre;
+}
+
+A#add {
+	background: url(../img/icon_add.gif) no-repeat;
+	padding-left: 17px;
+	padding-bottom: 1px;
+	white-space: pre;
+}
+
+
+A#edit {
+	background: url(../img/icon_edit.gif) no-repeat;
+	padding-left: 17px;
+	padding-bottom: 1px;
+	white-space: pre;
+}
+
+A#del {
+	background: url(../img/icon_del.gif) no-repeat;
+	padding-left: 18px;
+	padding-bottom: 1px;
+	white-space: pre;
+}
+
+A#dl {
+	background: url(../img/icon_dl.gif) no-repeat;
+	padding-left: 18px;
+	padding-bottom: 1px;
+	white-space: pre;
+}
+
+/*  件数結果
+--------------------------------------*/
+#matches {
+    font-size:13px;
+	font-weight: bold;
+	margin: 0px;
+    padding-top:5px;
+	padding-left:2px;
+	padding-bottom:0px;
+}
+
+/*  検索条件　角丸背景
+--------------------------------------*/
+#thead {
+	background: url(../img/texture_ta_01.gif) no-repeat 0px 0px;
+	margin-top:10px;
+}
+
+#thead DIV {
+	background: url(../img/texture_ta_02.gif) no-repeat right 0px;
+	font-size: 1px;
+	height: 10px;
+}
+
+#tbody {
+	background: url(../img/texture_ta_03.gif) repeat-y 0px 0px;
+}
+
+#tbody DIV {
+	background: url(../img/texture_ta_04.gif) repeat-y right 0px;
+}
+
+#tbody TABLE {
+	margin-left: 10px;
+}
+
+#tfoot {
+	background: url(../img/texture_ta_05.gif) no-repeat 0px 0px;
+	margin-bottom: 10px;
+}
+
+#tfoot DIV {
+	background: url(../img/texture_ta_06.gif) no-repeat right 0px;
+	font-size: 1px;
+	height: 10px;
+}
+
+/*  検索条件　角丸背景
+--------------------------------------*/
+#thead_login {
+	width:480px;
+	background: url(../img/texture_ta_01.gif) no-repeat 0px 0px;
+	margin-top: 10px;
+}
+
+#thead_login DIV {
+	width:100%;
+	background: url(../img/texture_ta_02.gif) no-repeat right 0px;
+	font-size: 1px;
+	height: 10px;
+}
+
+#tbody_login {
+	width:480px;
+	background: url(../img/texture_ta_03.gif) repeat-y 0px 0px;
+}
+
+#tbody_login DIV {
+	width:100%;
+	background: url(../img/texture_ta_04.gif) repeat-y right 0px;
+}
+
+#tbody_login TABLE {
+
+	width:70%;
+	margin-left: 10px;
+}
+
+#tfoot_login {
+	width:480px;
+	background: url(../img/texture_ta_05.gif) no-repeat 0px 0px;
+	margin-bottom: 10px;
+}
+
+#tfoot_login DIV {
+	width:100%;
+	background: url(../img/texture_ta_06.gif) no-repeat right 0px;
+	font-size: 1px;
+	height: 10px;
+}
+
+
+/*  その他
+--------------------------------------*/
+/* 縦書き */
+.vertical {
+	-ms-writing-mode: tb-rl;
+	direction: ltr;
+}
+
+
+
+
+
+
+
+
+/*--------------------------------------
+  ローカルメニューを上部にした時に使用
+--------------------------------------*/
+
+
+/*  メインコンテンツ(下枠)　レイアウト
+--------------------------------------*/
+
+div#content{
+	position:relative;
+	width: 1024px;
+}
+
+div#content-main{
+    position: absolute;
+    width: 100%;
+	float: right;
+	padding: 20px 14px 14px 14px;
+}
+
+div#content-main H2{
+	font-size: 18px;
+	font-weight: bold;
+	margin-top: 5px;
+    margin-left: 15px;
+	padding-left: 20px;
+    color: #3f94dd;
+	background: url(../img/icon_index.gif) no-repeat left center;
+}
+
+div#content-main H3{
+	font-size: 13px;
+	font-weight: bold;
+	color: #CC0000;
+}
+
+div#content-main IMG{
+	margin-top: 10px;
+}
+
+div#content-main INPUT.send{
+	margin-top: 10px;
+}
+
+div#content-main P{
+	margin-top: 10px;
+}
+
+div#content-main font.subject01{
+	color: #FF0000;
+    font-size: 11px;
+
+}
+
+div#content-main font.subject02 {
+	color: #0000FF;
+    font-size: 11px;
+}
+
+
+/*  ローカルナビゲーション(上枠)　レイアウト
+--------------------------------------*/
+DIV#localnav2-area {
+	width:100%;
+    height:40px;
+    background:url(../img/texture_nav.gif) repeat-x;
+}
+
+DIV#local-nav2 {
+	position: absolute;
+	margin: 10px 0 0 14px;
+    background: none;
+    z-index:9999; /*プルダウンメニューが他の文字より下になるのを防止*/
+}
+
+#local-nav2 dl {
+	margin: 0px 1px;
+	float: left;
+	font-size: 12px;
+/*	background: #369;*/
+	color: #537093;
+	font-weight: bold;
+	z-index:9998;
+}
+
+
+#local-nav2 dl a {
+	display: block;
+	color: #537093;
+	text-decoration:none;
+}
+#local-nav2 dl:hover dd {
+	display: block;
+}
+
+#local-nav2 dl:hover dt a {
+	color: #ffffff;
+	display: block;
+}
+#local-nav2 dl:hover dt div {
+    background:url(../img/button_rightactive_alpha.gif) no-repeat;
+    background-position: top right;
+}
+#local-nav2 dl:hover dt div div {
+    background:url(../img/button_leftactive_alpha.gif) no-repeat;
+	padding: 0px 10px;
+}
+#local-nav2 dl:hover dt div div div {
+    background:url(../img/button_centeractive.gif) repeat-x;
+	color: #ffffff;
+}
+#local-nav2 dl a:hover	{
+	text-decoration:underline;
+}
+#local-nav2 dt {
+	text-align: center;
+/*	border: 1px solid black;*/
+	line-height: 40px;
+	height: 30px;
+}
+
+#local-nav2 dt div {
+    background:url(../img/button_rightother_alpha.gif) no-repeat;
+    background-position: top right;
+}
+#local-nav2 dt div div {
+    background:url(../img/button_leftother_alpha.gif) no-repeat;
+	padding: 0px 10px;
+}
+#local-nav2 dt div div div {
+    background:url(../img/button_centerother_alpha.gif) repeat-x;
+}
+
+#local-nav2 dd {
+    background:url(../img/button_localnav_bar.gif) repeat-x;
+	font-size: 10px;
+	display: none;
+	margin: 0px;
+	border-left:solid 1px silver;
+	border-right:solid 1px silver;
+	border-bottom:solid 1px silver;
+	border-top: 0px;
+}
+#local-nav2 dd a {
+	display: block;
+	-width: 90px;
+	line-height: 140%;
+	color: #537093;
+	padding: 3px;
+}
+#local-nav2 dd a:hover	{
+    background:url(../img/button_localnav_bar_hover.gif) repeat-x;
+}
+

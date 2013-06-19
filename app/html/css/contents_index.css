@@ -1,0 +1,53 @@
+﻿@charset "UTF-8";
+/*--------------------------------------
+/*  検索条件　角丸背景
+--------------------------------------*/
+#thead_login {
+	width:480px;
+	background: url(../img/texture_ta_01.gif) no-repeat 0px 0px;
+	margin-top:50px;
+}
+
+#thead_login DIV {
+	width:100%;
+	background: url(../img/texture_ta_02.gif) no-repeat right 0px;
+	font-size: 1px;
+	height: 10px;
+}
+
+#tbody_login {
+	width:480px;
+	background: url(../img/texture_ta_03.gif) repeat-y 0px 0px;
+}
+
+#tbody_login DIV {
+	width:100%;
+	background: url(../img/texture_ta_04.gif) repeat-y right 0px;
+}
+
+#tbody_login TABLE {	
+	width:70%;
+	margin-left: 10px;
+    padding:10px;
+}
+
+#tbody_login td{
+    padding:5px;
+}
+
+#tbody_login th{
+    padding:5px;
+}
+
+#tfoot_login {
+	width:480px;
+	background: url(../img/texture_ta_05.gif) no-repeat 0px 0px;
+	margin-bottom: 10px;
+}
+
+#tfoot_login DIV {
+	width:100%;
+	background: url(../img/texture_ta_06.gif) no-repeat right 0px;
+	font-size: 1px;
+	height: 10px;
+}

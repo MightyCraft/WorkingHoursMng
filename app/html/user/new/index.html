@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../../css/import2.css" media="all" />
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/search-list.js"></script>
+<script type="text/javascript">
+{literal}
+// プロジェクトの絞り込み機能追加
+creatSearchListText('team_list_project_id', '1' , '60%', 'team_list_project_id_keyword');
+{/literal}
+</script>
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>アカウント管理　アカウント情報　【新規追加】</h2>
+
+{foreach from=$_error item=error_item}
+<span style="color:#FF0000;">{$error_item}</span><br />
+{foreachelse}
+{$_error}
+{/foreach}
+
+<br />
+<form name="form1" method="post" action="confirm.html">
+<div id="TAttr">
+<table width="100%">
+<tr>
+<th class="cel_r" style="width: 200px">社員コード</th>
+<td class="cel_l"><input type="text" name="member_code" style="width:300px;" value="{$_member_code}" maxlength="{$smarty.const.USER_MEMBER_CODE_MAX}">{$guide_message_member_code}
+<!-- カーソル初期位置 -->
+<SCRIPT>document.form1.member_code.focus();</SCRIPT>
+<!-- /カーソル初期位置 -->
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">氏名</th>
+<td class="cel_l"><input type="text" name="name" style="width:300px" value="{$_name}" maxlength="{$smarty.const.USER_MEMBER_NAME_MAX}">(最大{$smarty.const.USER_MEMBER_NAME_MAX}文字)</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">権限</th>
+<td class="cel_l">
+{html_options name="auth_lv" options=$array_auth_lv selected=$_auth_lv}
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">所属</th>
+<td class="cel_l">
+<select name="post">
+{foreach from=$array_post key=post_key item=post_data}
+<option value="{$post_data.id}"{if $post_data.id == $_post} selected="selected"{/if}>{$post_data.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">役職</th>
+<td class="cel_l">
+<select name="position">
+{foreach from=$array_position key=position_key item=position_data}
+<option value="{$position_data.id}"{if $position_data.id == $_position} selected="selected"{/if}>{$position_data.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">パスワード</th>
+<td class="cel_l"><input type="password" name="password" style="width:300px;ime-mode: disabled;" value="{$_password}" maxlength="{$smarty.const.USER_MEMBER_PASSWORD_MAX}">(半角英数{$smarty.const.USER_MEMBER_PASSWORD_MAX}文字以下)</td>
+</tr>
+</table>
+ <!-- /div#TAttr -->
+</div>
+<br />
+{include file="user/_project_team_list.html" _next_action="/user/new/index"}
+
+<input type="image" border="0" name="imageField" src="../../img/button_confirm.gif" alt="確認" class="send">
+</form>
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

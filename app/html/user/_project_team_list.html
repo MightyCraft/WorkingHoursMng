@@ -1,0 +1,51 @@
+<!-- プロジェクトリストフォーム -->
+<h2>所属プロジェクト編集</h2>
+
+{if $_team_error == 'no_select'}
+<span style="color:#FF0000;">プロジェクト名が選択されていません。</span><br />
+{elseif $_team_error == 'fraud'}
+<span style="color:#FF0000;">プロジェクト名の選択が不正です。</span><br />
+{elseif $_team_error == 'overlap'}
+<span style="color:#FF0000;">選択したプロジェクトは、登録済みです。</span><br />
+{/if}
+
+<br />
+<div id="TAttr">
+<table width="100%">
+ <tr>
+ <th width="10%" height="30">PJコード</th>
+ <th width="25%" height="30">顧客名</th>
+ <th width="30%">プロジェクト名</th>
+ <th width="5%">行操作</th>
+ </tr>
+{foreach from=$view_list item=list name=list}
+<tr>
+ <td>{if $list.project_id}{$project_list[$list.project_id].project_code}{/if}</td>
+ <td>{if $list.client_name}{$list.client_name}{else}不明な顧客{/if}</td>
+ <td>{if $list.project_name}{$list.project_name}{else}不明なプロジェクト{/if}{if $list.project_type==$smarty.const.PROJECT_TYPE_REMOVAL}&nbsp;&nbsp;<span style="color:#FF0000;">※廃止プロジェクト</span>{/if}</td>
+ <td><a href="dellist.html?index_no={$list.key}&next={$_next_action}" class="del">行削除</a></td>
+</tr>
+{/foreach}
+<tr>
+ <td colspan="3">
+ <b>プロジェクト名</b>&nbsp;&nbsp;&nbsp;
+ {* 通常案件プルダウン *}
+ <input type="text" id="team_list_project_id_keyword" name="team_list_project_id_keyword" value="{$_team_list_project_id_keyword}" placeholder="キーワード検索" style="padding:1px;" >
+ <select name="team_list_project_id" id="team_list_project_id" style="width:70%; display:none;">
+  <option value="0">▼選択</option>
+{foreach from=$team_list_project_id item=list name=list key=key}
+{if $list|is_array}
+  <option value="{$list.pid}">{if $list.cname}{$list.cname}{else}不明な顧客({$list.pcid}){/if}/{$list.pname}</option>
+{else}
+  <option value="{$key}">{$list}</option>
+{/if}
+{/foreach}
+ </select>
+ </td>
+ <td>
+  <a href="#" name="addproject" class="add" onclick="document.form1.action='../pushlist?next={$_next_action}';document.form1.submit();return false;">行追加</a>
+ </td>
+</tr>
+</table>
+ <!-- /div#TAttr -->
+</div>

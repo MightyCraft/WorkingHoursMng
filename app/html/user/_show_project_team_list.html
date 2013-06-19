@@ -1,0 +1,22 @@
+<!-- プロジェクトリスト表示 -->
+{if $view_list|is_array}
+<div id="TAttr">
+<table width="100%">
+ <tr>
+ <th width="10%" height="30">PJコード</th>
+ <th width="25%" height="30">顧客名</th>
+ <th width="30%">プロジェクト名</th>
+ </tr>
+{foreach from=$view_list item=list name=list} 
+<tr>
+ <td>{if $list.project_id}{$project_list[$list.project_id].project_code}{/if}</td>
+ <td>{if $list.client_name}{$list.client_name}{else}不明な顧客{/if}</td>
+ <td>{if $list.project_name}{$list.project_name}{else}不明なプロジェクト{/if}</td>
+</tr>
+{/foreach}
+</table>
+ <!-- /div#TAttr -->
+</div>
+{else}
+所属プロジェクトはありません。<br />
+{/if}

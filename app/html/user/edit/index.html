@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../../css/import2.css" media="all" />
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/search-list.js"></script>
+<script type="text/javascript">
+{literal}
+// プロジェクトの絞り込み機能追加
+creatSearchListText('team_list_project_id', '1' , '60%', 'team_list_project_id_keyword');
+
+function changeRadioButton() {
+	if (document.form1.password_change[1].checked){
+		document.form1.password.disabled = false;
+	} 
+	else 
+	{
+		document.form1.password.value = "";
+		document.form1.password.disabled = true;
+	}
+}
+{/literal}
+</script>
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>アカウント管理　アカウント情報　【編集】</h2>
+
+{foreach from=$_error item=error_item}
+<span style="color:#FF0000;">{$error_item}</span><br />
+{foreachelse}
+{$_error}
+{/foreach}
+
+<form name="form1" method="post" action="confirm.html">
+<div id="TAttr">
+<table width="100%">
+<tr>
+<th class="cel_r" style="width: 200px">社員コード</th>
+<td class="cel_l">{if !$b_auth_account}{$_member_code}<input type="hidden" name="member_code" value="{$_member_code}">{else}
+<input type="text" name="member_code" style="width:300px;" value="{$_member_code}" maxlength="{$smarty.const.USER_MEMBER_CODE_MAX}">{$guide_message_member_code}
+<!-- カーソル初期位置 -->
+<SCRIPT>document.form1.member_code.focus();</SCRIPT>
+<!-- /カーソル初期位置 -->{/if}
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">氏名</th>
+<td class="cel_l">{if !$b_auth_account}{$_name}<input type="hidden" name="name" value="{$_name}">{else}
+<input type="text" name="name" style="width:300px" value="{$_name}" maxlength="{$smarty.const.USER_MEMBER_NAME_MAX}">(最大{$smarty.const.USER_MEMBER_NAME_MAX}文字)</td>{/if}
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">権限</th>
+<td class="cel_l">{if !$b_auth_account}{$array_auth_lv[$_auth_lv]}<input type="hidden" name="auth_lv" value="{$_auth_lv}">{else}
+{html_options name="auth_lv" options=$array_auth_lv selected=$_auth_lv}{/if}
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">所属</th>
+<td class="cel_l">
+{if !$b_auth_account}{$array_post[$_post].name}<input type="hidden" name="post" value="{$_post}">
+{else}
+<select name="post">
+{foreach from=$array_post key=post_key item=post_data}
+<option value="{$post_data.id}"{if $post_data.id == $_post} selected="selected"{/if}>{$post_data.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+{/if}
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">役職</th>
+<td class="cel_l">
+{if !$b_auth_account}{$array_position[$_position].name}<input type="hidden" name="position" value="{$_position}">
+{else}
+<select name="position">
+{foreach from=$array_position key=position_key item=position_data}
+<option value="{$position_data.id}"{if $position_data.id == $_position} selected="selected"{/if}>{$position_data.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+{/if}
+</td>
+</tr>
+{if $_id == $session.manhour.member.id}
+<tr>
+<th class="cel_r" style="width: 200px">パスワード</th>
+<td class="cel_l">
+<input type="radio" name="password_change"  value="0" style="vertical-align:middle;" {if $_password_change !="1"}checked{/if} onClick="changeRadioButton()">変更無</input>
+<input type="radio" name="password_change"  value="1" style="vertical-align:middle;" {if $_password_change =="1"}checked{/if} onClick="changeRadioButton()">変更</input>
+<input type="password" name="password" style="width:300px;ime-mode: disabled;" value="{if $_password_reset =="1"}{$_password}{/if}" {if $_password_change !="1"}disabled{/if} maxlength="{$smarty.const.USER_MEMBER_PASSWORD_MAX}">(半角英数{$smarty.const.USER_MEMBER_PASSWORD_MAX}文字以下)</td>
+</tr>
+{else}
+<tr>
+<th class="cel_r" style="width: 200px">パスワード</th>
+<td class="cel_l">
+<input type="radio" name="password_change"  value="0" style="vertical-align:middle;" {if $_password_change !="1"}checked{/if}> 変更無</input>
+<input type="radio" name="password_change"  value="1" style="vertical-align:middle;" {if $_password_change =="1"}checked{/if}> 初期化</input>　<font color="red">※初期化指定でパスワードが未設定状態に更新されます。</font>
+</td>
+</tr>
+{/if}
+</table>
+ <!-- /div#TAttr -->
+</div>
+<br />
+{if $_id == $session.manhour.member.id}
+{include file="user/_project_team_list.html" _next_action="/user/edit/index"}
+{/if}
+
+<input type="image" border="0" name="imageField" src="../../img/button_confirm.gif" alt="確認" class="send">
+<input type="hidden" name="id" value="{$_id}">
+</form>
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

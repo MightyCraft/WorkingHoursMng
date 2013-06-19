@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../css/import.css" media="all" />
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="../js/search-list.js"></script>
+<script type="text/javascript" >
+	// プロジェクトの絞り込み機能追加
+	creatSearchListText('project_id', '1' , '70%', 'project_id_keyword');
+</script>
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>工数照会画面</h2>
+
+{include file="common/_list_search.html" _search_box='project'}
+
+<br />
+<div id="matches">■{$_date_Year}年{$_date_Month}月  {if $project_list_by_client_id[$project_id]}プロジェクト名：{$project_list_by_client_id[$project_id].cname}/{$project_list_by_client_id[$project_id].name}{/if}</div>
+{*<!-- 指定月工数一覧 -->*}
+{if empty($data)}{* <!-- 指定月データなし --> *}
+<div id="matches" style="color: #ff9090">指定月の工数データはありません。</div>
+
+{else}{* <!-- 指定月データあり --> *}
+<div id="TAttr">
+<table border="1">
+{* 項目名 *}
+<tr>
+<th nowrap>社員名</th>
+{foreach from=$weekends_holidays key=calendar_key item=calendar_data}
+{strip}
+<th {if $calendar_data == 1}id="blue"{elseif ($calendar_data == 2) || ($calendar_data == 3)}id="red"{/if} nowrap>
+{if $calendar_key<10}&nbsp;{/if}{$calendar_key}
+</th>
+{/strip}
+{/foreach}
+<th nowrap>合計</th>
+</tr>
+
+{* 工数情報(8時間越えたら青字) *}
+{foreach from=$data key=member_key item=member_data}
+<tr>
+{if empty($member_data.member_id)}<td nowrap style="color: #AAAAAA;">{$member_data.name}</td>
+{else}
+<td nowrap>
+<a href="member?member_id={$member_data.member_id}&date_Year={$_date_Year}&date_Month={$_date_Month}">{$member_data.name}</a>
+{if $member_data.delete_flg} <span style="color: #AAAAAA;">※削除済</span>{/if}
+</td>
+{/if}
+
+ {foreach from=$weekends_holidays key=calendar_key item=calendar_data}
+ {if $member_data[$calendar_key].manhour > 8}{assign var=over_color value='color: #0000FF;'}{else}{assign var=over_color value=''}{/if}
+ <td nowrap style="{$over_color}">{$member_data[$calendar_key].manhour}</td>
+ {/foreach}
+<td nowrap>{$member_data.total_manhour}</td>
+</tr>
+{/foreach}
+
+{* 日計行 *}
+<tr>
+<td nowrap>合計</td>
+{foreach from=$weekends_holidays key=calendar_key item=calendar_data}
+<td nowrap>{if !empty($total_data.total_daily[$calendar_key])}{$total_data.total_daily[$calendar_key]}{else}0{/if}</td>
+{/foreach}
+<td nowrap>{$total_data.total_monthly}</td>
+</tr>
+</table>
+<!-- /div#TAttr -->
+</div>
+{/if}
+
+<br /><br />
+
+{*<!-- 総工数表 -->*}
+<h2>プロジェクト総工数表</h2>
+<br />
+{if empty($total_data.total)}
+<div id="matches" style="color: #ff9090">プロジェクト全体の工数データがありません。</div>
+
+{else}
+{*<!-- 総工数情報 -->*}
+<div id="TAttr">
+<div id="matches">■総工数情報</div>
+<table border="1">
+<tr>
+<th></th>
+<th nowrap width="100px">総合計</th>
+{if $auth_manhour_flg}
+<th nowrap width="100px">残工数</th>
+<th nowrap width="100px">総割当工数</th>
+{/if}
+</tr>
+<tr>
+<th nowrap>指定年月({$_date_Year}/{$_date_Month})以前</th>
+<td nowrap style="text-align:right;">{$total_data.total_befor}</td>
+{if $auth_manhour_flg}{* 権限制限。総割当工数が0の時は残工数・総割当工数は未設定扱い。 *}
+ {if $total_data.total_budget_manhour > 0}
+  {if $total_data.leftover_budget_total_befor<0}{assign var=leftover_befor_color value='color: #FF0000'}{else}{assign var=leftover_befor_color value=''}{/if}
+  <td nowrap style="text-align:right; {$leftover_befor_color}">{$total_data.leftover_budget_total_befor}</td>
+ {else}
+  <td nowrap style="text-align:right; color: #AAAAAA;">未設定</td>
+ {/if}
+<td nowrap style="text-align:right; background-color:#AAAAAA;"></td>
+{/if}
+</tr>
+<tr>
+<th nowrap>プロジェクト全体</th>
+<td nowrap style="text-align:right;">{$total_data.total}</td>
+{if $auth_manhour_flg}{* 権限制限。総割当工数が0の時は残工数・総割当工数は未設定扱い。 *}
+ {if $total_data.total_budget_manhour > 0}
+  {if $total_data.leftover_budget_total<0}{assign var=leftover_color value='color: #FF0000'}{else}{assign var=leftover_color value=''}{/if}
+  <td nowrap style="text-align:right; {$leftover_color}">{$total_data.leftover_budget_total}</td>
+  <td nowrap style="text-align:right;">{$total_data.total_budget_manhour}</td>
+ {else}
+  <td nowrap style="text-align:right; color: #AAAAAA;">未設定</td>
+  <td nowrap style="text-align:right; color: #AAAAAA;">未設定</td>
+ {/if}
+{/if}
+</tr>
+</table>
+<!-- /div#TAttr -->
+</div>
+
+<br /><br />
+
+{*<!-- 週別工数集計 -->*}
+<div id="TAttr">
+<div id="matches">■週別工数集計（月曜始まり）</div>
+【案件終了月設定：{if $project_data.end_date}{$project_data.end_date|date_format:"%Y/%m/%d"}{else}未設定{/if}】<br />
+{* 年別 *}
+{foreach from=$weekly_data key=year_key item=year_item}
+<table border="1">
+<tr>
+<th nowrap>{$year_key}年</th>
+ {* 月別 *}
+ {foreach from=$year_item key=month_key item=month_item}
+ <td valign="top">
+ <table>
+ <tr><th colspan="2" nowrap>{$month_key}月</th></tr>
+  {* 週別 *}
+  {foreach from=$month_item.weekly key=week_key item=week_item}
+  <tr>
+  <th id="lightblue" nowrap>{$month_key}/{if $week_item.day}{$week_item.day}～{else}&nbsp;{/if}</th>
+  <td nowrap style="text-align:right;">{if $week_item.manhour}{$week_item.manhour}{else}&nbsp;&nbsp;{/if}</td>
+  </tr>
+  {/foreach}
+ {* 月合計 *}
+ <tr>
+ <th nowrap>合計</th>
+ <td nowrap style="text-align:right;">{$month_item.monthly}</td>
+ </tr>
+</table>
+</td>
+ {/foreach}
+</tr>
+</table>
+{/foreach}
+<!-- /div#TAttr_frame -->
+</div>
+
+{/if}
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>
