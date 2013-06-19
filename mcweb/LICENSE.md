@@ -1,7 +1,7 @@
 one line to give the program's name and an idea of what it does.  
 Copyright (C) 2013 Mighty Craft Co.  
 
-This file is part of WEBH”ŠÇ—ƒVƒXƒeƒ€(WEB Working Hours Management System).  
+This file is part of WEBå·¥æ•°ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ (WEB Working Hours Management System).  
 
 man-hour control is free software; you can redistribute it and/or  
 modify it under the terms of the GNU General Public License  
