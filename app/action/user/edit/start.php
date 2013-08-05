@@ -17,7 +17,7 @@ class _user_edit_start extends UserScene
 		}
 
 		//権限チェック
-		$this->checkAuthEditOtherAccount($this->_id);
+		$this->checkAuthEditMyAccount($this->_id);
 
 		$_SESSION['manhour']['tmp']['user_edit']				= array();
 		$_SESSION['manhour']['tmp']['user_project_team_list']	= array();
@@ -33,13 +33,15 @@ class _user_edit_start extends UserScene
 			MCWEB_Util::redirectAction("/user/index");
 		}
 
-		$_SESSION['manhour']['tmp']['user_edit']['id']			= $member_by_id['id'];
-		$_SESSION['manhour']['tmp']['user_edit']['member_code']	= $member_by_id['member_code'];
-		$_SESSION['manhour']['tmp']['user_edit']['name']		= $member_by_id['name'];
-		$_SESSION['manhour']['tmp']['user_edit']['auth_lv']		= $member_by_id['auth_lv'];
-		$_SESSION['manhour']['tmp']['user_edit']['post']		= $member_by_id['post'];
-		$_SESSION['manhour']['tmp']['user_edit']['position']	= $member_by_id['position'];
-		$_SESSION['manhour']['tmp']['user_edit']['password']	= $member_by_id['password'];
+		$_SESSION['manhour']['tmp']['user_edit']['id']					= $member_by_id['id'];
+		$_SESSION['manhour']['tmp']['user_edit']['member_code']			= $member_by_id['member_code'];
+		$_SESSION['manhour']['tmp']['user_edit']['name']				= $member_by_id['name'];
+		$_SESSION['manhour']['tmp']['user_edit']['auth_lv']				= $member_by_id['auth_lv'];
+		$_SESSION['manhour']['tmp']['user_edit']['post']				= $member_by_id['post'];
+		$_SESSION['manhour']['tmp']['user_edit']['position']			= $member_by_id['position'];
+		$_SESSION['manhour']['tmp']['user_edit']['mst_member_type_id']	= $member_by_id['mst_member_type_id'];
+		$_SESSION['manhour']['tmp']['user_edit']['mst_member_cost_id']	= $member_by_id['mst_member_cost_id'];
+		$_SESSION['manhour']['tmp']['user_edit']['password']			= $member_by_id['password'];
 
 		//所属プロジェクトのセッションデータをセット
 		$this->setProjectTeamSessionByMemberId($this->_id);

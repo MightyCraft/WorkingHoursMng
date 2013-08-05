@@ -1,47 +1,47 @@
-# SETTING �����菇
+# SETTING 導入手順
 
 
-## ������ъ�
+## 動作実績環境
 
 
-    ��Apache
+    ■Apache
     Version : 2.2
-    �_�E�����[�h : http://httpd.apache.org/download.cgi
+    ダウンロード : http://httpd.apache.org/download.cgi
 
-    ��PHP
+    ■PHP
     Version : 5.2
-    �_�E�����[�h : http://www.php.net/downloads.php
-    �g�����W���[�� : mbstring,mysql
-    �O�����C�u���� : PEAR/MDB2(2.4.0),PEAR/File_Archive(1.5.5)
+    ダウンロード : http://www.php.net/downloads.php
+    拡張モジュール : mbstring,mysql
+    外部ライブラリ : PEAR/MDB2(2.4.0),PEAR/File_Archive(1.5.5)
                      
-    ��MySQL
+    ■MySQL
     Version : 5.5
-    �_�E�����[�h: http://dev.mysql.com/downloads/
+    ダウンロード: http://dev.mysql.com/downloads/
 
 
-## ���ݒ�
+## 環境設定
 
 
-####���O��
+####■前提
 
-Apache�APHP�AMySQL������\�Ȋ��ł���K�v������܂��B
+Apache、PHP、MySQLが動作可能な環境である必要があります。
 
-####���C���X�g�[��
+####■インストール
 
 
-#####GitHub�̃��|�W�g����Clone����ꍇ
+#####GitHubのリポジトリをCloneする場合
 
-    cd �sWeb�T�[�o�h�L�������g���[�g�t
+    cd 《Webサーバドキュメントルート》
     git clone --recursive git@github.com:MightyCraft/WorkingHoursMng.git
 
-#####GitHub����\�[�X���_�E�����[�h���C���X�g�[������ꍇ
+#####GitHubからソースをダウンロードしインストールする場合
 
-1. GitHub����\�[�X���_�E�����[�h���܂��B  
+1. GitHubからソースをダウンロードします。  
     https://github.com/MightyCraft/WorkingHoursMng.git
-1. Web�T�[�o�̌��J�p�f�B���N�g���̃h�L�������g���[�g�ȉ��ɁA�𓀂����t�@�C����W�J���܂��B
-2. GitHub����_�E�����[�h�����t�@�C������L�t�H���_�ȉ��ɉ𓀁E�ۑ����܂��B
+1. Webサーバの公開用ディレクトリのドキュメントルート以下に、解凍したファイルを展開します。
+2. GitHubからダウンロードしたファイルを上記フォルダ以下に解凍・保存します。
 
-�ȉ��̃f�B���N�g���\���ɂȂ�悤�ɁA�ۑ����܂��B
+以下のディレクトリ構成になるように、保存します。
 		
 	/
 	  WorkingHoursMng/
@@ -51,85 +51,85 @@ Apache�APHP�AMySQL������\�Ȋ��ł���K�v������܂��B
         log/
         mcweb/
 
-#####���ӎ���
+#####注意事項
 
-* log�t�H���_��cache�t�H���_�������ꍇ�́A��t�H���_�ł悢�̂ŁA�K���쐬���Ă��������B
-* log�t�H���_��cache�t�H���_�́A�t�H���_�ւ̏������݌��������悤�ɐݒ肵�Ă��������B  
-  (Linux�T�[�o��ɍ쐬����ꍇ�́A�A�N�Z�X������777�ɕύX���Ă��������B)
+* logフォルダとcacheフォルダが無い場合は、空フォルダでよいので、必ず作成してください。
+* logフォルダとcacheフォルダは、フォルダへの書き込み権限をもつように設定してください。  
+  (Linuxサーバ上に作成する場合は、アクセス権限を777に変更してください。)
 
-####���V���{���b�N�����N�̍쐬
+####■シンボリックリンクの作成
 
-�V���{���b�N�����N�𐶐����܂��B
+シンボリックリンクを生成します。
 	
-**Windows���̏ꍇ**
+**Windows環境の場合**
 
-linkd�R�}���h�����݂��Ȃ��ꍇ�́A�_�E�����[�h���Ă��������B
+linkdコマンドが存在しない場合は、ダウンロードしてください。
 		
-�ݒ���@�́A`linkd.exe`�́A�p�X�̒ʂ��Ă���Ƃ���ɔz�u���Ă��������B
+設定方法は、`linkd.exe`は、パスの通っているところに配置してください。
 
-`�sC:\WINDOWS\system32\�t`�������߂ł��B
+`《C:\WINDOWS\system32\》`がお勧めです。
 
-cmd���N�����A`�sWeb�T�[�o�h�L�������g���[�g�t/WorkingHoursMng/documentroot/`�f�B���N�g���Ɉړ��������ƂɁA
-�ȉ��̃R�}���h�����s���Ă��������B
+cmdを起動し、`《Webサーバドキュメントルート》/WorkingHoursMng/documentroot/`ディレクトリに移動したあとに、
+以下のコマンドを実行してください。
 
-    linkd link �sWeb�T�[�o�h�L�������g���[�g�t\WorkingHoursMng\app\html
+    linkd link 《Webサーバドキュメントルート》\WorkingHoursMng\app\html
 
-**Linux���̏ꍇ**
+**Linux環境の場合**
 
-`�sWeb�T�[�o�h�L�������g���[�g�t/WorkingHoursMng/documentroot/`�ȉ���
-`�sWeb�T�[�o�h�L�������g���[�g�t/WorkingHoursMng/app/html`�ւ̃V���{���b�N�����N�𐶐����܂��B
+`《Webサーバドキュメントルート》/WorkingHoursMng/documentroot/`以下に
+`《Webサーバドキュメントルート》/WorkingHoursMng/app/html`へのシンボリックリンクを生成します。
 
 
-#####documentroot�������}
+#####documentroot内完成図
 
-    development	 - �J���җp�֗�PHP�t�H���_
-    link		 - "../app/html"�ւ̃V���{���b�N�����N
+    development	 - 開発者用便利PHPフォルダ
+    link		 - "../app/html"へのシンボリックリンク
     -.htaccess
     entry.php
 
-�� �V���{���b�N�����N��HTML�Ȃǂ��ی����ɂȂ��Ă��܂��Ƃ����S�z�����邩������܂��񂪁A
-mod_rewrite���摜�ȊO�ւ̃A�N�Z�X��h���悤�ɂȂ��Ă��܂��B  
+※ シンボリックリンクでHTMLなどが丸見えになってしまうという心配があるかもしれませんが、
+mod_rewriteが画像以外へのアクセスを防ぐようになっています。  
 
-�� ���ݒ�ɂ���ĎQ�Ƃ���documentroot�����}�ƈقȂ�ꍇ������܂��B��q�́u�e��A�v���P�[�V�����ݒ� �������v �Q��
+※ 環境設定によって参照するdocumentroot内が図と異なる場合があります。後述の「各種アプリケーション設定 複数環境」 参照
 
-####���e��ݒ�
+####■各種設定
 
-#####�ݒ�t�@�C��(release.ini.php�j�̐ݒ���@ 
+#####設定ファイル(release.ini.php）の設定方法 
 
-1. `app/define/release.ini.php.sample`�����l�[��  
+1. `app/define/release.ini.php.sample`をリネーム  
     release.ini.php.sample  
-    ��  
+    ↓  
     release.ini.php
-1. PEAR�ւ̃p�X��ݒ�
-1. **URL_DOMAIN_ROOT**�ݒ�	�T�C�gURL��documentroot�p�X�w��	(�� �Ō�Ɂu/�v������)
-1. **URL_SITE_ROOT**�ݒ�	    �T�C�gURL��documentroot�p�X�w��	(�� �Ō�Ɂu/�v������)
-1. **URL_FRAMEWORK_PHP**�ݒ�	�T�C�gURL��documentroot�p�X�w��	(�� �Ō�Ɂu/�v�����Ȃ�)
-1. **DIR_LIB_ROOT**�ݒ�	    �ۑ��t�@�C���p�X�w��		    (�� �Ō�Ɂu/�v�����Ȃ�)
-1. DB�ڑ��̐ݒ�
-    `DatabaseSetting::setMaster('mysql://[���[�UID]:[�p�X���[�h]@[�T�[�o]/[DB��]?charset=[�����Z�b�g]');`
+1. PEARへのパスを設定
+1. **URL_DOMAIN_ROOT**設定	サイトURLのdocumentrootパス指定	(※ 最後に「/」をつける)
+1. **URL_SITE_ROOT**設定	    サイトURLのdocumentrootパス指定	(※ 最後に「/」をつける)
+1. **URL_FRAMEWORK_PHP**設定	サイトURLのdocumentrootパス指定	(※ 最後に「/」をつけない)
+1. **DIR_LIB_ROOT**設定	    保存ファイルパス指定		    (※ 最後に「/」をつけない)
+1. DB接続の設定
+    `DatabaseSetting::setMaster('mysql://[ユーザID]:[パスワード]@[サーバ]/[DB名]?charset=[文字セット]');`
 	
-����q�́uMySQL�ݒ�v�Ŏ��ۂ̏����f�[�^�x�[�X�ݒ���������܂��B  
-��3�`6�⑫ Windows���̏ꍇ�́A�h���C�u�́w�啶���x�B\�́u/�v�ɂ���B
+※後述の「MySQL設定」で実際の初期データベース設定をおこいます。  
+※3～6補足 Windows環境の場合は、ドライブは『大文字』。\は「/」にする。
 
-######�L�q��
+######記述例
 
-    //2. PEAR�ւ̃p�X��ݒ�
+    //2. PEARへのパスを設定
     set_include_path('C:/app/xampp/php/PEAR');
-    �E
-    �E
-    //3. URL_DOMAIN_ROOT	�T�C�gURL��documentroot�p�X�w��
+    ・
+    ・
+    //3. URL_DOMAIN_ROOT	サイトURLのdocumentrootパス指定
     define('URL_DOMAIN_ROOT', 'http://localhost/WorkingHoursMng/documentroot/');
-    //4. URL_SITE_ROOT	    �T�C�gURL��documentroot�p�X�w��
+    //4. URL_SITE_ROOT	    サイトURLのdocumentrootパス指定
     define('URL_SITE_ROOT', 'http://localhost/WorkingHoursMng/documentroot/');
-    //5. URL_FRAMEWORK_PHP	�T�C�gURL��documentroot�p�X�w��
+    //5. URL_FRAMEWORK_PHP	サイトURLのdocumentrootパス指定
     define('URL_FRAMEWORK_PHP', 'http://localhost/WorkingHoursMng/documentroot');
-    �E
-    �E
-    //6. DIR_LIB_ROOT	    �ۑ��t�@�C���p�X�w��
+    ・
+    ・
+    //6. DIR_LIB_ROOT	    保存ファイルパス指定
     define('DIR_LIB_ROOT',	'C:/app/xampp/htdocs/WorkingHoursMng');
-    �E
-    �E
-    //7. DB�ڑ��̐ݒ�
+    ・
+    ・
+    //7. DB接続の設定
     DatabaseSetting::setMaster('mysql://root:pass@localhost/working_hours_mng?charset=utf8');
     DatabaseSetting::setSlaves(
     array(
@@ -138,72 +138,123 @@ mod_rewrite���摜�ȊO�ւ̃A�N�Z�X��h���悤�ɂȂ��Ă��܂��B
     		'mysql://root:pass@localhost/working_hours_mng?charset=utf8'
     	)
 		
-�� ���ݒ�ɂ���ĎQ�Ƃ���ݒ�t�@�C�����قȂ�ꍇ������܂��B�u�e��A�v���P�[�V�����ݒ� ������ �Q�Ɓv
+※ 環境設定によって参照する設定ファイルが異なる場合があります。「各種アプリケーション設定 複数環境 参照」
 		
-#####��MySQL�ݒ�
+#####■MySQL設定
 
-`create_working_hours_mng.sql`�̃X�N���v�g�����s���܂��B
+`create_working_hours_mng.sql`のスクリプトを実行します。
 		
-#####��Apache�ݒ�
+#####■Apache設定
 
-Apache Portable Runtime library �� IPv6���T�|�[�g���Ă��Ȃ��ꍇ��`httpd.conf`�ɉ��L�C�����s���܂��B
+Apache Portable Runtime library が IPv6をサポートしていない場合は`httpd.conf`に下記修正を行います。
 		
     Listen 80
-    ��
+    ↓
     Listen 0.0.0.0:80
 	
-#####��Web�H���\�ɊǗ����[�U�Ń��O�C���o����Ί��ݒ芮��
+#####■Web工数表に管理ユーザでログイン出来れば環境設定完了
 
 ID/PASS root/root	
-    `http://�sWEB�T�[�o�A�h���X�t/WorkingHoursMng/documentroot/`
+    `http://《WEBサーバアドレス》/WorkingHoursMng/documentroot/`
 
-###�e��A�v���P�[�V�����ݒ�
+###各種アプリケーション設定
 
+#####■マスタ設定
 
-#####�����[�U�쐬
+######アカウント作成：ログインするために必要
 
-�A�J�E���g����ʂ�胆�[�U��o�^
-(�A�J���E���g�Ǘ����A�J�E���g�ꗗ �V�K�ǉ�����)
+管理ユーザでログイン後、アカウント情報画面よりユーザを登録します。  
+(アカンウント管理＞アカウント一覧 新規追加押下)
+			
+アカウント登録には下記のマスタ設定を使用します。
+* 権限マスタ (その他マスタ管理＞権限管理押下)  
+  初期データとして「システム管理者」が登録されています。必要に応じて登録・修正してください。
 
-���̑��K�v������΃N���C�A���g�E�v���W�F�N�g�E�}�X�^�f�[�^���̓o�^���s���܂��B  
-���K�v�����E�o�^���@���ɂ��Ă͓����́uREFERENCE.md�v�Q��
+* 部署マスタ (その他マスタ管理＞部署管理押下)  
+  初期データとして「総務部」「営業部」「制作部」が登録されています。必要に応じて登録・修正してください。
 
-#####��������
+* 役職マスタ (その他マスタ管理＞役職管理押下)  
+  初期データとして「一般」が登録されています。必要に応じて登録・修正してください。
 
-���V�X�e���ł͊��ݒ���g�p���āA���ݗL���Ȑݒ�t�@�C�������[�h����@�\�������Ă��܂��B 
+* 社員タイプマスタ (その他マスタ管理＞社員タイプ管理押下)  
+  初期データとして「正社員」が登録されています。必要に応じて登録・修正してください。
+
+* 社員コストマスタ (その他マスタ管理＞社員コスト管理押下)  
+  初期データとして「基準値」が登録されています。必要に応じて登録・修正してください。
+
+※必要権限・登録方法等についてはそれぞれ同梱の「HELP.md」,「REFERENCE.md」参照
+		
+######プロジェクト登録：システムを利用するのに必要
+
+プロジェクト新規追加画面よりプロジェクトを登録します。  
+(プロジェクト管理＞既存案件一覧/終了案件一覧 新規追加押下)
+
+プロジェクト登録には下記のマスタ設定を使用します。
+* クライアントマスタ　(クライアント管理押下)  
+  初期データは未登録の状態です。必要に応じて登録・修正してください。  
+  (こちらのマスタデータが登録されていないとプロジェクトの登録は不可です。)
+
+* 社員コストマスタ
+  ※アカウント作成参照
+
+※必要権限・登録方法等についてはそれぞれ同梱の「HELP.md」,「REFERENCE.md」参照
+
+#####■バッチ設定
+
+######使用済みコスト工数集計バッチ：最新の使用済みコスト工数を集計するのに必要
+
+使用済みコスト工数集計するには下記コマンドを実行します。
+
+    php -f 《実ファイル格納ディレクトリ》/WorkingHoursMng/documentroot/entry.php /commandline/cron/cost
+　　
+例) 実ファイル格納ディレクトリが`C:/project/`の場合
+
+    php -f C:/project/WorkingHoursMng/documentroot/entry.php /commandline/cron/cost    
+
+実行後以下の文字列がのみ表示されば正常終了となります。
+
+    start=2013-08-01 17:25:12
+    end=2013-08-01 17:25:12
+
+※こちらはcron等に登録しユーザの更新が少ない時間帯に自動実行することを推奨します。  
+※コスト工数の説明は同梱の「HELP.md」の「※2 コスト工数について」をご確認下さい。
+
+#####■複数環境
+
+当システムでは環境設定を使用して、現在有効な設定ファイルをロードする機能を持っています。 
 	
-#####��`��
+#####定義環境
 
-�ȉ��̂R�̊�����`����Ă���
+以下の３つの環境が定義されており
 
-�����ɎQ�Ƃ���`�sWeb�T�[�o�h�L�������g���[�g�t/WorkingHoursMng/documentroot/`�z���̐ݒ�t�@�C�����قȂ�܂��B
+環境毎に参照する`《Webサーバドキュメントルート》/WorkingHoursMng/documentroot/`配下の設定ファイルが異なります。
 	  
 
-1. ���[�J����  
-�\�[�X�Ɏ������S���҂̍��PC�ɍ쐬�����Ɨp����z�肵����`�ł��B  
-�ݒ�t�@�C�� `local.ini.php` ���Q��	  
-2. �f�o�b�O��  
-�C�������\�[�X�̓���m�F����z�肵����`�ł��B  
-�ݒ�t�@�C�� `debug.ini.php` ���Q��
-3. �����[�X��  
-���ۂɉ^�p����{�Ԋ���z�肵����`�ł��B  
-�ݒ�t�@�C�� `release.ini.php` ���Q��
+1. ローカル環境  
+ソースに手を入れる担当者の作業PCに作成する作業用環境を想定した定義です。  
+設定ファイル `local.ini.php` を参照	  
+2. デバッグ環境  
+修正したソースの動作確認環境を想定した定義です。  
+設定ファイル `debug.ini.php` を参照
+3. リリース環境  
+実際に運用する本番環境を想定した定義です。  
+設定ファイル `release.ini.php` を参照
 
-�������`****.ini.php.sample`�Ƃ����u.sample�v�t���̃t�@�C�������݂���̂�
-�u.sample�v�����Ƀ��l�[�����Ďg�p���ĉ������B
+いずれも`****.ini.php.sample`という「.sample」付きのファイルが存在するので
+「.sample」無しにリネームして使用して下さい。
 
-#####�ݒ���@
+#####設定方法
 	 
-`�sWeb�T�[�o�h�L�������g���[�g�t/WorkingHoursMng/documentroot/`�z���ɋK��̃t�@�C����z�u���邱�ƂŊ��w�肪�\�ł��B
+`《Webサーバドキュメントルート》/WorkingHoursMng/documentroot/`配下に規定のファイルを配置することで環境指定が可能です。
 
-1. ���[�J����  
-  `.local` �t�@�C��(���g�͋�̃t�@�C��)��z�u���܂��B
-2. �f�o�b�O��  
-  `.debug` �t�@�C��(���g�͋�̃t�@�C��)��z�u���܂��B
-3. �����[�X��  
-  `.release` �t�@�C��(���g�͋�̃t�@�C��)��z�u���܂��B
-  �������� `.local`  `.debug`  `.release` �̂�������z�u���Ȃ��悤�ɂ��܂��B
+1. ローカル環境  
+  `.local` ファイル(中身は空のファイル)を配置します。
+2. デバッグ環境  
+  `.debug` ファイル(中身は空のファイル)を配置します。
+3. リリース環境  
+  `.release` ファイル(中身は空のファイル)を配置します。
+  もしくは `.local`  `.debug`  `.release` のいずれも配置しないようにします。
 	   
-�܂� `.local`  `.debug`  `.release` �����������ɑ��݂���ꍇ��
-1 < 2 < 3 �̗D��x�ŗL���ɂȂ�������܂�܂��B
+また `.local`  `.debug`  `.release` が複数同時に存在する場合は
+1 < 2 < 3 の優先度で有効になる環境が決まります。
 	  

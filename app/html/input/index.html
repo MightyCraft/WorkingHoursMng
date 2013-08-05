@@ -25,7 +25,7 @@
 <!--.....メインコンテンツ.....-->
 <div id="content">
 <div id="content-main">
-<h2>工数入力画面</h2>
+<h2>工数入力</h2>
 <br />
 
  {if $_res == 1}
@@ -141,7 +141,7 @@
  <th width="10%" height="30">PJコード</th>
  <th width="23%" height="30">顧客名</th>
  <th width="29%">プロジェクト名</th>
- <th width="5%">時間</th>
+ <th width="5%"> 作業時間</th>
  <th width="28%">備考</th>
  <th width="5%">行操作</th>
  </tr>
@@ -156,10 +156,19 @@
  {if $list.project_name}
   {if $project_list[$list.project_id].project_type==$smarty.const.PROJECT_TYPE_BACK}{* 後発作業用コードの時 *}
    {$list.project_name}<br />⇒
-   {if $project_list[$list.end_project_id]}<a href="../list/project?project_id={$list.end_project_id}&date_Year={$_work_year}&date_Month={$_work_month}">{$project_list[$list.end_project_id].name}</a>
+   {if $project_list[$list.end_project_id]}
+   {if $session.manhour.member.auth.list_project}
+   <a href="../list/project?project_id={$list.end_project_id}&date_Year={$_work_year}&date_Month={$_work_month}">{$project_list[$list.end_project_id].name}</a>
+   {else}
+   {$project_list[$list.end_project_id].name}
+   {/if}
    {else}不明なプロジェクト{/if}
   {else}{* 後発以外の時 *}
+   {if $session.manhour.member.auth.list_project}
    <a href="../list/project?project_id={$list.project_id}&date_Year={$_work_year}&date_Month={$_work_month}">{$list.project_name}</a>
+   {else}
+   {$list.project_name}
+   {/if}
    {if $project_list[$list.project_id].project_type==$smarty.const.PROJECT_TYPE_REMOVAL}<br /><span style="color:#FF0000;">※廃止プロジェクト</span>
    {elseif (!empty($project_list[$list.project_id].end_unixtime) && ($date_unixtime > $project_list[$list.project_id].end_unixtime))}<br /><span style="color:#FF0000;">※終了プロジェクト</span>{/if}
   {/if}
@@ -236,7 +245,9 @@
 <br /><br />
 <div id="matches">
 <div style="padding:6px;">
+{if $session.manhour.member.auth.list_member}
 <a href="../list/member?date_Year={$_work_year}&date_Month={$_work_month}">{$_work_year}年{$_work_month}月の工数照会へ</a>
+{/if}
 </div>
 </div>
 
@@ -247,14 +258,16 @@
 <tr>
 <th>日</th>
 {foreach from=$holidays key=day_key item=day_item}
-<th align="center" {if $holidays[$day_key] == 1}id="blue"{elseif ($holidays[$day_key] == 2) || ($holidays[$day_key] == 3)}id="red"{/if} nowrap><a href="index.html?work_year={$_work_year}&work_month={$_work_month}&work_day={$day_key}">{$day_key}</a></th>
+<th align="center" {if $holidays[$day_key] == 1}id="blue"{elseif ($holidays[$day_key] == 2) || ($holidays[$day_key] == 3)}id="red"{/if} nowrap>
+<a href="index.html?work_year={$_work_year}&work_month={$_work_month}&work_day={$day_key}">{$day_key}</a>
+</th>
 {/foreach}
 </tr>
 <tr>
-<th>時間</th>
+<th>作業時間</th>
 {foreach from=$holidays key=day_key2 item=day_item2}
 <td nowrap {if $_work_day == $day_key2}style="background-color: #CCFFCC;"{/if}>
-{if $arr_manhour[$day_key2]}{$arr_manhour[$day_key2]}{else}　{/if}
+{if $arr_manhour[$day_key2]}{$arr_manhour[$day_key2]|number_format:2}{else}　{/if}
 </td>
 {/foreach}
 </tr>

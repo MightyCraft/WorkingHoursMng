@@ -49,8 +49,7 @@ class _excel_do extends PostAndGetScene
 		//エクセル出力権限チェック＆出力対象社員情報取得
 		$member_by_ids	= array();
 		$post_name		= '';
-		$auth_excel	= checkAuthExcel($_SESSION['manhour']['member']['auth_lv'], $_SESSION['manhour']['member']['post']);
-		if($auth_excel)
+		if($_SESSION['manhour']['member']['auth']['open_other_excel'])
 		{
 			// 出力権限あり
 			if (!empty($this->_member_id))
@@ -324,8 +323,7 @@ ECHO_TEXT;
 $total_line = <<<ECHO_TEXT
  <tr height=39 style='mso-height-source:userset;height:29.25pt'>
   <td height=39 style='height:29.25pt'></td>
-  <td class=xl35 style='border-top:none'><ruby>合<span style='display:none'><rt>ゴウ</rt></span></ruby>
-  <ruby>計<span style='display:none'><rt>ケイ</rt></span></ruby></td>
+  <td class=xl35 style='border-top:none'><ruby>合<span style='display:none'><rt>ゴウ</rt></span></ruby><ruby>計<span style='display:none'><rt>ケイ</rt></span></ruby></td>
   <td class=xl30 style='border-top:none;border-left:none'>　</td>
   $total_line_data
  </tr>

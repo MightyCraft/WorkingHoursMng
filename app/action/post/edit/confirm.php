@@ -19,12 +19,6 @@ class _post_edit_confirm extends PostScene
 
 	function check()
 	{
-		// 権限が無い場合は工数入力画面に強制遷移
-		if (!checkAuthPostManagement($_SESSION['manhour']['member']['auth_lv'],$_SESSION['manhour']['member']['post']))
-		{
-			MCWEB_Util::redirectAction("/input/index/");
-		}
-
 		// バリデートチェック
 		$errors = MCWEB_ValidationManager::validate(
 			$this

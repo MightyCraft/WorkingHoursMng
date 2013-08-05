@@ -17,7 +17,7 @@
 <!--.....メインコンテンツ.....-->
 <div id="content">
 <div id="content-main">
-<h2>ＰＪコード一括変換画面</h2>
+<h2>ＰＪコード一括変換</h2>
 <br />
 <div id="matches">
 以下の内容で宜しければ登録ボタンを押してください。<br />
@@ -58,9 +58,9 @@
 {/foreach}
 </tr>
 <tr>
-<th>変更前工数</th>
+<th>変更前作業時間</th>
 {foreach name=monhour from=$calendar key=date item=week}
-{if !empty($monhour_list[$date])}<td style="{if $monhour_list[$date].befor_end_flg}color: #FF6060;{/if} {if $monhour_list[$date].change_flg}font-weight: bold;{/if}">{$monhour_list[$date].man_hour}</td>{else}<td></td>{/if}
+{if !empty($monhour_list[$date])}<td style="{if $monhour_list[$date].befor_end_flg}color: #FF6060;{/if} {if $monhour_list[$date].change_flg}font-weight: bold;{/if}">{$monhour_list[$date].man_hour|number_format:2}</td>{else}<td></td>{/if}
 {/foreach}
 </tr>
 <tr>
@@ -70,8 +70,8 @@
 {/foreach}
 </tr>
 </table>
-<div style="color: #FF6060;">※「変更前工数」：変更対象のプロジェクトに該当する日毎の工数です。赤字は［変更前］に終了案件扱いとなっている工数です。</div>
-<div style="color: #6060FF;">※「変更対象」：今回変更対象となる日付であることを示します。青字は［変更後］に終了案件扱いになる工数です。</div>
+<div style="color: #FF6060;">※「変更前作業時間」：変更対象のプロジェクトに該当する日毎の作業時間です。赤字は［変更前］に終了案件扱いとなっている作業時間です。</div>
+<div style="color: #6060FF;">※「変更対象」：今回変更対象となる日付であることを示します。青字は［変更後］に終了案件扱いになる作業時間です。</div>
 </div><!-- /div#TAttr -->
 <table>
 <tr><td>

@@ -1,0 +1,12 @@
+@charset "UTF-8";
+/*--------------------------------------
+   マスタメンテナンス関連 設定
+--------------------------------------*/
+
+#auth_config_checkbox_layout label {
+  display: block;
+  float: left;
+  width: 250px;
+  white-space: nowrap;
+}
+

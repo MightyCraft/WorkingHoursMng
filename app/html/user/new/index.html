@@ -78,6 +78,28 @@ creatSearchListText('team_list_project_id', '1' , '60%', 'team_list_project_id_k
 </td>
 </tr>
 <tr>
+<th class="cel_r" style="width: 200px">社員タイプ</th>
+<td class="cel_l">
+<select name="mst_member_type_id">
+{foreach from=$array_member_type key=member_type_key item=member_type_data}
+<option value="{$member_type_data.id}"{if $member_type_data.id == $_mst_member_type_id} selected="selected"{/if}>{$member_type_data.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">社員コスト</th>
+<td class="cel_l">
+<select name="mst_member_cost_id"">
+{foreach from=$array_member_cost key=member_cost_key item=member_cost_data}
+<option value="{$member_cost_data.id}"{if $member_cost_data.id == $_mst_member_cost_id} selected="selected"{/if}>{$member_cost_data.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
 <th class="cel_r" style="width: 200px">パスワード</th>
 <td class="cel_l"><input type="password" name="password" style="width:300px;ime-mode: disabled;" value="{$_password}" maxlength="{$smarty.const.USER_MEMBER_PASSWORD_MAX}">(半角英数{$smarty.const.USER_MEMBER_PASSWORD_MAX}文字以下)</td>
 </tr>

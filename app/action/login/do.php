@@ -57,7 +57,7 @@ class _login_do extends PostScene
 				setcookie('cookie_manhour_member_id_login', '', time() - 3600, '/', $domain);
 			}
 		}
-		MCWEB_Util::redirectAction('/input/index');
+		MCWEB_Util::redirectAction('/');
 	}
 }
 ?>

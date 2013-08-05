@@ -62,6 +62,18 @@
 </td>
 </tr>
 <tr>
+<th width="15%" align="left">社員タイプ</th>
+<td width="85%">
+<select name="member_type">
+   <option value="0">▼選択</option>
+{foreach from=$array_member_type item=member_type_list key=member_type_list_key}
+   <option value="{$member_type_list.id}"{if $member_type_list.id == $member_type} selected{/if}>{$member_type_list.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
 <th width="15%" align="left">表示対象</th>
 <td width="85%" >
 {html_radios name="display_type" options=$display_type_list selected=$display_type style="vertical-align:middle;" separator=" "}
@@ -86,8 +98,9 @@
 </div>
 
 
-
+{if $session.manhour.member.auth.user_new_}
 <a href="new/start.html"><img src="../img/button_newadd.gif" alt="新規追加"></a>
+{/if}
 
 <div id="topic-path">
 {$_page}/{$last_page}ページ　{$all_num}件
@@ -110,9 +123,13 @@
 <th><a href="?column=auth_lv{if $_column == 'auth_lv' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">権限{if $_column == 'auth_lv'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
 <th><a href="?column=post{if $_column == 'post' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">所属{if $_column == 'post'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
 <th><a href="?column=position{if $_column == 'position' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">役職{if $_column == 'position'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
-<th><a href="?column=regist_date{if $_column == 'regist_date' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">登録日{if $_column == 'regist_date'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
-<th><a href="?column=update_date{if $_column == 'update_date' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">更新日{if $_column == 'update_date'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=mst_member_type_id{if $_column == 'mst_member_type_id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">社員タイプ{if $_column == 'mst_member_type_id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+{if $session.manhour.member.auth.user_new_}
+<th><a href="?column=mst_member_cost_id{if $_column == 'mst_member_cost_id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">社員コスト{if $_column == 'mst_member_cost_id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+{/if}
+{if $session.manhour.member.auth.open_user_edit}
 <th>更新</th>
+{/if}
 <th>削除</th>
 </tr>
 
@@ -128,14 +145,26 @@
 
 <td style="text-align:center;">{$item.id}</td>
 <td>{$item.member_code}</td>
+{if $session.manhour.member.auth.list_member}
 <td><a href="../list/member?member_id={$item.id}">{$item.name}</a></td>
+{else}
+<td>{$item.name}</td>
+{/if}
 <td style="text-align:center;">{$array_auth_lv[$item.auth_lv]}</td>
 <td style="text-align:center;">{$array_post[$item.post].name}</td>
 <td style="text-align:center;">{$array_position[$item.position].name}</td>
-<td style="text-align:center;">{$item.regist_date}</td>
-<td style="text-align:center;">{$item.update_date}</td>
+<td style="text-align:center;">{if $array_member_type[$item.mst_member_type_id]}{$array_member_type[$item.mst_member_type_id].name}{else}　{/if}</td>
+{if $session.manhour.member.auth.user_new_}
+<td style="text-align:center;">{if $array_member_cost[$item.mst_member_cost_id]}{$array_member_cost[$item.mst_member_cost_id].name}{else}　{/if}</td>
+{/if}
+{if $session.manhour.member.auth.open_user_edit}
 <td style="text-align:center;">{if !$item.delete_flg}<a href="edit/start.html?id={$item.id}" id="edit">編集</a><br/>{/if}</td>
-<td style="text-align:center;">{if !$item.delete_flg}<a href="delete/confirm.html?id={$item.id}" id="del">削除</a><br/>{else if}削除済{/if}</td>
+{/if}
+<td style="text-align:center;">{if !$item.delete_flg}
+{if $session.manhour.member.auth.user_delete_}
+<a href="delete/confirm.html?id={$item.id}" id="del">削除</a><br/>
+{/if}
+{else if}削除済{/if}</td>
 </tr>
 {/foreach}
 </table>

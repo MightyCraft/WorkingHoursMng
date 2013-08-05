@@ -111,7 +111,7 @@ class Member
 	 */
 	function getMemberByPost($post,$delete_flg=false,$delete_sort=false)
 	{
-		// 抽出対所属ID
+		// 抽出する所属ID
 		if (is_array($post))
 		{
 			// IDが複数指定の時
@@ -149,7 +149,7 @@ class Member
 
 		return $res;
 	}
-	
+
 	/**
 	 * 指定された役職ID（複数指定可）よりデータを取得
 	 *
@@ -160,7 +160,7 @@ class Member
 	 */
 	function getMemberByPosition($position, $delete_flg=false, $delete_sort=false)
 	{
-		// 抽出対約束ID
+		// 抽出する役職ID
 		if (is_array($position))
 		{
 			// IDが複数指定の時
@@ -177,11 +177,11 @@ class Member
 			$sql = "SELECT * FROM {$this->table} WHERE position = ?";
 			$params = array($position);
 		}
-	
+
 		// 削除済み(退職者)を含むか
 		if (!$delete_flg)
 		{
-	
+
 			$sql .=  ' AND delete_flg = 0';
 		}
 		// 削除済み(退職者)フラグでソートするか
@@ -193,56 +193,232 @@ class Member
 		{
 			$sql .= ' ORDER BY id';
 		}
-	
+
 		$res = $this->instance_db->select($sql,$params);
+
+		return $res;
+	}
+
+	/**
+	 * 指定された社員タイプID（複数指定可）よりデータを取得
+	 *
+	 * @param	integer/array	：$member_type	社員タイプID（複数指定時はarrayで指定）
+	 * @param	string			：$delete_flg	削除フラグ：trueの時削除も含む
+	 * @param	string			：$delete_sort	削除フラグでソートを行うか
+	 * @return	array			：取得データ
+	 */
+	function getMemberByMemberType($member_type, $delete_flg=false, $delete_sort=false)
+	{
+		// 抽出する社員タイプID
+		if (is_array($member_type))
+		{
+			// IDが複数指定の時
+			foreach ($member_type as $member_type_id)
+			{
+				$tmp_values[] = "?";
+				$params[] = $member_type_id;
+			}
+			$values = '('.implode(',', $tmp_values).')';
+			$sql = "SELECT * FROM {$this->table} WHERE mst_member_type_id IN {$values}";
+		}
+		else
+		{
+			$sql = "SELECT * FROM {$this->table} WHERE mst_member_type_id = ?";
+			$params = array($member_type);
+		}
+
+		// 削除済み(退職者)を含むか
+		if (!$delete_flg)
+		{
+
+			$sql .=  ' AND delete_flg = 0';
+		}
+		// 削除済み(退職者)フラグでソートするか
+		if ($delete_sort)
+		{
+			$sql .= ' ORDER BY delete_flg, id';
+		}
+		else
+		{
+			$sql .= ' ORDER BY id';
+		}
+
+		$res = $this->instance_db->select($sql,$params);
+
+		return $res;
+	}
+
+	/**
+	 * 指定された社員コストID（複数指定可）よりデータを取得
+	 *
+	 * @param	integer/array	：$member_cost	社員コストID（複数指定時はarrayで指定）
+	 * @param	string			：$delete_flg	削除フラグ：trueの時削除も含む
+	 * @param	string			：$delete_sort	削除フラグでソートを行うか
+	 * @return	array			：取得データ
+	 */
+	function getMemberByMemberCost($member_cost, $delete_flg=false, $delete_sort=false)
+	{
+		// 抽出する社員コストID
+		if (is_array($member_cost))
+		{
+			// IDが複数指定の時
+			foreach ($member_cost as $member_cost_id)
+			{
+				$tmp_values[] = "?";
+				$params[] = $member_cost_id;
+			}
+			$values = '('.implode(',', $tmp_values).')';
+			$sql = "SELECT * FROM {$this->table} WHERE mst_member_cost_id IN {$values}";
+		}
+		else
+		{
+			$sql = "SELECT * FROM {$this->table} WHERE mst_member_cost_id = ?";
+			$params = array($member_cost);
+		}
+
+		// 削除済み(退職者)を含むか
+		if (!$delete_flg)
+		{
+
+			$sql .=  ' AND delete_flg = 0';
+		}
+		// 削除済み(退職者)フラグでソートするか
+		if ($delete_sort)
+		{
+			$sql .= ' ORDER BY delete_flg, id';
+		}
+		else
+		{
+			$sql .= ' ORDER BY id';
+		}
+
+		$res = $this->instance_db->select($sql,$params);
+
+		return $res;
+	}
 	
+	/**
+	 * 指定された権限（複数指定可）よりデータを取得
+	 *
+	 * @param	integer/array	：$auth_lv	権限（複数指定時はarrayで指定）
+	 * @param	string			：$delete_flg	削除フラグ：trueの時削除も含む
+	 * @param	string			：$delete_sort	削除フラグでソートを行うか
+	 * @return	array			：取得データ
+	 */
+	function getMemberByAuthLv($auth_lv, $delete_flg = false, $delete_sort = false)
+	{
+		// 抽出する社員タイプID
+		if (is_array($auth_lv))
+		{
+			// IDが複数指定の時
+			foreach ($auth_lv as $auth_lv_id)
+			{
+				$tmp_values[] = "?";
+				$params[] = $auth_lv_id;
+			}
+			$values = '('.implode(',', $tmp_values).')';
+			$sql = "SELECT * FROM {$this->table} WHERE auth_lv IN {$values}";
+		}
+		else
+		{
+			$sql = "SELECT * FROM {$this->table} WHERE auth_lv = ?";
+			$params = array(
+					$auth_lv
+			);
+		}
+
+		// 削除済み(退職者)を含むか
+		if (!$delete_flg)
+		{
+
+			$sql .= ' AND delete_flg = 0';
+		}
+		// 削除済み(退職者)フラグでソートするか
+		if ($delete_sort)
+		{
+			$sql .= ' ORDER BY delete_flg, id';
+		}
+		else
+		{
+			$sql .= ' ORDER BY id';
+		}
+
+		$res = $this->instance_db->select($sql, $params);
+
 		return $res;
 	}
 	
 	/**
 	 * ユーザー登録
 	 *
-	 * @param array $data
-	 *
-	 * @return array $res
+	 * @param	array $regist_data	登録内容
+	 * @return	array 登録結果
 	 */
-	function insertMember($data)
+	function insertMember($regist_data)
 	{
-		$sql="INSERT INTO {$this->table} (member_code,name,auth_lv,post,position,password,regist_date,update_date) VALUE (?,?,?,?,?,?,?,?)";
+		$response=null;
+		$insert_id=null;
 
-		$res = $this->instance_db->insert($sql,$data);
+		if (!empty($regist_data) && is_array($regist_data))
+		{
+			$regist_data['regist_date'] = date('Y-m-d H:i:s');
+			$regist_data['update_date'] = $regist_data['regist_date'];
 
-		$insert_id = $this->instance_db->lastInsertID();
+			$tmp_columns	= array();
+			$tmp_values		= array();
+			$params			= array();
+			foreach ($regist_data as $key => $value)
+			{
+				$tmp_columns[]	= '`'.$key.'`';			// 登録カラム
+				$tmp_values[]	= "?";					//
+				$params[]		= $value;				// パラメータ
+			}
+			$columns	= '('.implode(',', $tmp_columns).')';
+			$values		= '('.implode(',', $tmp_values).')';
 
-		return array($res,$insert_id);
+			// insert処理
+			$sql="INSERT INTO {$this->table} {$columns} VALUE {$values}";
+			$response	= $this->instance_db->insert($sql,$params);
+			$insert_id	= $this->instance_db->lastInsertID();
+		}
+
+		return array($response,$insert_id);
 	}
-	
+
 	/**
 	 * ユーザー更新(パラメータ指定)
 	 *
-	 * @param array $id
-	 * @param array $data
-	 *
-	 * @return array $res
+	 * @param 	array	$id
+	 * @param 	array 	$data
+	 * @param	boolean	$delete_flg	trueの時は有効社員で無いと修正しない
+	 * @return	array $res
 	 */
 	function updateMemberToParam($id, $data, $delete_flg = true)
 	{
+		// 更新日時
+		$data['update_date']	= date('Y-m-d H:i:s');
+
+		// SET
 		$set	= array();
 		$param	= array();
-		if(is_array($data)) {
-			foreach($data as $key => $value) {
+		if (is_array($data))
+		{
+			foreach($data as $key => $value)
+			{
 				$set[]	= "{$key} = ?";
 				$param[]= $value;
 			}
 		}
-		$param[]	= $id;
 
-		$sql	="UPDATE {$this->table} SET " . implode(',', $set) . " WHERE "; 
+		// WHERE
+		$where = ' WHERE  id = ? ';
+		$param[]	= $id;
 		if ($delete_flg)
 		{
-			$sql	.=" delete_flg = 0 AND ";
+			$where .= " AND delete_flg = 0 ";
 		}
-		$sql	.=" id = ?";
+
+		$sql	="UPDATE {$this->table} SET " . implode(',', $set) . $where;
 		$res	= $this->instance_db->update($sql,$param);
 
 		return $res;
@@ -283,14 +459,14 @@ class Member
 		. " WHERE delete_flg = 0 ORDER BY {$column} {$order}"
 		. " LIMIT {$offset},{$limit}";
 		$data	= $this->instance_db->select($sql,array());
-	
+
 		$query_rows = "SELECT FOUND_ROWS()";
 		$result_rows = $this->instance_db->select($query_rows,array());
 			$all_num = $result_rows[0]['found_rows()'];
-	
+
 					return array($data,$all_num);
 	}
-	
+
 	/**
 	 * ユーザー情報取得ページング対応
 	 * (Where句指定)
@@ -299,7 +475,7 @@ class Member
 	 * @param int $limit
 	 * @param string $column
 	 * @param string $order
-	 * @param string $where_columns 
+	 * @param string $where_columns
 	 * @param string $where_columns_keyword
 	 *
 	 * @return array $res
@@ -308,20 +484,20 @@ class Member
 	{
 		$params = array();
 		$where_keyword_array = array();
-		
+
 		// Where句生成
 		$where = _makeWhereQuery($where_columns, $params);
 
 		// キーワード検索 Where句生成
 		foreach($where_columns_keyword as $key => $value)
 		{
-			if (empty($value)) 
+			if (empty($value))
 			{
 				continue;
 			}
 			$where_keyword_array[] = $key. ' LIKE ?';
 			$params[] = '%'.$value.'%';
-			
+
 		}
 		if (!empty($where_keyword_array))
 		{
@@ -332,7 +508,7 @@ class Member
 				. " {$where} ORDER BY {$column} {$order}"
 				. " LIMIT {$offset},{$limit}";
 		$data	= $this->instance_db->select($sql,$params);
-		
+
 		$query_rows = "SELECT FOUND_ROWS()";
 		$result_rows = $this->instance_db->select($query_rows,array());
 		$all_num = $result_rows[0]['found_rows()'];

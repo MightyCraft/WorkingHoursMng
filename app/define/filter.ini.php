@@ -10,7 +10,9 @@ class MyFilterFactory implements MCWEB_filter_factory
 		if (MCWEB_Framework::getInstance()->commandline)
 		{
 			return array(
-				  new mcweb_encode_input()
+					  new mcweb_define_client_carrier_by_useragent()
+					, new mcweb_define_client_encoding()
+					, new mcweb_encode_input()
 			);
 		}
 		return array(
@@ -25,6 +27,7 @@ class MyFilterFactory implements MCWEB_filter_factory
 			, new mcweb_define_client_encoding()
 			, new mcweb_encode_input()
 			, new mcweb_session_member_check()
+			, new mcweb_check_authority()
 		);
 	}
 

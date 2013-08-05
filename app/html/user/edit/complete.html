@@ -47,6 +47,16 @@
 <td class="cel_l">{$array_position[$member_by_id.position].name}</td>
 </tr>
 <tr>
+<th class="cel_r" style="width: 200px">社員タイプ</th>
+<td class="cel_l">{$array_member_type[$member_by_id.mst_member_type_id].name}</td>
+</tr>
+{if $session.manhour.member.auth.user_new_}
+<tr>
+<th class="cel_r" style="width: 200px">社員コスト</th>
+<td class="cel_l">{$array_member_cost[$member_by_id.mst_member_cost_id].name}</td>
+</tr>
+{/if}
+<tr>
 <th class="cel_r" style="width: 200px">パスワード</th>
 {if $_password_change}
 	{if $member_by_id.id == $session.manhour.member.id}

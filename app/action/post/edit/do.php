@@ -16,11 +16,6 @@ class _post_edit_do extends PostScene
 
 	function check()
 	{
-		// 権限が無い場合は工数入力画面に強制遷移
-		if (!checkAuthPostManagement($_SESSION['manhour']['member']['auth_lv'],$_SESSION['manhour']['member']['post']))
-		{
-			MCWEB_Util::redirectAction("/input/index/");
-		}
 		// ID未指定の時は新規登録扱い
 		if (empty($this->_id))
 		{
@@ -52,7 +47,7 @@ class _post_edit_do extends PostScene
 		if (!empty($errors))
 		{
 			// この時点のエラーは不正なアクセス
-			MCWEB_Util::redirectAction("/post/index/?edit_type={$this->type}&id={$this->_id}&error_flg=1");
+			MCWEB_Util::redirectAction("/post/index?edit_type={$this->type}&id={$this->_id}&error_flg=1");
 		}
 	}
 
@@ -86,7 +81,7 @@ class _post_edit_do extends PostScene
 			if (empty($post_data))
 			{
 				// 修正データが存在しない時は不正なアクセス
-				MCWEB_Util::redirectAction("/post/index/?edit_type={$this->type}&id={$this->_id}&error_flg=1");
+				MCWEB_Util::redirectAction("/post/index?edit_type={$this->type}&id={$this->_id}&error_flg=1");
 			}
 
 			$update_data = array(
@@ -102,16 +97,16 @@ class _post_edit_do extends PostScene
 			// 影響を与えた行数がある
 			if ($this->type == 'new')
 			{
-				MCWEB_Util::redirectAction("/post/index/?edit_type={$this->type}&id={$insert_id}");
+				MCWEB_Util::redirectAction("/post/index?edit_type={$this->type}&id={$insert_id}");
 			}
 			else
 			{
-				MCWEB_Util::redirectAction("/post/index/?edit_type={$this->type}&id={$this->_id}");
+				MCWEB_Util::redirectAction("/post/index?edit_type={$this->type}&id={$this->_id}");
 			}
 		}
 		else
 		{
-			MCWEB_Util::redirectAction("/post/index/?edit_typet={$this->type}&id={$this->_id}&error_flg=1");
+			MCWEB_Util::redirectAction("/post/index?edit_typet={$this->type}&id={$this->_id}&error_flg=1");
 		}
 	}
 }

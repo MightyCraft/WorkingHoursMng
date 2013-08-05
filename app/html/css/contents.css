@@ -346,7 +346,12 @@ A#dl {
 	direction: ltr;
 }
 
-
+/* ツールチップ */
+.ui-common-tooltip{
+	display:none;
+	border:1px solid #666;
+	z-index:99;
+}
 
 
 

@@ -17,7 +17,7 @@
 
 		return $password_tmp;
 	}
-	
+
 	/**
 	 * パスワードを暗号化する
 	 *
@@ -27,161 +27,6 @@
 	function hashPassWord($password)
 	{
 		return hash('sha256', $password);
-	}
-
-	/**
-	 * プロジェクトレベル権限をチェックする
-	 *
-	 * @param array	$auth_array	権限チェック配列
-	 * @param int	$auth_lv	権限レベル
-	 * @param int	$post		役職
-	 * @return boolean
-	 */
-	function checkAuth($auth_array, $auth_lv, $post)
-	{
-		//権限レベル
-		if(isset($auth_array['auth']))
-		{
-			if(array_search($auth_lv, $auth_array['auth']) !== false)
-			{
-				return	true;
-			}
-		}
-		//役職
-		if(isset($auth_array['post']))
-		{
-			if(array_search($post, $auth_array['post']) !== false)
-			{
-				return	true;
-			}
-		}
-		return	false;
-	}
-
-	/**
-	 * アカウント管理権限をチェックする
-	 *
-	 * @param int	$auth_lv	権限レベル
-	 * @param int	$post		役職
-	 * @return boolean
-	 */
-	function checkAuthAccountManagement($auth_lv, $post)
-	{
-		static	$auth_account_management	= false;
-		if(!$auth_account_management)
-		{
-			$auth_account_management	= returnArrayAuthAccountManagement();
-		}
-
-		return	checkAuth($auth_account_management, $auth_lv, $post);
-	}
-
-	/**
-	 * プロジェクト管理権限をチェックする
-	 *
-	 * @param int	$auth_lv	権限レベル
-	 * @param int	$post		役職
-	 * @return boolean
-	 */
-	function checkAuthProjectManagement($auth_lv, $post)
-	{
-		static	$auth_project_management	= false;
-		if(!$auth_project_management)
-		{
-			$auth_project_management	= returnArrayAuthProjectManagement();
-		}
-
-		return	checkAuth($auth_project_management, $auth_lv, $post);
-	}
-
-	/**
-	 * クライアント管理権限をチェックする
-	 *
-	 * @param int	$auth_lv	権限レベル
-	 * @param int	$post		役職
-	 * @return boolean
-	 */
-	function checkAuthClientManagement($auth_lv, $post)
-	{
-		static	$auth_client_management	= false;
-		if(!$auth_client_management)
-		{
-			$auth_client_management	= returnArrayAuthClientManagement();
-		}
-
-		return	checkAuth($auth_client_management, $auth_lv, $post);
-	}
-
-	/**
-	 * 総予算工数周り権限をチェックする
-	 *
-	 * @param int	$auth_lv	権限レベル
-	 * @param int	$post		役職
-	 * @return boolean
-	 */
-	function checkAuthTotalManhour($auth_lv, $post)
-	{
-		static	$auth_total_manhour	= false;
-		if(!$auth_total_manhour)
-		{
-			$auth_total_manhour	= returnArrayAuthTotalManhour();
-		}
-
-		return	checkAuth($auth_total_manhour, $auth_lv, $post);
-	}
-
-	/**
-	 * 部署管理権限をチェックする
-	 *
-	 * @param int	$auth_lv	権限レベル
-	 * @param int	$post		役職
-	 * @return boolean
-	 */
-	function checkAuthPostManagement($auth_lv, $post)
-	{
-		static	$auth_holiday	= false;
-		if(!$auth_holiday)
-		{
-			$auth_holiday	= returnArrayAuthPostManagement();
-		}
-
-		return	checkAuth($auth_holiday, $auth_lv, $post);
-	}
-
-	/**
-	 * 休日管理権限をチェックする
-	 *
-	 * @param int	$auth_lv	権限レベル
-	 * @param int	$post		役職
-	 * @return boolean
-	 */
-	function checkAuthHolidayManagement($auth_lv, $post)
-	{
-		static	$auth_holiday	= false;
-		if(!$auth_holiday)
-		{
-			$auth_holiday	= returnArrayAuthHolidayManagement();
-		}
-
-		return	checkAuth($auth_holiday, $auth_lv, $post);
-	}
-
-	/**
-	 * 他人のエクセル出力権限をチェックする
-	 *
-	 * @param int	$auth_lv	権限レベル
-	 * @param int	$post		役職
-	 * @return boolean
-	 */
-	function checkAuthExcel($auth_lv, $post)
-	{
-		static	$auth_excel	= false;
-		if(!$auth_excel)
-		{
-			$auth_excel	= returnArrayAuthExcel();
-		}
-
-		return	checkAuth($auth_excel, $auth_lv, $post);
 	}
 
 	/**
@@ -209,17 +54,34 @@
 	}
 
 	/**
-	 * 総割当工数計算（時間）
+	 * コスト予算
 	 *
-	 * @param	int	$total_buget：総予算
-	 * @return	int	四捨五入した数値を返す
+	 * @param	int	$total_buget		総予算
+	 * @param	int	$exclusion_budget	コスト管理外予算
+	 * @param	int	$cost_rate			原価率
+	 * @return	int	小数は切捨て
 	 */
-	function getTotal_budget_manhour($total_budget)
+	function calculateCostBudget($total_budget,$exclusion_budget,$cost_rate)
 	{
-		$equation = sprintf(USER_TOTAL_BUDGET_MANHOUR_EQUATION, $total_budget);
-		eval('$result = '. $equation. ';');
+		// ( 総予算 - コスト管理除外単価 ) * 原価率
+ 		$tmp_cost_rate = (int)$cost_rate / (int)COST_RATE_BREAK;
+ 		$cost_budget = (string)(((int)$total_budget * $tmp_cost_rate) - (int)$exclusion_budget);
+		
+ 		return (int)$cost_budget;
+	}
+	/**
+	 * 総割当コスト工数計算（時間）
+	 *
+	 * @param	int	$cost_budget
+	 * @param	int	$member_cost
+	 * @return	int	小数は切捨て
+	 */
+	function calculateTotalCostManhour($cost_budget, $member_cost)
+	{
+		// コスト予算 / 基準社員コスト
+		$total_cost_manhour = (string)($cost_budget / $member_cost);
 
-		return round($result, 0);
+		return (int)$total_cost_manhour;
 	}
 
 
@@ -334,4 +196,106 @@
 		return false;
 	}
 
+	/**
+	 * 指定の2次元配列を結合します。
+	 *
+	 * @param $two_dimensions_array 2次元配列
+	 * @param $delimiters 指定区切文字
+	 *
+	 * @return 配列要素を結合した文字列
+	 */
+	function implodeTwoDimensionsArray($two_dimensions_array, $delimiters=',')
+	{
+		$result = '';
+		foreach ($two_dimensions_array as $one_dimensions_array)
+		{
+			$result .= implode (',', $one_dimensions_array)."\n";
+		}
+		return $result;
+	}
+
+	/**
+	 * 指定配列のソートを行います。
+	 *
+	 * @param	$array	指定配列
+	 * @param	$column ソート対象列
+	 * @param	$sort 昇順・降順指定 ASC or DESC
+	 *
+	 * @return	ソートされた配列
+	 */
+	function usortArray($array, $column, $sort='ASC')
+	{
+		if (empty($column))
+		{
+			return $array;
+		}
+
+		$sort_value = 1;
+		if ($sort == 'DESC')
+		{
+			$sort_value = -1;
+		}
+		usort($array, buildSortFunc(array($column => $sort_value)));
+		return $array;
+	}
+
+	/**
+	 * 配列をソートする関数を返す
+	 *  ex. $keys = array('create_date', 'id'); => create_date, idの順でソートする
+	 *      $keys = array('create_date' => -1, 'id' => 1); => create_dateを逆順, idを正順でソートする
+	 * 返り値は、usort()などのソート関数で使用できる
+	 *
+	 * @param  array  ソートするカラム名の配列
+	 * @return function
+	 */
+	function buildSortFunc($keys)
+	{
+		$key = key($keys);
+		if ($key === 0) {
+			// 0の値が取れるようなら、ソート用のキーだけ与えられたと見て、それぞれの値でASCソート
+			$func = create_function('$a, $b',
+					'foreach ('. var_export($keys, 1). ' as $v) {'.
+					'	if ($a[$v] > $b[$v]) {'.
+					'		return 1;'.
+					'	} elseif ($a[$v] < $b[$v]) {'.
+					'		return -1;'.
+					'	}'.
+					'}'.
+					'return 0;'
+			);
+		} else {
+			// それぞれの値によって、キー値でASC/DESCでソートする
+			$func = create_function('$a, $b',
+					'foreach ('. var_export($keys, 1). ' as $k => $v) {'.
+					'	if ($v == -1) {'.
+					'		if ($a[$k] < $b[$k]) {'.
+					'			return 1;'.
+					'		} elseif ($a[$k] > $b[$k]) {'.
+					'			return -1;'.
+					'		}'.
+					'	} else {'.
+					'		if ($a[$k] > $b[$k]) {'.
+					'			return 1;'.
+					'		} elseif ($a[$k] < $b[$k]) {'.
+					'			return -1;'.
+					'		}'.
+					'	}'.
+					'}'.
+					'return 0;'
+			);
+		}
+		return $func;
+	}
+	
+	/**
+	 * 数値の少数桁数を検証
+	 *
+	 * @param  array  $val 検証値
+	 * @param  array  $deci 少数桁の桁数指定
+	 * @return 結果 true:正常 false:異常
+	 */
+	function isNumWithDecimal($val, $deci)
+	{
+		return preg_match('/^[0-9]+(.[0-9]{1,'.$deci.'})?$/', $val) > 0;
+	}
 ?>

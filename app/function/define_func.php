@@ -18,6 +18,13 @@
 		const	SALES				= 2;		//営業部
 		const	GENE_PRODUCT		= 3;		//制作部
 	}
+	
+	// 管理者フラグ
+	class AdministratorFlgDefine
+	{
+		const	ADMINISTRATOR_FLG_OFF	= 0;		//管理者権限 有 
+		const	ADMINISTRATOR_FLG_ON	= 1;		//管理者権限 無
+	}
 
 	// PJコードタイプ定数クラス
 	function setProjectTypeDefine()
@@ -43,16 +50,13 @@
 	//権限
 	function returnArrayAuthLv()
 	{
-		$mm = MessageManager::getInstance();
-		$array = array(
-			AuthLvDefine::NORMAL			=> $mm->sprintfMessage(MessageDefine::USER_AUTH_LV_NAME_1),
-			AuthLvDefine::HEAD				=> $mm->sprintfMessage(MessageDefine::USER_AUTH_LV_NAME_2),
-			AuthLvDefine::MANAGER			=> $mm->sprintfMessage(MessageDefine::USER_AUTH_LV_NAME_3),
-			AuthLvDefine::GENERAL_MANAGER	=> $mm->sprintfMessage(MessageDefine::USER_AUTH_LV_NAME_4),
-			AuthLvDefine::DIRECTOR			=> $mm->sprintfMessage(MessageDefine::USER_AUTH_LV_NAME_5),
-			AuthLvDefine::PRESIDENT			=> $mm->sprintfMessage(MessageDefine::USER_AUTH_LV_NAME_6),
-		);
-
+		$obj_authority = new Authority();
+		$data_all = $obj_authority->getDataAll();
+		$array = array();
+		foreach($data_all as $key => $data)
+		{
+			$array[$key] = $data['name'];
+		}
 		return $array;
 	}
 
@@ -93,6 +97,19 @@
 			);
 
 		}
+		return $array;
+	}
+
+	// 予算タイプ
+	function returnArrayBudgetType()
+	{
+		$mm = MessageManager::getInstance();
+		$array = array(
+			BUDGET_TYPE_CONTENTS	=> $mm->sprintfMessage(MessageDefine::USER_BUDGET_TYPE_NAME_CONTENTS),
+			BUDGET_TYPE_TIME		=> $mm->sprintfMessage(MessageDefine::USER_BUDGET_TYPE_NAME_TIME),
+			BUDGET_TYPE_NOT_MANAGE	=> $mm->sprintfMessage(MessageDefine::USER_BUDGET_TYPE_NAME_NOT_MANAGE),
+		);
+
 		return $array;
 	}
 

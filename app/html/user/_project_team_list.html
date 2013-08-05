@@ -23,7 +23,9 @@
  <td>{if $list.project_id}{$project_list[$list.project_id].project_code}{/if}</td>
  <td>{if $list.client_name}{$list.client_name}{else}不明な顧客{/if}</td>
  <td>{if $list.project_name}{$list.project_name}{else}不明なプロジェクト{/if}{if $list.project_type==$smarty.const.PROJECT_TYPE_REMOVAL}&nbsp;&nbsp;<span style="color:#FF0000;">※廃止プロジェクト</span>{/if}</td>
- <td><a href="dellist.html?index_no={$list.key}&next={$_next_action}" class="del">行削除</a></td>
+ <td>
+  <a href="#" name="delproject" class="del" onclick="document.form1.action='../dellist?index_no={$list.key}&next={$_next_action}';document.form1.submit();return false;">行削除</a>
+ </td>
 </tr>
 {/foreach}
 <tr>

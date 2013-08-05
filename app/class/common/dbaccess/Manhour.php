@@ -13,6 +13,7 @@ class Manhour
 	{
 		$this->instance_db = DatabaseSetting::getAccessor();
 	}
+
 	/**
 	 * 社員の作業データ取得
 	 *
@@ -229,6 +230,77 @@ class Manhour
 	}
 
 	/**
+	 * 年月指定の作業データ取得
+	 * 後発作業分は実際のプロジェクトコードでも取得
+	 *
+	 * @param integer $year 抽出年
+	 * @param integer $month 抽出月
+	 * @return	工数データ
+	 */
+	function getDataByYearMonth($year,$month)
+	{
+		if (empty($year) || empty($month))
+		{
+			return array();
+		}
+
+		$where_columns['work_year']		= $year;
+		$where_columns['work_month']	= $month;
+		$params = array();
+		$where = _makeWhereQuery($where_columns, $params);
+
+		// 後発作業用環境
+		if (checkUseProjectTypeBack())
+		{
+			// 後発作業用コード環境
+			// 後発作業用コード以外のデータ抽出(=end_project_idがセットされていない）
+			$sql  = 'SELECT project_id,member_id,work_year,work_month,work_day,man_hour';
+			$sql .= "  FROM {$this->table} {$where} AND end_project_id = 0 ";
+			$result = $this->instance_db->select($sql,$params);
+			// 後発作業用コードのデータ抽出(=end_project_idがセットされている）
+			$back_sql  = 'SELECT end_project_id AS project_id,member_id,work_year,work_month,work_day,man_hour';
+			$back_sql .= "  FROM {$this->table} {$where} AND end_project_id != 0 ";
+			$back_result = $this->instance_db->select($back_sql,$params);
+
+			$result = array_merge($result,$back_result);
+		}
+		else
+		{
+			$sql  = 'SELECT project_id,member_id,work_year,work_month,work_day,man_hour';
+			$sql .= "  FROM {$this->table} {$where} ";
+			$result = $this->instance_db->select($sql,$params);
+		}
+
+		return $result;
+	}
+
+	/**
+	 * 年月指定の社員別日計作業データ取得
+	 *
+	 * @param integer $year 抽出年
+	 * @param integer $month 抽出月
+	 * @return	社員別日毎に集計された工数データ
+	 */
+	function getDataByYearMonthSumDay($year,$month)
+	{
+		if (empty($year) || empty($month))
+		{
+			return array();
+		}
+
+		$where_columns['work_year']		= $year;
+		$where_columns['work_month']	= $month;
+		$params = array();
+		$where = _makeWhereQuery($where_columns, $params);
+
+		$sql  = 'SELECT member_id,work_year,work_month,work_day,SUM(man_hour) day_manhour';
+		$sql .= "  FROM {$this->table} {$where} GROUP BY member_id,work_year,work_month,work_day ORDER BY member_id ";
+		$result	= $this->instance_db->select($sql,$params);
+
+		return $result;
+	}
+
+	/**
 	 * 工数登録
 	 *
 	 * @author hirano
@@ -404,6 +476,117 @@ class Manhour
 
 		$res	= $this->instance_db->select($sql,array($id,$year,$month));
 		return $res;
+	}
+	
+	/**
+	 * 指定プロジェクトIDの工数を取得（期間指定可能）
+	 *
+	 * @param integer $id 社員ID
+	 * @param datetime $renge_start 期間開始
+	 * @param datetime $renge_end 期間終了
+	 * @param string $key_word キーワード（備考）
+	 * 
+	 */
+	function getRengeDataByProjectIds($project_ids, $renge_start = null, $renge_end = null, $key_word = null)
+	{
+		if (empty($project_ids))
+		{
+			return array();
+		}
+		$params = array();
+		foreach ($project_ids as $v)
+		{
+			$where_in[] = '?';
+			$params[] = $v;
+		}
+		$where_ids = implode(', ', $where_in);
+
+		$where = ' WHERE (`project_id` IN ('.$where_ids.') ';
+		if (checkUseProjectTypeBack())
+		{
+			// 後発作業用コード環境
+			$where .= ' OR `end_project_id` IN ('.$where_ids.') ';
+			$params = array_merge($params, $params);
+		}
+		$where .= " ) ";
+		
+		// 対象期間開始
+		if ($renge_start)
+		{
+			$where .= " AND input_datetime >= '".$renge_start."'";
+		}
+		// 対象期間終了
+		if ($renge_end)
+		{
+			$where .= " AND input_datetime <= '".$renge_end."'";
+		}
+		// 備考
+		if ($key_word)
+		{
+			$where .= " AND memo like '%{$key_word}%' ";
+		}
+		
+		$sql = " SELECT * FROM  ";
+		$sql .= " (SELECT ";
+		$sql .= " * ,"; 
+		$sql .= " CONCAT( work_year, '-', lpad( work_month, 2, 0 ) , '-', lpad( work_day, 2, 0 )) as input_datetime";
+		$sql .= " FROM ".$this->table ;
+		$sql .= ' ) as datetime_table ';
+		$sql .= $where;
+		
+		$result = $this->instance_db->select($sql, $params);
+		
+		return $result;
+	}
+	
+	
+	/**
+	 * 指定社員の作業のあった日付を取得（期間指定可能）
+	 *
+	 * @param integer $member_ids 社員ID配列
+	 * @param datetime $renge_start 期間開始
+	 * @param datetime $renge_end 期間終了
+	 *
+	 */
+	function getRengeWorkDateByMemberIds($member_ids, $renge_start = null, $renge_end = null)
+	{
+		if (empty($member_ids))
+		{
+			return array();
+		}
+		$params = array();
+		foreach ($member_ids as $v)
+		{
+			$where_in[] = '?';
+			$params[] = $v;
+		}
+		$where_ids = implode(', ', $where_in);
+	
+		$where = ' WHERE `member_id` IN ('.$where_ids.') ';
+
+		// 対象期間開始
+		if ($renge_start)
+		{
+			$where .= " AND input_date >= '".$renge_start."'";
+		}
+		// 対象期間終了
+		if ($renge_end)
+		{
+			$where .= " AND input_date <= '".$renge_end."'";
+		}
+	
+		$sql = " SELECT member_id, input_date FROM  ";
+		$sql .= " (SELECT ";
+		$sql .= " * ,";
+		$sql .= " CONCAT( work_year, '-', lpad( work_month, 2, 0 ) , '-', lpad( work_day, 2, 0 )) as input_date";
+		$sql .= " FROM ".$this->table ;
+		$sql .= ' ) as date_table ';
+		$sql .= $where;
+		$sql .= 'GROUP BY member_id, input_date';
+	
+		$result = $this->instance_db->select($sql, $params);
+	
+		return $result;
 	}
 }
 

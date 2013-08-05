@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../../css/import.css" media="all" />
+<script type="text/javascript" src="../../js/SetPointer.js"></script>
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/search-list.js"></script>
+<script type="text/javascript" >
+	// プロジェクトの絞り込み機能追加
+	creatSearchListText('project_id', '1' , '70%', 'project_id_keyword');
+</script>
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>プロジェクト管理　備考入力状況一覧</h2>
+
+
+<div id="thead">
+<div>
+<!-- /#thead div -->
+</div>
+<!-- /div#thead -->
+</div>
+<div id="tbody">
+<div>
+
+{*<!-- エラーメッセージ -->*}
+ {if $_error}
+<div style="color:#ff0000;padding-left:15px;padding-top:5px;padding-bottom:5px;">
+  {foreach from=$_error item=error_item}
+{$error_item}<br />
+  {foreachelse}
+{$_error}
+  {/foreach}
+</div>
+ {/if}
+
+{*<!-- 検索条件 -->*}
+<form action="index" name="search" method="post">
+<table width="100%">
+<tr><th align="left" colspan="2">
+<div id="tooltip-display" class="ui-common-tooltip" ></div>
+	<label>
+      キーワード（備考）
+    </label>
+  </th>
+</tr>
+<tr>
+<td colspan="2"><input type="text" name="key_word" style="width:300px" value="{$_key_word}" />　（指定無しで全検索）</td>
+</tr>
+<tr><td colspan="2"><br/></td></tr>
+<tr>
+<th align="left" width="15%">プロジェクト名<br/></th>
+
+<td>
+ <input type="text" id="project_id_keyword" name="project_id_keyword" value="{$project_id_keyword}" placeholder="キーワード検索" style="padding:1px;" >
+ <select name="project_id" id="project_id" style="width:70%; display:none;">
+  <option value="0">▼選択</option>
+{foreach from=$search_project_list item=list name=list key=key}
+  <option value="{$key}" {if $project_id == $key}selected{/if}>{$list.client_name}/{$list.name}</option>
+{/foreach}
+ </select>
+ </td>
+</tr>
+<tr>
+<th align="left" width="15%">年月</th>
+<td>{html_select_date_time_plus  prefix='date_' time=$smarty.now|date_format:"%D" start_year='-5' month_format='%m' display_days=false field_order='YMD' field_separator='／' time_format=$set_time}</td>
+</tr>
+<tr>
+<th width="15%" align="left">社員名</th>
+<td width="85%">
+<select name="member_id">
+   <option value="0">▼選択</option>
+{foreach from=$member_list item=member_list_item key=member_list_key}
+   <option value="{$member_list_item.id}"{if $member_list_item.id == $_member_id} selected{/if}>{$member_list_item.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<th width="15%" align="left">表示対象</th>
+<td width="85%">備考必須入力のみ対象</td>
+</tr>
+<tr>
+<td colspan="2">
+<input src="../../img/button_search.gif" name="searchbutton" type="image" class="send" alt="検索" width="63" height="22" border="0" value="search">
+<input type="hidden" name="ret_type" value=1>
+<input type="hidden" name="type" value="{$_type}">
+</td>
+</tr>
+</table>
+<input type="hidden" name="page" value="1" >
+</form>
+
+<!-- /#tbody div -->
+</div>
+<!-- /div#tbody -->
+</div>
+<div id=tfoot>
+<div>
+<!-- /#tfoot div -->
+</div>
+<!-- /div#tfoot -->
+</div>
+
+<div style="padding-top:20px;">
+<div id="matches">{$_date_Year}年{$_date_Month}月 一覧</div>
+<br/>
+</div>
+
+
+
+{*<!-- 一覧表示 -->*}
+<div id="topic-path">
+{if $total > 0 && $list}
+{$now_page}/{$last_page}ページ　{$total}件
+{/if}
+<!-- /div#topic-path -->
+</div>
+<br />
+
+<!--.....ページ送り..... -->
+<div id="topic-path">
+{if $pager.back}{$pager.back} | {/if}{if $pager.pages}{$pager.pages}{/if}{if $pager.next} | {$pager.next}{/if}
+<!-- /div#topic-path -->
+</div>
+
+ {if $manhour_list}
+<div id="TAttr">
+<table width="100%">
+<tr>
+<th><a href="?column=input_datetime{if $_column == 'input_datetime' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$add_parameters}">入力日付{if $_column == 'input_datetime'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=client_name{if $_column == 'client_name' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$add_parameters}">顧客名{if $_column == 'client_name'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=project_name{if $_column == 'project_name' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$add_parameters}">プロジェクト名{if $_column == 'project_name'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=member_name{if $_column == 'member_name' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$add_parameters}">社員名{if $_column == 'member_name'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=memo{if $_column == 'memo' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$add_parameters}">備考{if $_column == 'memo'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+</tr>
+{foreach from=$manhour_list item=manhour_item}
+<tr>
+<td class="cel_l"  bgcolor="#F5F5F5" width="3%" nowrap>{$manhour_item.input_datetime|date_format:"%Y/%m/%d"}</td>
+<td class="cel_l"  bgcolor="#F5F5F5" width="10%" nowrap>{$manhour_item.client_name}</td>
+<td class="cel_l"  bgcolor="#F5F5F5" width="20%" nowrap>
+{if $session.manhour.member.auth.list_project}
+<a href="../../list/project?project_id={$manhour_item.project_id}">{$manhour_item.project_name}</a>
+{else}
+{$manhour_item.project_name}
+{/if}
+</td>
+<td class="cel_l"  bgcolor="#F5F5F5" width="5%" nowrap>
+{if $session.manhour.member.auth.list_member}
+<a href="../../list/member?member_id={$manhour_item.member_id}">{$manhour_item.member_name}</a>
+{else}
+{$manhour_item.member_name}
+{/if}
+</td>
+<td class="cel_l"  bgcolor="#F5F5F5" width="27%" nowrap>{$manhour_item.memo}</td>
+
+</tr>
+{/foreach}
+</table>
+<!-- /div#TAttr -->
+</div>
+ {else}
+<div style="color:#ff0000;padding-top:20px;">備考欄入力内容情報を取得できませんでした。</div>
+ {/if}
+
+<!--.....ページ送り..... -->
+<div id="topic-path">
+{if $pager.back}{$pager.back} | {/if}{if $pager.pages}{$pager.pages}{/if}{if $pager.next} | {$pager.next}{/if}
+<!-- /div#topic-path -->
+</div>
+
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

@@ -1,9 +1,12 @@
 <?php
 /**
  * アカウント管理 新規作成
+ *
  */
 require_once(DIR_APP . "/class/common/dbaccess/Post.php");
 require_once(DIR_APP . "/class/common/dbaccess/Position.php");
+require_once(DIR_APP . "/class/common/dbaccess/MemberType.php");
+require_once(DIR_APP . "/class/common/dbaccess/MemberCost.php");
 class _user_new_index extends UserScene
 {
 	//外部からのエラー通知
@@ -22,6 +25,10 @@ class _user_new_index extends UserScene
 	var $_post;
 	//役職
 	var $_position;
+	//社員タイプ
+	var $_mst_member_type_id;
+	//社員コスト
+	var $_mst_member_cost_id;
 	//パスワード
 	var $_password;
 	// パスワード変更
@@ -32,6 +39,13 @@ class _user_new_index extends UserScene
 	//出力用
 	var $project_list_by_client_id;
 	var $guide_message_member_code;		// 社員番号の入力制限説明
+	var $array_auth_lv;
+	var $array_post;
+	var $array_position;
+	var $array_member_type;
+	var $array_member_cost;
+	var $password_tmp;
+
 
 	//初期チェック
 	function check()
@@ -45,6 +59,8 @@ class _user_new_index extends UserScene
 		if($this->_auth_lv)				{	$_SESSION['manhour']['tmp']['user_edit']['auth_lv']				= $this->_auth_lv;				}
 		if($this->_post)				{	$_SESSION['manhour']['tmp']['user_edit']['post']				= $this->_post;					}
 		if($this->_position)			{	$_SESSION['manhour']['tmp']['user_edit']['position']			= $this->_position;				}
+		if($this->_mst_member_type_id)	{	$_SESSION['manhour']['tmp']['user_edit']['mst_member_type_id']	= $this->_mst_member_type_id;	}
+		if($this->_mst_member_cost_id)	{	$_SESSION['manhour']['tmp']['user_edit']['mst_member_cost_id']	= $this->_mst_member_cost_id;	}
 		if($this->_password)			{	$_SESSION['manhour']['tmp']['user_edit']['password']			= $this->_password;				}
 		if($this->_team_list_project_id){	$_SESSION['manhour']['tmp']['user_edit']['team_list_project_id']= $this->_team_list_project_id;	}
 
@@ -56,28 +72,26 @@ class _user_new_index extends UserScene
 	//処理
 	function task(MCWEB_InterfaceSceneOutputVars $access)
 	{
-		$array_auth_lv	= returnArrayAuthLv();
-		$obj_post	= new Post();
-		$array_post	= $obj_post->getDataAll();
+		// 各種マスタ情報取得
+		$this->array_auth_lv	= returnArrayAuthLv();
+		$obj_post	=		 new Post();
+		$this->array_post	= $obj_post->getDataAll();
+		$obj_position			 = new Position();
+		$this->array_position	= $obj_position->getDataAll();
+		$obj_member_type			= new MemberType();
+		$this->array_member_type	= $obj_member_type->getDataAll();
+		$obj_member_cost			= new MemberCost();
+		$this->array_member_cost	= $obj_member_cost->getDataAll();
 
-		$obj_position = new Position();
-		$array_position	= $obj_position->getDataAll();
-		
-		$password_tmp	= changePassWord($this->_password);
-
-		//テンプレートへセット//GET値POST値等publicなメンバー変数は自動的にセット
-		$access->text('password_tmp',	$password_tmp);
-		$access->text('array_auth_lv',	$array_auth_lv);
-		$access->text('array_post',		$array_post);
-		$access->text('array_position',	$array_position);
+		$this->password_tmp	= changePassWord($this->_password);
 
 		//セッションのデータを表示用にセット
 		$this->setProjectTeamViewListBySession();
 
-		// プロジェクトコードの入力制限説明文言取得
+		// 社員コードの入力制限説明文言取得
 		$mm = MessageManager::getInstance();
 		$this->guide_message_member_code = $mm->sprintfMessage(MessageDefine::USER_GUIDE_MESSAGE_MEMBER_CODE_FORMAT);
-		
+
 		// 本日時点で有効なプロジェクトを検索
 		$obj_project		= new Project;
 		$this->team_list_project_id	= $obj_project->getNowProject(array(PROJECT_TYPE_NORMAL,PROJECT_TYPE_INFORMAL));	// プロジェクトタイプ：通常/仮登録のみ

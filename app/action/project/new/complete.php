@@ -2,12 +2,22 @@
 /**
  *	プロジェクト　新規作成　完了
  */
-require_once(DIR_APP . "/class/common/dbaccess/Project.php");
+require_once(DIR_APP . '/class/common/dbaccess/Project.php');
 require_once(DIR_APP . '/class/common/dbaccess/Client.php');
-require_once(DIR_APP . "/class/common/MasterMaintenance.php");
+require_once(DIR_APP . '/class/common/dbaccess/MemberCost.php');
+require_once(DIR_APP . '/class/common/dbaccess/Member.php');
 class _project_new_complete extends PostAndGetScene
 {
+	var $_type;							// プロジェクト一覧に「戻る」ボタン用
+
 	var	$_id;
+
+	var $data;
+	var $client_data;
+	var $member_data;
+	var $project_type_list;
+	var $budget_type_list;
+	var $member_cost_data;
 
 	function check()
 	{
@@ -15,28 +25,35 @@ class _project_new_complete extends PostAndGetScene
 
 	function task(MCWEB_InterfaceSceneOutputVars $access)
 	{
-		//先程登録したレコードを表示
 		$obj_project		= new Project;
 		$obj_client			= new Client;
-		$obj_maintenance	= new MasterMaintenance;
+		$obj_member			= new Member;
+		$obj_member_cost	= new MemberCost;
 
+		//先程登録したレコードを表示
 		if(!empty($this->_id))
 		{
 			$project	= $obj_project->getDataById($this->_id);
 			if(!empty($project))
 			{
-				$access->text('data', $project);
+				$this->data = $project;
 			}
 		}
-		//クライアントリスト取得
-		$access->text('client_list', $obj_client->getDataAll());
 
-		//PJコードタイプリスト
-		$array_project_type = returnArrayPJtype();
-		$access->text('array_project_type', $array_project_type);
+		// クライアントデータ
+		$this->client_data = $obj_client->getClientById($this->data['client_id']);
 
-		// アカウントリスト取得(営業のみ)
-		$access->text('member_list', $obj_maintenance->getMemberByPostType(PostTypeDefine::SALES));
+		// 営業担当データ
+		$this->member_data = $obj_member->getMemberById($this->data['member_id'],true);
+
+		// プロジェクトタイプリスト
+		$this->project_type_list = returnArrayPJtype();
+
+		// 予算タイプ
+		$this->budget_type_list = returnArrayBudgetType();
+
+		// 基準社員コストIDデータ
+		$this->member_cost_data = $obj_member_cost->getDataById($this->data['mst_member_cost_id']);
 
 	}
 }

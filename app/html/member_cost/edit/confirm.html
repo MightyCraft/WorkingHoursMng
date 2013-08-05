@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../../css/import2.css" media="all" />
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>社員コスト管理　社員コスト情報　{if $new_flg}【新規追加】{else}【修正】{/if}</h2>
+<br />
+
+以下の内容で宜しければ登録ボタンを押してください<br />
+{if $_delete_flg}
+<div id="matches" style="color: #FF6060;">
+削除状態に変更いたします。<br />
+</div>
+{/if}
+
+<div id="TAttr">
+<table width="100%">
+{if !$new_flg}
+<tr>
+<th class="cel_r" style="width: 200px">管理ID</th>
+<td class="cel_l">{$_id}</td>
+</tr>
+{/if}
+<tr>
+<th class="cel_r" style="width: 200px">社員コスト名</th>
+<td class="cel_l">{$_name}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">コスト</th>
+<td class="cel_l">{$_cost}</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">使用可否</th>
+<td class="cel_l">{if $_delete_flg}不可{else}可{/if}</td>
+</tr>
+</table>
+<!-- /div#TAttr -->
+</div>
+
+<table>
+<tr><td>
+<form name="form_back" action="index.html" method="post">
+<input type="image" class="send"  src="../../img/button_back.gif" alt="戻る" width="63" height="22" border="0">
+<input type="hidden" name="id" value="{$_id}">
+<input type="hidden" name="name" value="{$_name}">
+<input type="hidden" name="cost" value="{$_cost}">
+<input type="hidden" name="delete_flg" value="{$_delete_flg}">
+<input type="hidden" name="back_flg" value="1">
+</form>
+</td><td>
+<form name="form_do" action="do.html" method="post">
+<input type="image" class="send" src="../../img/button_entry.gif" alt="登録" width="63" height="22" border="0">
+<input type="hidden" name="id" value="{$_id}">
+<input type="hidden" name="name" value="{$_name}">
+<input type="hidden" name="cost" value="{$_cost}">
+<input type="hidden" name="delete_flg" value="{$_delete_flg}">
+</form>
+</td></tr>
+</table>
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

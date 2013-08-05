@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * アカウント新規編集削除処理で使用
+ *
+ */
 require_once(DIR_APP . "/class/common/dbaccess/Member.php");
 require_once(DIR_APP . "/class/common/dbaccess/Client.php");
 require_once(DIR_APP . "/class/common/dbaccess/Project.php");
@@ -32,30 +35,25 @@ abstract class UserScene extends PostAndGetScene
 		$this->obj_project		= new Project;
 		$this->obj_project_team	= new ProjectTeam;
 
-		//アカウント情報閲覧権限をチェック
-		$this->b_auth_account	= checkAuthAccountManagement(
-									$_SESSION['manhour']['member']['auth_lv'],
-									$_SESSION['manhour']['member']['post']);
 	}
 
-	//自分以外のアカウント編集が行えるかをチェック
-	function checkAuthEditOtherAccount($member_id)
+	//自分のアカウント編集が行えるかをチェック
+	function checkAuthEditMyAccount($member_id)
 	{
-		//他人のアカウントを編集する権限がない場合は弾く
-		if(!$this->b_auth_account) {
-			if($member_id != $_SESSION['manhour']['member']['id']) {
-				MCWEB_Util::redirectAction("/user/index");
-			} else {
-				//他人アカウント編集権限が無ければ、自身の下記パラメータの編集も行えないように、セッションの値を上書きする
-				$this->_member_code	= $_SESSION['manhour']['member']['member_code'];
-				$this->_name		= $_SESSION['manhour']['member']['name'];
-				$this->_auth_lv		= $_SESSION['manhour']['member']['auth_lv'];
-				$this->_post		= $_SESSION['manhour']['member']['post'];
-				$this->_position	= $_SESSION['manhour']['member']['position'];
+		if ($member_id == $_SESSION['manhour']['member']['id'])
+		{
+			if (!$_SESSION['manhour']['member']['auth']['open_user_edit_mine'])
+			{
+				MCWEB_Util::redirectAction('/index');
+			}
+		} else {
+			if (!$_SESSION['manhour']['member']['auth']['open_user_edit'])
+			{
+				MCWEB_Util::redirectAction('/index');
 			}
 		}
 	}
-
+	
 	//セッションから編集データを引用する
 	function setProjectTeamSessionByMemberId($member_id)
 	{
@@ -73,7 +71,17 @@ abstract class UserScene extends PostAndGetScene
 		if(isset($_SESSION['manhour']['tmp']['user_edit']))
 		{
 			$check_session = array(
-				'id', 'member_code', 'name', 'auth_lv', 'post', 'position', 'password', 'password_change', 'team_list_project_id',
+				'id',
+				'member_code',
+				'name',
+				'auth_lv',
+				'post',
+				'position',
+				'mst_member_type_id',
+				'mst_member_cost_id',
+				'password',
+				'password_change',
+				'team_list_project_id',
 			);
 			foreach($check_session as $key => $value) {
 				$this_param	= '_'. $value;

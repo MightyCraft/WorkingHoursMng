@@ -76,6 +76,10 @@ TD.cel_r {
 	text-align: right;
 }
 
+TD.cel_c {
+	text-align: center;
+}
+
 #TAttr TD#cel1 {
 	background: #D2D8DD;
 }

@@ -17,8 +17,8 @@ creatSearchListText('team_list_project_id', '1' , '60%', 'team_list_project_id_k
 function changeRadioButton() {
 	if (document.form1.password_change[1].checked){
 		document.form1.password.disabled = false;
-	} 
-	else 
+	}
+	else
 	{
 		document.form1.password.value = "";
 		document.form1.password.disabled = true;
@@ -49,7 +49,7 @@ function changeRadioButton() {
 <table width="100%">
 <tr>
 <th class="cel_r" style="width: 200px">社員コード</th>
-<td class="cel_l">{if !$b_auth_account}{$_member_code}<input type="hidden" name="member_code" value="{$_member_code}">{else}
+<td class="cel_l">{if !$session.manhour.member.auth.user_new_}{$_member_code}<input type="hidden" name="member_code" value="{$_member_code}">{else}
 <input type="text" name="member_code" style="width:300px;" value="{$_member_code}" maxlength="{$smarty.const.USER_MEMBER_CODE_MAX}">{$guide_message_member_code}
 <!-- カーソル初期位置 -->
 <SCRIPT>document.form1.member_code.focus();</SCRIPT>
@@ -58,19 +58,19 @@ function changeRadioButton() {
 </tr>
 <tr>
 <th class="cel_r" style="width: 200px">氏名</th>
-<td class="cel_l">{if !$b_auth_account}{$_name}<input type="hidden" name="name" value="{$_name}">{else}
+<td class="cel_l">{if !$session.manhour.member.auth.user_new_}{$_name}<input type="hidden" name="name" value="{$_name}">{else}
 <input type="text" name="name" style="width:300px" value="{$_name}" maxlength="{$smarty.const.USER_MEMBER_NAME_MAX}">(最大{$smarty.const.USER_MEMBER_NAME_MAX}文字)</td>{/if}
 </tr>
 <tr>
 <th class="cel_r" style="width: 200px">権限</th>
-<td class="cel_l">{if !$b_auth_account}{$array_auth_lv[$_auth_lv]}<input type="hidden" name="auth_lv" value="{$_auth_lv}">{else}
+<td class="cel_l">{if !$session.manhour.member.auth.user_new_}{$array_auth_lv[$_auth_lv]}<input type="hidden" name="auth_lv" value="{$_auth_lv}">{else}
 {html_options name="auth_lv" options=$array_auth_lv selected=$_auth_lv}{/if}
 </td>
 </tr>
 <tr>
 <th class="cel_r" style="width: 200px">所属</th>
 <td class="cel_l">
-{if !$b_auth_account}{$array_post[$_post].name}<input type="hidden" name="post" value="{$_post}">
+{if !$session.manhour.member.auth.user_new_}{$array_post[$_post].name}<input type="hidden" name="post" value="{$_post}">
 {else}
 <select name="post">
 {foreach from=$array_post key=post_key item=post_data}
@@ -84,7 +84,7 @@ function changeRadioButton() {
 <tr>
 <th class="cel_r" style="width: 200px">役職</th>
 <td class="cel_l">
-{if !$b_auth_account}{$array_position[$_position].name}<input type="hidden" name="position" value="{$_position}">
+{if !$session.manhour.member.auth.user_new_}{$array_position[$_position].name}<input type="hidden" name="position" value="{$_position}">
 {else}
 <select name="position">
 {foreach from=$array_position key=position_key item=position_data}
@@ -95,6 +95,37 @@ function changeRadioButton() {
 {/if}
 </td>
 </tr>
+<tr>
+<th class="cel_r" style="width: 200px">社員タイプ</th>
+<td class="cel_l">
+{if !$session.manhour.member.auth.user_new_}{$array_member_type[$_mst_member_type_id].name}<input type="hidden" name="mst_member_type_id" value="{$_mst_member_type_id}">
+{else}
+<select name="mst_member_type_id">
+{foreach from=$array_member_type key=member_type_key item=member_type_data}
+<option value="{$member_type_data.id}"{if $member_type_data.id == $_mst_member_type_id} selected="selected"{/if}>{$member_type_data.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+{/if}
+</td>
+</tr>
+<tr>
+{if !$session.manhour.member.auth.user_new_}
+<input type="hidden" name="mst_member_cost_id" value="{$_mst_member_cost_id}">
+{else}
+<th class="cel_r" style="width: 200px">社員コスト</th>
+<td class="cel_l">
+
+<select name="mst_member_cost_id">
+{foreach from=$array_member_cost key=member_cost_key item=member_cost_data}
+<option value="{$member_cost_data.id}"{if $member_cost_data.id == $_mst_member_cost_id} selected="selected"{/if}>{$member_cost_data.name}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+{/if}
+
 {if $_id == $session.manhour.member.id}
 <tr>
 <th class="cel_r" style="width: 200px">パスワード</th>

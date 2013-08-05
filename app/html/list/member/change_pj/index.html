@@ -25,7 +25,7 @@
 <!--.....メインコンテンツ.....-->
 <div id="content">
 <div id="content-main">
-<h2>ＰＪコード一括変換画面</h2>
+<h2>ＰＪコード一括変換</h2>
 {if !empty($_errors)}
 	{foreach from=$_errors item=list name=list key=key}
 		{if $key == 'after_project_id'}
@@ -100,9 +100,9 @@
 {/foreach}
 </tr>
 <tr>
-<th>工数</th>
+<th>作業時間</th>
 {foreach name=monhour from=$calendar key=date item=week}
-{if !empty($monhour_list[$date])}<td {if $monhour_list[$date].end_flg}style="color: #FF6060;"{/if}>{$monhour_list[$date].man_hour}</td>{else}<td></td>{/if}
+{if !empty($monhour_list[$date])}<td {if $monhour_list[$date].end_flg}style="color: #FF6060;"{/if}>{$monhour_list[$date].man_hour|number_format:2}</td>{else}<td></td>{/if}
 {/foreach}
 </tr>
 <tr>
@@ -112,7 +112,7 @@
 {/foreach}
 </tr>
 </table>
-<div style="color: #FF6060;">※赤字は終了案件扱いの工数です</div><br /><br />
+<div style="color: #FF6060;">※赤字は終了案件扱いの作業時間です</div><br /><br />
 <input type="image" class="send" src="../../../img/button_confirm.gif" alt="確認" width="63" height="22" border="0">
 </div><!-- /div#TAttr -->
 

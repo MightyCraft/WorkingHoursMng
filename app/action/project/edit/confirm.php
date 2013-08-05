@@ -2,17 +2,26 @@
 /**
  *	プロジェクト　編集　確認
  */
+require_once(DIR_APP . '/class/common/dbaccess/Project.php');
 require_once(DIR_APP . '/class/common/dbaccess/Client.php');
-require_once(DIR_APP . "/class/common/MasterMaintenance.php");
+require_once(DIR_APP . '/class/common/dbaccess/MemberCost.php');
+require_once(DIR_APP . '/class/common/dbaccess/Member.php');
 class _project_edit_confirm extends PostScene
 {
-	var	$_id;
 	// パラメータ
+	var $_type;							// プロジェクト一覧に「戻る」ボタン用
+
+	var	$_id;
+
 	var	$_project_code;					// プロジェクトコード
 	var	$_name;							// プロジェクト名
 	var	$_client_id;					// クライアントID
 	var	$_project_type;					// プロジェクトタイプ
+	var	$_budget_type;					// 予算タイプ
 	var	$_total_budget;					// 総予算
+	var	$_exclusion_budget;				// コスト管理外予算
+	var	$_cost_rate;					// 原価率
+	var	$_mst_member_cost_id;			// 基準社員コストID
 	var	$_project_start_date_year;		// 開発開始日付
 	var	$_project_start_date_month;		//
 	var	$_project_start_date_day;		//
@@ -28,17 +37,42 @@ class _project_edit_confirm extends PostScene
 	var $_memo_flg;						// 工数入力時備考必須フラグ
 	var $_member_id;					// 担当営業
 	var $_memo;							// 備考
-	// 自動セット
-	var	$_total_budget_manhour;	// 総割当工数
+
+	// 自動セット項目
+	var	$_total_cost_manhour;	// 総割当工数
+	var $_use_cost_manhour;		// 使用済コスト工数
+	var $_cost_budget;			// コスト予算
 	var	$_end_date_day;			// 案件終了月の末日
 
-	// クライアント情報
-	var $obj_client;
+	// 画面表示用
+	var $project_type_list;
 	var $client_data;
+	var $member_data;
+	var $budget_type_list;
+	var $member_cost_data;
+
+	// 処理用
+	var $project;
+
 
 	function check()
 	{
 		$obj_project = new Project;
+
+		// プロジェクトマスタ存在チェック
+		$error_id = MCWEB_ValidationManager::validate(
+			$this
+			, 'id',			ValidatorInt::createInstance()->min(1)
+		);
+		if (!empty($error_id))
+		{
+			throw new MCWEB_BadRequestException();
+		}
+		$this->project		= $obj_project->getDataById($this->_id);
+		if (empty($this->project))
+		{
+			throw new MCWEB_BadRequestException();
+		}
 
 		//プロジェクトコードの自動採番
 		$auto_error_flg = false;
@@ -51,11 +85,15 @@ class _project_edit_confirm extends PostScene
 		//バリデートチェック
 		$errors = MCWEB_ValidationManager::validate(
 			$this
-			, 'name',			ValidatorString::createInstance()->min(1)->max(USER_PROJECT_NAME_MAX)
-			, 'client_id',		ValidatorInt::createInstance()->min(1)
-			, 'total_budget',	ValidatorInt::createInstance()->min(0)->max(2147483647)
-			, 'nouki',			ValidatorString::createInstance()->nullable()->max(USER_PROJECT_NOUKI_MAX)
-			, 'memo',			ValidatorString::createInstance()->nullable()->max(USER_PROJECT_MEMO_MAX)
+			, 'name',				ValidatorString::createInstance()->min(1)->max(USER_PROJECT_NAME_MAX)
+			, 'client_id',			ValidatorInt::createInstance()->min(1)
+			, 'total_budget',		ValidatorInt::createInstance()->nullable()->min(0)->max(2147483647)
+			, 'exclusion_budget',	ValidatorInt::createInstance()->min(0)->max(2147483647)
+			, 'cost_rate',			ValidatorInt::createInstance()->min(0)->max(100)
+			, 'mst_member_cost_id',	ValidatorInt::createInstance()->min(1)
+			, 'nouki',				ValidatorString::createInstance()->nullable()->max(USER_PROJECT_NOUKI_MAX)
+			, 'member_id',			ValidatorInt::createInstance()->min(0)
+			, 'memo',				ValidatorString::createInstance()->nullable()->max(USER_PROJECT_MEMO_MAX)
 		);
 		if (USER_PROJECT_CODE_FORMAT != '')
 		{
@@ -69,15 +107,21 @@ class _project_edit_confirm extends PostScene
 		{
 			$errors['project_code'] = $project_code_error;
 		}
+
 		//エラー文言配列
 		$mm = MessageManager::getInstance();
 		$error_format_array = array(
+			'id'					=> 'プロジェクト名は'.USER_PROJECT_NAME_MAX.'文字以内で入力して下さい。',
 			'project_code'	=> $mm->sprintfMessage(MessageDefine::USER_ERR_MESSAGE_PROJECT_CODE),
-			'name'			=> 'プロジェクト名は'.USER_PROJECT_NAME_MAX.'文字以内で入力して下さい。',
-			'client_id'		=> '顧客名を選択してください。',
-			'total_budget'	=> '総予算は(0～2147483647)の範囲内で入力して下さい。',
-			'nouki'			=> '納期は'.USER_PROJECT_NOUKI_MAX.'文字以内で入力して下さい。',
-			'memo'			=> '備考は'.USER_PROJECT_MEMO_MAX.'文字以内（改行含む）で入力して下さい。',
+			'name'					=> 'プロジェクト名は'.USER_PROJECT_NAME_MAX.'文字以内で入力して下さい。',
+			'client_id'				=> '顧客名を選択してください。',
+			'total_budget'			=> '総予算は(0～2147483647)の範囲内で入力して下さい。',
+			'exclusion_budget'		=> 'コスト管理外予算は(0～2147483647)の範囲内で入力して下さい。',
+			'cost_rate'				=> '原価率は(0～100)の範囲内で入力して下さい。',
+			'mst_member_cost_id'	=> '基準社員コストIDが選択されていません。',
+			'nouki'					=> '納期は'.USER_PROJECT_NOUKI_MAX.'文字以内で入力して下さい。',
+			'member_id'				=> '担当営業の指定が不正です。',
+			'memo'					=> '備考は'.USER_PROJECT_MEMO_MAX.'文字以内（改行含む）で入力して下さい。',
 		);
 		//エラーチェック
 		$error_msg	= array();
@@ -89,7 +133,7 @@ class _project_edit_confirm extends PostScene
 			}
 		}
 
-		//時間チェック
+		// 開発開始日付、開発終了日付チェック
 		$start_time	=	0;
 		$end_time	=	9999999999;
 		if(empty($this->_project_pending_start_date))
@@ -117,6 +161,21 @@ class _project_edit_confirm extends PostScene
 		if($start_time > $end_time)
 		{
 			$error_msg[]	= '開始日付は終了日付より以前の日に設定して下さい';
+		}
+
+		// 案件終了月チェック
+		if(empty($this->_pending_end_date))
+		{
+			$date = $this->_end_date_year.'-'.$this->_end_date_month.'-01';
+			$this->_end_date_day = getMonthEnd($date);							// 案件終了月に末日をセットして表示
+
+			$yyyy	= sprintf("%04d", $this->_end_date_year);
+			$mm		= sprintf("%02d", $this->_end_date_month);
+			$dd		= sprintf("%02d", $this->_end_date_day);
+			if(ValidatorDate::createInstance()->validate($yyyy.$mm.$dd))
+			{
+				$error_msg[]	= '案件終了日付には存在する日付を入力して下さい。';
+			}
 		}
 
 		//名前重複チェック
@@ -169,8 +228,8 @@ class _project_edit_confirm extends PostScene
 			$error_msg[] = 'PJコードタイプが後発作業用コードのデータが既に存在するため登録できません。';
 		}
 		// 設定されている値を使用しているか
-		$array_project_type = returnArrayPJtype();
-		if (!isset($array_project_type[$this->_project_type]))
+		$this->project_type_list = returnArrayPJtype();
+		if (!isset($this->project_type_list[$this->_project_type]))
 		{
 			$error_msg[] = 'PJコードタイプの値が不正です。';
 		}
@@ -178,17 +237,47 @@ class _project_edit_confirm extends PostScene
 		// クライアントマスタ存在チェック
 		if (!isset($errors['client_id']))
 		{
-			$this->obj_client = new Client;
-			$this->client_data = $this->obj_client->getClientById($this->_client_id);
+			$obj_client = new Client;
+			$this->client_data = $obj_client->getClientById($this->_client_id);
 			if (empty($this->client_data))
 			{
 				$error_msg[] = '指定された顧客は存在しません。';
 			}
 		}
 
+		// 担当営業チェック
+		if (!isset($errors['member_id']) && $this->_member_id > 0)
+		{
+			$obj_member	= new Member();
+			$this->member_data = $obj_member->getMemberById($this->_member_id,true);
+			if (empty($this->member_data))
+			{
+				$error_msg[] = '指定された担当営業は社員データに存在しません。';
+			}
+		}
+
+		// 予算タイプ
+		$this->budget_type_list = returnArrayBudgetType();
+		if (!isset($this->budget_type_list[$this->_budget_type]))
+		{
+			$error_msg[] = '予算タイプの値が不正です。';
+		}
+
+		// 基準社員コストID
+		if (!isset($errors['mst_member_cost_id']))
+		{
+			$obj_member_cost = new MemberCost;
+			$this->member_cost_data = $obj_member_cost->getDataById($this->_mst_member_cost_id);
+			if (empty($this->member_cost_data))
+			{
+				$error_msg[] = '指定された基準社員コストデータは存在しません。';
+			}
+		}
+
 		//エラー
 		if(!empty($error_msg))
 		{
+			$this->_return_flg = 1;
 			$this->_error = $error_msg;
 			$f = new MCWEB_SceneForward('/project/edit/index');
 			$f->regist('FORWARD', $this);
@@ -198,25 +287,26 @@ class _project_edit_confirm extends PostScene
 
 	function task(MCWEB_InterfaceSceneOutputVars $access)
 	{
-		$obj_maintenance	= new MasterMaintenance;
+		// 総予算が設定されていたら関連項目を計算
+		if (!empty($this->_total_budget))
+		{
+			// コスト予算
+			$this->_cost_budget = calculateCostBudget($this->_total_budget,$this->_exclusion_budget,$this->_cost_rate);
+			// 総割当コスト工数計算
+			$this->_total_cost_manhour = calculateTotalCostManhour($this->_cost_budget, $this->member_cost_data['cost']);
+		}
+		else
+		{
+			// 総予算未設定時はNULLセット
+			$this->_cost_budget = NULL;				// コスト予算
+			$this->_total_cost_manhour = NULL;		// 総割当コスト工数計算
 
-		//クライアントリスト取得
-		$access->text('client_data', $this->client_data);
+			// 総予算もNULLセット
+			$this->_total_budget = NULL;
+		}
 
-		//PJコードタイプリスト
-		$array_project_type = returnArrayPJtype();
-		$access->text('array_project_type', $array_project_type);
-
-		// 総割当工数計算
-		$this->_total_budget_manhour = getTotal_budget_manhour($this->_total_budget);
-
-		// 案件終了月に末日をセットして表示
-		$date = $this->_end_date_year.'-'.$this->_end_date_month.'-01';
-		$this->_end_date_day = getMonthEnd($date);
-
-		// アカウントリスト取得(営業のみ)
-		$access->text('member_list', $obj_maintenance->getMemberByPostType(PostTypeDefine::SALES));
-
+		// 使用済コスト工数（日次集計項目）
+		$this->_use_cost_manhour = $this->project['use_cost_manhour'];
 	}
 }
 

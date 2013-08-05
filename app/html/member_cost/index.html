@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../css/import.css" media="all" />
+<script type="text/javascript" src="../js/SetPointer.js"></script>
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+<!--.....メインコンテンツ.....-->
+<div id="content">
+<div id="content-main">
+<h2>社員コスト管理</h2>
+<br />
+
+
+{*<!-- 登録修正処理結果 -->*}
+<div id="matches">
+{if $_edit_type == 'new'}
+ {if $_error_flg || empty($member_cost_list[$_id])}
+新規登録に失敗しました。
+ {else}
+「{$_id}：{$member_cost_list[$_id].name}」を新規登録しました。
+ {/if}
+{elseif $_edit_type == 'edit'}
+ {if $_error_flg || empty($member_cost_list[$_id])}
+「{$_id}：{$member_cost_list[$_id].name}」の修正に失敗しました。
+ {else}
+「{$_id}：{$member_cost_list[$_id].name}」を修正しました。
+ {/if}
+{/if}
+</div>
+
+{*<!-- 新規追加ボタン -->*}
+{if $session.manhour.member.auth.member_cost_edit_}
+<div id="matches"><a href="edit/index.html"><img src="../img/button_newadd.gif" alt="新規追加"></a></div>
+{/if}
+<br />
+
+{*<!-- 一覧 -->*}
+{if empty($member_cost_list)}
+<div id="matches" style="color: #FF6060;">社員コスト情報を取得できませんでした。</div>
+{else}
+<div id="TAttr">
+<table "100%">
+<tr>
+<th width="50px">ID</th>
+<th width="200px">社員コスト名</th>
+<th width="100px">コスト</th>
+<th width="80px">削除</th>
+{if $session.manhour.member.auth.member_cost_edit_}
+<th width="80px">編集</th>
+{/if}
+</tr>
+
+{foreach from=$member_cost_list key=member_cost_key item=member_cost_data}
+{if $member_cost_data.delete_flg}
+<tr bgcolor="#AAAAAA" onmouseover="setPointer(this, {$member_cost_data.id}, 'over', '#AAAAAA', '#99BB99', '#BB9955');" onmouseout="setPointer(this, {$member_cost_data.id}, 'out', '#AAAAAA', '#99BB99', '#BB9955');">
+{else}
+<tr bgcolor="#F5F5F5" onmouseover="setPointer(this, {$member_cost_data.id}, 'over', '#F5F5F5', '#CCFFCC', '#FFCC99');" onmouseout="setPointer(this, {$member_cost_data.id}, 'out', '#F5F5F5', '#CCFFCC', '#FFCC99');">
+{/if}
+<td class="cel_r" nowrap>{$member_cost_data.id}</td>
+<td class="cel_l" nowrap>{$member_cost_data.name}</td>
+<td class="cel_r" nowrap>{$member_cost_data.cost}</td>
+<td align="center" nowrap>{if $member_cost_data.delete_flg}使用不可{/if}
+{if $session.manhour.member.auth.member_cost_edit_}
+<td align="center" nowrap><a href="edit/index.html?id={$member_cost_data.id}" id="edit">編集</a></td>
+{/if}
+</td>
+</tr>
+{/foreach}
+</table>
+<!-- /div#TAttr -->
+</div>
+{/if}
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

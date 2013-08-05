@@ -37,8 +37,7 @@ class _excel_index extends GetScene
 	{
 
 		// エクセル権限チェック
-		$auth_excel	= checkAuthExcel($_SESSION['manhour']['member']['auth_lv'], $_SESSION['manhour']['member']['post']);
-		if($auth_excel)
+		if($_SESSION['manhour']['member']['auth']['open_other_excel'])
 		{
 			// 権限OKの場合、社員プルダウン表示（自分以外も出力可能）
 			$obj_member			= new Member();

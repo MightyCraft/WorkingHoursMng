@@ -9,6 +9,46 @@ class Project
 	{
 		$this->instance_db = DatabaseSetting::getAccessor();
 	}
+	/**
+	 * プロジェクトタイプ指定で取得
+	 *
+	 * @param 	array	$project_type	抽出対象のタイプをarrayで指定
+	 * @param	boolean	$delete_flg		tureの時は削除済みも含む
+	 * @return	array	プロジェクトマスタデータ
+	 */
+	function getDataByConditions($conditions = array(), $custum_conditions=array(), $sort = array())
+	{
+		$where_columns = array();
+		$params = array();
+
+		// WHERE句
+		$where = _makeWhereQuery($conditions, $params);
+
+		// WHERE句付加条件
+		if ($custum_conditions)
+		{
+			$where .= ' AND '.implode(' AND ', $custum_conditions);
+		}
+		// ORDER BY句
+		$order = '';
+		foreach ($sort as $key => $value)
+		{
+			$orders[] = $key.' '.$value;
+		}
+		if (!empty($orders))
+		{
+			$order = ' ORDER BY '.implode(',', $orders);
+		}
+		$sql = 'SELECT * FROM '.$this->table.' '.$where.$order;
+		$res	= $this->instance_db->select($sql,$params);
+
+		$ret=array();
+		foreach($res as $key => $value)
+		{
+			$ret[$value['id']]	= $value;
+		}
+		return $ret;
+	}
 
 	/**
 	 * プロジェクトマスタの全データを取得
@@ -107,7 +147,7 @@ class Project
 		$sql	.= ' FROM '. $this->table. ' AS MP INNER JOIN mst_client AS MC ON MP.client_id = MC.id ';
 		$sql	.= $where. $order;
 		$res	= $this->instance_db->select($sql, $params);
-	
+
 		$ret=array();
 		foreach($res as $key => $value)
 		{
@@ -115,8 +155,8 @@ class Project
 		}
 		return $ret;
 	}
-	
-	
+
+
 	/**
 	 * 指定クライアントIDを持つデータを全て取得
 	 *
@@ -159,46 +199,43 @@ class Project
 	 * @param	int		$page	ページ番号
 	 * @param	int		$limit	1ページあたりの項目数
 	 * @param	int		&$total	全項目数
-	 * @param	string	$range	取得範囲
+	 * @param	string	$range	取得範囲（all：既存・終了両方、now：既存案件、end：終了案件）
 	 * @param	string	$column	ソートKEY
 	 * @param	string	$order	昇順/降順
 	 * @param	array	$search_type	検索タイプ（１：所属プロジェクト、２：キーワード）
 	 * @param	array	$search			検索条件（タイプ１：プロジェクトID、タイプ２：指定カラムの部分一致）
-	 * @param	array	$search_column	検索条件（担当営業id、総予算フラグ、仮PJコードフラグ）
+	 * @param	array	$search_column	検索条件（担当営業、総予算、開発終了日、プロジェクトタイプ、予算タイプ、表示対象）
 	 * @return	array	全データ
 	 */
-	function getDataByLimit($page, $limit, &$total, $range='all', $column='MP.id', $order='DESC', $search_type=0, $search=array(), $search_column=array())
+	function getDataByLimit($page, $limit, &$total, $range, $column='MP.id', $order='DESC', $search_type=0, $search=array(), $search_column=array())
 	{
 		$where	= array();
 		$param	= array();
 
-		//取得範囲確認
+		// 既存案件or終了案件
 		$now_date = date("Y-m-d");
 		switch((string)$range)
 		{
-			//継続案件（削除、廃止は対象外）
+			// 既存案件（終了案件日未設定or案件終了日を過ぎていない）
 			case 'now':
-				// 終了案件切り替え日になっていない
 				$where[]	= '(MP.end_date IS NULL OR MP.end_date >= ?)';
 				$param[]	= $now_date;
-				// 対象プロジェクトタイプ
 				break;
-			//終了案件（削除、廃止は対象外）
+			// 終了案件
 			case 'end':
 				$where[]	= 'MP.end_date < ?';
 				$param[]	= $now_date;
-				// 対象プロジェクトタイプ
 				break;
-			//全案件（削除、廃止は対象外）
+			// 全て取得（案件終了日の抽出条件無し）
 			case 'all':
-				// 対象プロジェクトタイプ
+				$where[]	= '1=1';
 				break;
-			//条件無し（削除は対象外）
+			// 条件無し（案件終了日の抽出条件無し）
 			default:
+				$where[]	= '1=1';
 				break;
 		}
-
-		// 検索条件
+		// 検索タイプ
 		if (($search_type == 1) && (!empty($search)))
 		{
 			// 所属プロジェクト検索
@@ -226,52 +263,76 @@ class Project
 				$where[] = '('.implode(' OR ', $arr_search).')';
 			}
 		}
-
-		$sql_member_id = '';
-		$sql_total_budget_chk = '';
-		$sql_project_type_chk = '';
-		$sql_delete_flg_chk = '';
-		$search_column['member_id'] = isset($search_column['member_id']) ? $search_column['member_id'] : 0;
-		$search_column['total_budget_chk'] = isset($search_column['total_budget_chk']) ? $search_column['total_budget_chk'] : 0;
-		$search_column['project_type_chk'] = isset($search_column['project_type_chk']) ? $search_column['project_type_chk'] : 0;
-		//担当営業が指定されていた場合
-		if($search_column['member_id'] >= 1)
+		// 「担当営業」が指定がある場合
+		if(isset($search_column['member_id']))
 		{
-			$sql_member_id = ' AND MP.member_id = ?';
+			$where[] = 'MP.member_id = ?';
 			$param[] = $search_column['member_id'];
 		}
-
-		//総予算未設定が指定されていた場合
-		if($search_column['total_budget_chk'] == 1)
+		// 「総予算未設定」が指定がある場合
+		if(isset($search_column['total_budget_chk']))
 		{
-			$sql_total_budget_chk = " AND MP.total_budget < '1'";
+			$where[] = 'MP.total_budget < ?';
+			$param[] = 1;
 		}
- 		// プロジェクトタイプの指定がある場合
+		// 「開発終了日未設定」が指定がある場合
+		if(isset($search_column['project_end_date_chk']))
+		{
+			$where[] = 'MP.project_end_date IS NULL';
+		}
+		// プロジェクトタイプの指定がある場合
  		if(isset($search_column['project_type']))
  		{
- 			$sql_project_type_chk = " AND MP.project_type ='".$search_column['project_type']."'";
+			if (is_array($search_column['project_type']))
+			{
+				foreach ($search_column['project_type'] as $project_type_value)
+				{
+					$project_type_search[]	= '?';
+					$param[]				= $project_type_value;
+				}
+
+				$where[] = 'MP.project_type IN ('. implode(',', $project_type_search) .')';
+			}
+			else
+			{
+	 			$where[] = 'MP.project_type = ?';
+				$param[] = $search_column['project_type'];
+			}
+ 		}
+		// 予算タイプの指定がある場合
+ 		if(isset($search_column['budget_type']))
+ 		{
+	 			$where[] = 'MP.budget_type = ?';
+				$param[] = $search_column['budget_type'];
  		}
  		// 削除フラグの指定がある場合
  		if(isset($search_column['delete_flg']))
  		{
- 			$sql_delete_flg_chk = " AND MP.delete_flg = '".$search_column['delete_flg']."'";
+	 			$where[] = 'MP.delete_flg = ?';
+				$param[] = $search_column['delete_flg'];
  		}
- 		
-		$sql	= "SELECT SQL_CALC_FOUND_ROWS MP.*, MC.name as cname"
-				. " FROM {$this->table} as MP"
-				. " LEFT JOIN mst_client as MC ON (MC.delete_flg = 0 AND MP.client_id = MC.id)"
-				. " WHERE 1=1 ".(!empty($where) ? ' AND '.implode(' AND ', $where) : '')
-				. "{$sql_member_id}{$sql_total_budget_chk}{$sql_project_type_chk}{$sql_delete_flg_chk}"
-				. " ORDER BY {$column} {$order}"
-				. " LIMIT ?, ?";
+
+ 		// ページ指定
 		$limit_offset	= ($page - 1) * $limit;
 		$param[]	= $limit_offset;
 		$param[]	= $limit;
+
+		// SQL発行
+		$sql	= "SELECT SQL_CALC_FOUND_ROWS MP.*, MC.name AS cname"
+				. "       ,(MP.cost_budget - (MP.use_cost_manhour * MMC.cost)) AS leftover_budget"		// 残予算計算
+				. "       ,(MP.total_cost_manhour - MP.use_cost_manhour) AS leftover_budget_manhour"	// 残コスト工数計算
+				. "  FROM {$this->table} as MP"
+				. "       LEFT JOIN mst_client as MC ON (MC.delete_flg = 0 AND MP.client_id = MC.id)"
+				. "       ,mst_member_cost as MMC"
+				. " WHERE MP.mst_member_cost_id = MMC.id AND " . implode(' AND ', $where)
+				. " ORDER BY {$column} {$order}"
+				. " LIMIT ?, ?";
 		$res		= $this->instance_db->select($sql, $param);
 
 		//全項目数取得の為のエイリアスが渡されている場合
 		$total_res	= $this->instance_db->select('SELECT FOUND_ROWS()', array());
 		$total		= $total_res[0]['found_rows()'];
+
 		return $res;
 	}
 
@@ -348,6 +409,45 @@ class Project
 
 		$sql = 'SELECT * FROM '. $this->table. ' '. $where;
 		$res	= $this->instance_db->select($sql,$params);
+
+		return $res;
+	}
+
+	/**
+	 * 基準社員コスト指定で取得
+	 *
+	 * @param 	integer/array	$member_cost	抽出対象のタイプをarrayで指定
+	 * @param	boolean			$delete_flg		tureの時は削除済みも含む
+	 * @return	array	プロジェクトマスタデータ
+	 */
+	function getDataByCost($member_cost=array(),$delete_flg=false)
+	{
+		// 抽出する社員タイプID
+		if (is_array($member_cost))
+		{
+			// IDが複数指定の時
+			foreach ($member_cost as $member_cost_id)
+			{
+				$tmp_values[] = "?";
+				$params[] = $member_cost_id;
+			}
+			$values = '('.implode(',', $tmp_values).')';
+			$sql = "SELECT * FROM {$this->table} WHERE mst_member_cost_id IN {$values}";
+		}
+		else
+		{
+			$sql = "SELECT * FROM {$this->table} WHERE mst_member_cost_id = ?";
+			$params = array($member_cost);
+		}
+
+		// 削除済み(退職者)を含むか
+		if (!$delete_flg)
+		{
+
+			$sql .=  ' AND delete_flg = 0';
+		}
+
+		$res = $this->instance_db->select($sql,$params);
 
 		return $res;
 	}
@@ -585,91 +685,73 @@ class Project
 	/**
 	 * プロジェクト登録
 	 *
-	 * @param array $data
+	 * @param array $regist_data
 	 *
 	 * @return array $res
 	 */
-	function insertProject($data)
+	function insertProject($regist_data)
 	{
-		$column	= array(
-			'project_code',
-			'name',
-			'client_id',
-			'project_type',
-			'total_budget_manhour',
-			'total_budget',
-			'project_start_date',
-			'project_end_date',
-			'end_date',
-			'member_id',
-			'nouki',
-			'memo_flg',
-			'memo',
-			'regist_date',
-			'update_date',
-		);
-		$values = array();
-		foreach($column as $value)
-		{
-			$values[]	= "?";
-		}
-		$sql="INSERT INTO {$this->table} (".implode(',', $column).") VALUE (".implode(',', $values).")";
+		$response=null;
+		$insert_id=null;
 
-		$res		= $this->instance_db->insert($sql,$data);
-		$insert_id	= $this->instance_db->lastInsertID();
-		return array($res,$insert_id);
+		if (!empty($regist_data) && is_array($regist_data))
+		{
+			$regist_data['regist_date'] = date('Y-m-d H:i:s');
+			$regist_data['update_date'] = $regist_data['regist_date'];
+
+			$tmp_columns	= array();
+			$tmp_values		= array();
+			$params			= array();
+			foreach ($regist_data as $key => $value)
+			{
+				$tmp_columns[]	= '`'.$key.'`';			// 登録カラム
+				$tmp_values[]	= "?";					//
+				$params[]		= $value;				// パラメータ
+			}
+			$columns	= '('.implode(',', $tmp_columns).')';
+			$values		= '('.implode(',', $tmp_values).')';
+
+
+			$sql="INSERT INTO {$this->table} {$columns} VALUE {$values}";
+
+			// insert処理
+			$response	= $this->instance_db->insert($sql,$params);
+			$insert_id	= $this->instance_db->lastInsertID();
+		}
+
+		return array($response,$insert_id);
 	}
 
 	/**
 	 * プロジェクト更新
 	 *
-	 * @param	integer	$id
-	 * @param	array	$data
-	 * @return array $res
+	 * @param	integer	$id				更新するプロジェクトID
+	 * @param	array	$update_columns	更新内容
+	 * @return	array	更新結果
 	 */
-	function updateProject($id, $data)
+	function updateProject($id,$update_columns)
 	{
-		$column	= array(
-			'project_code',
-			'name',
-			'client_id',
-			'project_type',
-			'total_budget_manhour',
-			'total_budget',
-			'project_start_date',
-			'project_end_date',
-			'end_date',
-			'member_id',
-			'nouki',
-			'memo_flg',
-			'memo',
-			'update_date'
+
+		$update_columns['update_date'] = date('Y-m-d H:i:s');
+		$where_columns = array(
+			'id'		=> (int)$id,
 		);
-		foreach($column as $key => $value)
-		{
-			$column[$key]	= "{$value} = ?";
-		}
-		$sql="UPDATE {$this->table} SET ".implode(',', $column)." WHERE delete_flg = 0 AND id = ?";
 
-		$param = array_merge($data,array($id));
+		// set句生成
+		$update_params = array();
+		$set = _makeUpdateSetQuery($update_columns,$update_params);
+		// where句生成
+		$where_params = array();
+		$where = _makeWhereQuery($where_columns, $where_params);
 
-		$res = $this->instance_db->update($sql,$param);
+		$params = array();
+		$params	= array_merge($update_params,$where_params);
 
-		return $res;
-	}
+		// update処理
+		$sql	= "UPDATE {$this->table} SET {$set} {$where}";
+		$response	= $this->instance_db->update($sql,$params);
 
-	/**
-	 * プロジェクト削除
-	 *
-	 * @param array $data
-	 *
-	 * @return array $res
-	 */
-	function deleteProject($data)
-	{
-		$sql="UPDATE {$this->table} SET delete_flg = 1 WHERE id = ?";
-		$res = $this->instance_db->update($sql,$data);
-		return $res;
+		return $response;
 	}
 
 	/**

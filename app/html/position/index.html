@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>株式会社マイティークラフト工数表管理</title>
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <meta name="copyright" content="(C) Mighty Craft, Inc." />
@@ -40,7 +40,9 @@ ID：{$_id} を修正しました。
 </div>
 
 {*<!-- 新規追加ボタン -->*}
+{if $session.manhour.member.auth.position_edit_}
 <div id="matches"><a href="edit/index.html"><img src="../img/button_newadd.gif" alt="新規追加"></a></div>
+{/if}
 <br />
 
 {*<!-- 一覧 -->*}
@@ -53,7 +55,9 @@ ID：{$_id} を修正しました。
 <th width="50px">ID</th>
 <th width="200px">役職名</th>
 <th width="80px">削除</th>
+{if $session.manhour.member.auth.position_edit_}
 <th width="80px">編集</th>
+{/if}
 </tr>
 
 {foreach from=$position_list key=position_key item=position_data}
@@ -65,7 +69,9 @@ ID：{$_id} を修正しました。
 <td class="cel_r" nowrap>{$position_data.id}</td>
 <td class="cel_l" nowrap>{$position_data.name}</td>
 <td align="center" nowrap>{if $position_data.delete_flg}使用不可{/if}
+{if $session.manhour.member.auth.position_edit_}
 <td align="center" nowrap><a href="edit/index.html?id={$position_data.id}" id="edit">編集</a></td>
+{/if}
 </td>
 </tr>
 {/foreach}

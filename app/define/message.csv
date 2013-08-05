@@ -7,4 +7,5 @@ PROJECT_TYPE_NAME_INFORMAL,"仮登録コード"
 PROJECT_TYPE_NAME_BACK,"後発作業用コード"
 PROJECT_TYPE_NAME_REMOVAL,"廃止コード"
 
-
+AUTH_CONFIG_KEY,"input:","list:member:change_pj:","list:member","list:project","list:member:manhour:","list:project:manhour:","project:index","project:new:","project:edit:","project:delete:","project:risk:","project:memo","user:index","user:new:","open_user_edit","user:delete:","open_user_edit_mine","client:index","client:edit:","post:index","post:edit:","position:index","position:edit:","member_type:index","member_type:edit:","member_cost:index","member_cost:edit:","authority:index","authority:edit:","holiday:","excel:","open_other_excel","open_project_cost"
+AUTH_CONFIG_NAME,"工数入力","ＰＪコード一括変換","作業時間照会(社員毎)","作業時間照会(ﾌﾟﾛｼﾞｪｸﾄ毎)","作業時間集計(社員別)","作業時間集計(ﾌﾟﾛｼﾞｪｸﾄ別)","既存/終了案件一覧","プロジェクト新規登録","プロジェクト編集","プロジェクト削除","危険案件一覧","備考入力状況一覧","アカウント一覧","アカウント新規登録","アカウント編集","アカウント削除","マイアカウント編集","クライアント一覧","クライアント新規登録・編集・削除","部署一覧","部署新規登録・編集・削除","役職一覧","役職新規登録・編集・削除","社員タイプ一覧","社員タイプ新規登録・編集・削除","社員コスト一覧","社員コスト新規登録・編集・削除","権限レベル一覧","権限レベル新規登録・編集・削除","休日一覧・編集・削除","エクセル工数表","他人のエクセル工数表出力可否","プロジェクトのコスト関連項目参照可否"

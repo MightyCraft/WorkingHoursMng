@@ -20,22 +20,14 @@
 <td class="cel_l">{if $client_data.name}{$client_data.name}{else}不明な顧客{/if}<input type="hidden" name="client_id" value="{$_client_id}"></td>
 </tr>
 <tr>
-<th class="cel_r" style="width: 200px">PJコードタイプ確認</th>
-<td class="cel_l">{$array_project_type[$_project_type]}<input type="hidden" name="project_type" value="{$_project_type}"></td>
+<th class="cel_r" style="width: 200px">プロジェクトタイプ確認</th>
+<td class="cel_l">{$project_type_list[$_project_type]}<input type="hidden" name="project_type" value="{$_project_type}"></td>
 </tr>
 <tr>
-<tr>
-<th class="cel_r" style="width: 200px">総予算</th>
-<td class="cel_l">￥{$_total_budget|number_format}<input type="hidden" name="total_budget" value="{$_total_budget}"></td>
-</tr>
-<tr>
-<th class="cel_r" style="width: 200px">総割当工数</th>
-<td class="cel_l">{$_total_budget_manhour}時間<input type="hidden" name="total_budget_manhour" value="{$_total_budget_manhour}"></td>
-</tr>
-
 <tr>
 <th class="cel_r" style="width: 200px">開発開始日付</th>
-<td class="cel_l">{if $_project_pending_start_date}未定{else}{$_project_start_date_year}年{$_project_start_date_month}月{$_project_start_date_day}日{/if}
+<td class="cel_l">{if $_project_pending_start_date}未定
+ {else}{$_project_start_date_year}/{$_project_start_date_month|string_format:"%02d"}/{$_project_start_date_day|string_format:"%02d"}{/if}
 <input type="hidden" name="project_start_date_year" value="{$_project_start_date_year}">
 <input type="hidden" name="project_start_date_month" value="{$_project_start_date_month}">
 <input type="hidden" name="project_start_date_day" value="{$_project_start_date_day}">
@@ -44,24 +36,24 @@
 </tr>
 <tr>
 <th class="cel_r" style="width: 200px">開発終了日付</th>
-<td class="cel_l">{if $_project_pending_end_date}未定{else}{$_project_end_date_year}年{$_project_end_date_month}月{$_project_end_date_day}日{/if}
+<td class="cel_l">{if $_project_pending_end_date}未定{if !$_delete}<span style="font-size:10px;color: #FF0000;">　※未定の場合は「危険案件一覧」にて一部使用できない機能が発生します。</span>{/if}
+ {else}{$_project_end_date_year}/{$_project_end_date_month|string_format:"%02d"}/{$_project_end_date_day|string_format:"%02d"}{/if}
 <input type="hidden" name="project_end_date_year" value="{$_project_end_date_year}">
 <input type="hidden" name="project_end_date_month" value="{$_project_end_date_month}">
 <input type="hidden" name="project_end_date_day" value="{$_project_end_date_day}">
 <input type="hidden" name="project_pending_end_date" value="{$_project_pending_end_date}">
 </td>
-
 </tr>
 <tr>
 <th class="cel_r" style="width: 200px">案件終了予定</th>
-<td class="cel_l">{if $_pending_end_date}未定{else}{$_end_date_year}年{$_end_date_month}月{$_end_date_day}日{/if}
+<td class="cel_l">{if $_pending_end_date}未定
+ {else}{$_end_date_year}/{$_end_date_month|string_format:"%02d"}/{$_end_date_day|string_format:"%02d"}{/if}
 <input type="hidden" name="end_date_year" value="{$_end_date_year}">
 <input type="hidden" name="end_date_month" value="{$_end_date_month}">
 <input type="hidden" name="end_date_day" value="{$_end_date_day}">
 <input type="hidden" name="pending_end_date" value="{$_pending_end_date}">
 </td>
 </tr>
-
 <tr>
 <th class="cel_r" style="width: 200px">納期</th>
 <td class="cel_l">{$_nouki}<input type="hidden" name="nouki" value="{$_nouki}"></td>
@@ -72,9 +64,60 @@
 </tr>
 <tr>
 <th class="cel_r" style="width: 200px">担当営業</th>
-<td class="cel_l">{if $member_list[$_member_id]}{$member_list[$_member_id].name}{else}未指定{/if}<input type="hidden" name="member_id" value="{$_member_id}"></td>
+<td class="cel_l">{if $member_data}{$member_data.name}{else}未指定{/if}<input type="hidden" name="member_id" value="{$_member_id}"></td>
+</tr>
+</table>
+<br />
+
+■コスト管理関連
+<table width="100%">
+<tr>
+<th class="cel_r" style="width: 200px">予算タイプ</th>
+<td class="cel_l">{$budget_type_list[$_budget_type]}<input type="hidden" name="budget_type" value="{$_budget_type}"></td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">総予算</th>
+<td class="cel_l">
+{if $_total_budget == NULL}未設定{if !$_delete}<span style="font-size:10px;color: #FF0000;">　※未設定の場合はコスト管理関連の機能が使用できません。</span>{/if}
+{else}￥{$_total_budget|number_format}{/if}
+<input type="hidden" name="total_budget" value="{$_total_budget}">
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">コスト管理外予算</th>
+<td class="cel_l">￥{$_exclusion_budget|number_format}<input type="hidden" name="exclusion_budget" value="{$_exclusion_budget}"></td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">原価率</th>
+<td class="cel_l">{$_cost_rate|number_format}％<input type="hidden" name="cost_rate" value="{$_cost_rate}"></td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">基準社員コストID </th>
+<td class="cel_l">{$member_cost_data.name}（\{$member_cost_data.cost|number_format}）<input type="hidden" name="mst_member_cost_id" value="{$_mst_member_cost_id}"></td>
 </tr>
 
+<tr><th class="cel_r" style="width: 200px" rowspan="3">コスト関連項目（自動計算）</th>
+<td class="cel_l">
+コスト予算：{if $_cost_budget == NULL}未設定{if !$_delete}<span style="font-size:10px;color: #FF0000;">　※「総予算」の設定がないので自動計算できません。</span>{/if}
+{else}￥{$_cost_budget|number_format}{/if}
+<input type="hidden" name="cost_budget" value="{$_cost_budget}">
+</td></tr>
+<tr><td class="cel_l">
+総割当コスト工数：{if $_total_cost_manhour == NULL}未設定{if !$_delete}<span style="font-size:10px;color: #FF0000;">　※「総予算」の設定がないので自動計算できません。</span>{/if}
+{else}{$_total_cost_manhour|number_format}時間{/if}
+<input type="hidden" name="total_cost_manhour" value="{$_total_cost_manhour}">
+</td></tr>
+<tr><td class="cel_l">
+使用済コスト工数：{if $_use_cost_manhour == NULL}未集計{if !$_delete}<span style="font-size:10px">　※日次集計後に自動セットされます。</span>{/if}
+{else}{$_use_cost_manhour|number_format}時間{/if}
+<input type="hidden" name="use_cost_manhour" value="{$_use_cost_manhour}">
+</td></tr>
+
+</table>
+<br />
+
+■備考
+<table width="100%">
 <tr>
 <th class="cel_r" style="width: 200px">備考</th>
 <td class="cel_l">{$_memo|nl2br}<input type="hidden" name="memo" value="{$_memo}"></td>
@@ -94,9 +137,11 @@
 <table border="0">
 <tr valign="top"><td>
 <input type="image" border="0" name="imageBack" src="../../img/button_back.gif" alt="戻る" onclick="this.form.action='index';" class="send">
+<input type="hidden" name="return_flg" value="1">
 <td>
 <input type="image" border="0" name="imageDo" src="../../img/button_entry.gif" alt="登録" class="send">
 </td></tr>
 </table>
 {/if}
+<input type="hidden" name="type" value="{$_type}">
 </form>

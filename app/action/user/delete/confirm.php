@@ -4,9 +4,20 @@
  */
 require_once(DIR_APP . "/class/common/dbaccess/Post.php");
 require_once(DIR_APP . "/class/common/dbaccess/Position.php");
+require_once(DIR_APP . "/class/common/dbaccess/MemberType.php");
+require_once(DIR_APP . "/class/common/dbaccess/MemberCost.php");
 class _user_delete_confirm extends UserScene
 {
 	var $_id;
+
+	// 画面
+	var $member_by_id;
+	var $array_auth_lv;
+	var $array_post;
+	var $array_position;
+	var $array_member_type;
+	var $array_member_cost;
+	var $password_tmp;
 
 	function check()
 	{
@@ -47,25 +58,25 @@ class _user_delete_confirm extends UserScene
 	function task(MCWEB_InterfaceSceneOutputVars $access)
 	{
 		$obj_member		= new Member;
+		$this->member_by_id	= $obj_member->getMemberById($this->_id);
 
-		$member_by_id	= $obj_member->getMemberById($this->_id);
-		$array_auth_lv	= returnArrayAuthLv();
-		
-		$obj_post	= new Post();
-		$array_post	= $obj_post->getDataAll();
-		
-		$obj_position = new Position();
-		$array_position	= $obj_position->getDataAll();
-		
-		$password_tmp	= changePassWord($member_by_id['password']);
+		$this->array_auth_lv	= returnArrayAuthLv();
 
-		//テンプレートへセット//GET値POST値等publicなメンバー変数は自動的にセット
-		$access->text('member_by_id',	$member_by_id);
-		$access->text('password_tmp',	substr($password_tmp, 0, USER_MEMBER_PASSWORD_MAX));
-		$access->text('array_auth_lv',	$array_auth_lv);
-		$access->text('array_post',		$array_post);
-		$access->text('array_position',		$array_position);
-		
+		$obj_post			= new Post();
+		$this->array_post	= $obj_post->getDataAll();
+
+		$obj_position			= new Position();
+		$this->array_position	= $obj_position->getDataAll();
+
+		$obj_member_type			= new MemberType();
+		$this->array_member_type	= $obj_member_type->getDataAll();
+
+		$obj_member_cost			= new MemberCost();
+		$this->array_member_cost	= $obj_member_cost->getDataAll();
+
+		$password_tmp		= changePassWord($this->member_by_id['password']);
+		$this->password_tmp	= substr($password_tmp, 0, USER_MEMBER_PASSWORD_MAX);
+
 
 		//所属リスト表示処理
 		$this->setProjectTeamViewListByProjectTeamTable($this->_id);

@@ -1,156 +1,144 @@
-# REFERENCE ƒŠƒtƒ@ƒŒƒ“ƒX
+# REFERENCE ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹
 
-## ƒAƒvƒŠƒP[ƒVƒ‡ƒ“\¬
+## ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æ§‹æˆ
 
-### ¡ƒfƒBƒŒƒNƒgƒŠ\¬
+### â– ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ§‹æˆ
 
-    app         :ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒ\[ƒXŠi”[ƒfƒBƒŒƒNƒgƒŠ
-    cache       :ŠeŽíƒLƒƒƒbƒVƒ…ƒtƒ@ƒCƒ‹Ši”[ƒfƒBƒŒƒNƒgƒŠ
-    log         :ƒƒOƒtƒ@ƒCƒ‹Ši”[ƒfƒBƒŒƒNƒgƒŠ
-    documentroot:ŒöŠJ—pƒfƒBƒŒƒNƒgƒŠ
-    mcweb       :MCWEBƒtƒŒ[ƒ€ƒ[ƒNƒ\[ƒXŠi”[ƒfƒBƒŒƒNƒgƒŠ
+    app         :ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚½ãƒ¼ã‚¹æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+    cache       :å„ç¨®ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ•ã‚¡ã‚¤ãƒ«æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+    log         :ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+    documentroot:å…¬é–‹ç”¨ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+    mcweb       :MCWEBãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¯ãƒ¼ã‚¯ã‚½ãƒ¼ã‚¹æ ¼ç´ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 
-## ŠeŽíÝ’è
+## å„ç¨®è¨­å®š
 
-—˜—pŠÂ‹«‚É‰ž‚¶‚ÄÝ’è‚µ‚Ä‚à‚ç‚¤’è”’è‹`‚ð‚·‚é‰ÓŠ‚É‚Â‚¢‚Ä‚Ìà–¾‚Å‚·B
+åˆ©ç”¨ç’°å¢ƒã«å¿œã˜ã¦è¨­å®šã—ã¦ã‚‚ã‚‰ã†å®šæ•°å®šç¾©ã‚’ã™ã‚‹ç®‡æ‰€ã«ã¤ã„ã¦ã®èª¬æ˜Žã§ã™ã€‚
 
-### ¡ƒVƒXƒeƒ€Ý’è (app/define/user_config/user.define.ini.php)
+### â– ã‚·ã‚¹ãƒ†ãƒ è¨­å®š (app/define/user_config/user.define.ini.php)
 
 * **USER_SYSTEM_TITLE**
-  ƒVƒXƒeƒ€ƒ^ƒCƒgƒ‹–¼‚ðÝ’è‚µ‚Ü‚·B
-
-* **USER_TOTAL_BUDGET_MANHOUR_EQUATION**
-  ‘—\ŽZ‚©‚ç‘Š„“–H”‚ÌŽZo‚·‚éŒvŽZŽ®
-  evalŠÖ”‚ðŽg—p‚µ‚ÄŒvŽZ‚µ‚Ü‚·B
-  u%1$dv‚ÌˆÊ’u‚ÉƒvƒƒWƒFƒNƒgƒ}ƒXƒ^‚Ì‘—\ŽZ‚ªƒZƒbƒg‚³‚ê‚Ü‚·B
-  ¬”“_ˆÈ‰º‚ÍŽlŽÌŒÜ“ü‚³‚ê‚Ü‚·B
-
-  Ý’è—á) `%1$d / 10`
+  ã‚·ã‚¹ãƒ†ãƒ ã‚¿ã‚¤ãƒˆãƒ«åã‚’è¨­å®šã—ã¾ã™ã€‚
   
-#### “ü—Í•¶Žš§ŒÀÝ’è
+#### å…¥åŠ›æ–‡å­—åˆ¶é™è¨­å®š
 
-* **USER_POST_NAME_MAX** •”–¼ãŒÀ•¶Žš”
+* **USER_POST_NAME_MAX** 
+  éƒ¨ç½²åä¸Šé™æ–‡å­—æ•°
+
+* **USER_AUTHORITY_NAME_MAX** 
+  æ¨©é™åä¸Šé™æ–‡å­—æ•°
+
+* **USER_MEMBER_TYPE_NAME_MAX** 
+  ç¤¾å“¡ã‚¿ã‚¤ãƒ—åä¸Šé™æ–‡å­—æ•°
+
+* **USER_MEMBER_COST_NAME_MAX** 
+  ç¤¾å“¡ã‚³ã‚¹ãƒˆåä¸Šé™æ–‡å­—æ•°
 
 * **USER_MEMBER_CODE_MAX**
-  ŽÐˆõƒR[ƒhãŒÀ•¶Žš”
+  ç¤¾å“¡ã‚³ãƒ¼ãƒ‰ä¸Šé™æ–‡å­—æ•°
   
 * **UUSER_MEMBER_CODE_MIN**
-  ŽÐˆõƒR[ƒhãŒÀ•¶Žš”
+  ç¤¾å“¡ã‚³ãƒ¼ãƒ‰ä¸Šé™æ–‡å­—æ•°
   
 * **UUSER_MEMBER_CODE_FORMAT**
-  ŽÐˆõƒR[ƒh‘Ž®i³‹K•\Œ»/•s—vŽž‚Í''‚ðƒZƒbƒgj
+  ç¤¾å“¡ã‚³ãƒ¼ãƒ‰æ›¸å¼ï¼ˆæ­£è¦è¡¨ç¾/ä¸è¦æ™‚ã¯''ã‚’ã‚»ãƒƒãƒˆï¼‰
   
 * **UUSER_MEMBER_NAME_MAX**
-  ŽÐˆõ–¼ãŒÀ•¶Žš”
+  ç¤¾å“¡åä¸Šé™æ–‡å­—æ•°
   
 * **UUSER_MEMBER_PASSWORD_MAX**
-  ƒpƒXƒ[ƒhãŒÀ•¶Žš”
+  ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ä¸Šé™æ–‡å­—æ•°
   
 * **UUSER_CLIENT_NAME_MAX**
-  ƒNƒ‰ƒCƒAƒ“ƒg–¼ãŒÀ•¶Žš”
+  ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆåä¸Šé™æ–‡å­—æ•°
 
 * **USER_CLIENT_MEMO_MAX**
-  ƒNƒ‰ƒCƒAƒ“ƒg”õlãŒÀ•¶Žš”
+  ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå‚™è€ƒä¸Šé™æ–‡å­—æ•°
 
 * **UUSER_PROJECT_CODE_MAX**
-  ƒvƒƒWƒFƒNƒgƒR[ƒhãŒÀ•¶Žš”
+  ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã‚³ãƒ¼ãƒ‰ä¸Šé™æ–‡å­—æ•°
   
 * **USER_PROJECT_CODE_MIN**
-  ƒvƒƒWƒFƒNƒgƒR[ƒh‰ºŒÀ•¶Žš”
+  ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã‚³ãƒ¼ãƒ‰ä¸‹é™æ–‡å­—æ•°
 
 * **USER_PROJECT_CODE_FORMAT**
-  ƒvƒƒWƒFƒNƒgƒR[ƒh‘Ž®i³‹K•\Œ»/•s—vŽž‚Í''‚ðƒZƒbƒgj
+  ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã‚³ãƒ¼ãƒ‰æ›¸å¼ï¼ˆæ­£è¦è¡¨ç¾/ä¸è¦æ™‚ã¯''ã‚’ã‚»ãƒƒãƒˆï¼‰
 
 * **USER_PROJECT_CODE_AUTO_CREATE**
-  ƒvƒƒWƒFƒNƒgƒR[ƒhŽ©“®ƒR[ƒh¶¬i‰¼ƒR[ƒhŽž‚ÉŽg—pj
+  ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã‚³ãƒ¼ãƒ‰è‡ªå‹•ã‚³ãƒ¼ãƒ‰ç”Ÿæˆï¼ˆä»®ã‚³ãƒ¼ãƒ‰æ™‚ã«ä½¿ç”¨ï¼‰
 
 * **USER_PROJECT_NAME_MAX**
-  ƒvƒƒWƒFƒNƒg–¼ãŒÀ•¶Žš”
+  ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆåä¸Šé™æ–‡å­—æ•°
   
 * **USER_PROJECT_NOUKI_MAX**
-  ƒvƒƒWƒFƒNƒg”[ŠúãŒÀ•¶Žš”
+  ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆç´æœŸä¸Šé™æ–‡å­—æ•°
   
 * **USER_PROJECT_MEMO_MAX**
-  ƒvƒƒWƒFƒNƒg”õlãŒÀ•¶Žš”
+  ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå‚™è€ƒä¸Šé™æ–‡å­—æ•°
   
 * **USER_MANHOUR_MEMO_MAX**
-  H”ƒf[ƒ^”õlãŒÀ•¶Žš”
+  å·¥æ•°ãƒ‡ãƒ¼ã‚¿å‚™è€ƒä¸Šé™æ–‡å­—æ•°
 
-#### ƒGƒNƒZƒ‹H”•\o—Í
+#### ã‚¨ã‚¯ã‚»ãƒ«å·¥æ•°è¡¨å‡ºåŠ›
 * **USER_EXCEL_ROW_NUM**
-  o—Ís”
+  å‡ºåŠ›è¡Œæ•°
 
-#### ƒLƒƒƒbƒVƒ…—LŒøŽžŠÔ
+#### ã‚­ãƒ£ãƒƒã‚·ãƒ¥æœ‰åŠ¹æ™‚é–“
 
 * **USER_CACHE_LOGIN_MEMBER_ID**
-  ƒƒOƒCƒ“Žž‚Ì‰Šú•\Ž¦ƒ†[ƒUID
+  ãƒ­ã‚°ã‚¤ãƒ³æ™‚ã®åˆæœŸè¡¨ç¤ºãƒ¦ãƒ¼ã‚¶ID
   
 * **USER_CACHE_LOGIN_STATE**
-  ƒƒOƒCƒ“ó‘Ô‚Ì•ÛŽ
+  ãƒ­ã‚°ã‚¤ãƒ³çŠ¶æ…‹ã®ä¿æŒ
 
 
-### ¡ƒƒbƒZ[ƒWÝ’è (app/define/user_config/user.message.csv)
+### â– ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¨­å®š (app/define/user_config/user.message.csv)
 
 * **USER_DUMMY_MESSAGE**
-  ’è‹`—á‚ÅƒVƒXƒeƒ€‚Å‚ÍŽg—p‚µ‚Ü‚¹‚ñB
-  V‚½‚É’è‹`‚ð’Ç‰Á‚·‚éê‡‚ÍA’è‹`–¼‚É‚Í•K‚¸uUSER_v‚©‚çŽn‚Ü‚é’l‚ðÝ’è‚µ‚Ä‚­‚¾‚³‚¢
+  å®šç¾©ä¾‹ã§ã‚·ã‚¹ãƒ†ãƒ ã§ã¯ä½¿ç”¨ã—ã¾ã›ã‚“ã€‚
+  æ–°ãŸã«å®šç¾©ã‚’è¿½åŠ ã™ã‚‹å ´åˆã¯ã€å®šç¾©åã«ã¯å¿…ãšã€ŒUSER_ã€ã‹ã‚‰å§‹ã¾ã‚‹å€¤ã‚’è¨­å®šã—ã¦ãã ã•ã„
   
-* **USER_ERR_MESSAGE_PROJECT_CODE** ƒvƒƒWƒFƒNƒgƒR[ƒh‚Ì‘Ž®ƒGƒ‰[ŽžƒƒbƒZ[ƒW
+* **USER_ERR_MESSAGE_PROJECT_CODE** ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã‚³ãƒ¼ãƒ‰ã®æ›¸å¼ã‚¨ãƒ©ãƒ¼æ™‚ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
   
-* **USER_GUIDE_MESSAGE_PROJECT_CODE_FORMAT**  ƒvƒƒWƒFƒNƒgƒR[ƒh‚Ì•\Ž¦—p‘Ž®’è‹`
+* **USER_GUIDE_MESSAGE_PROJECT_CODE_FORMAT**  ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã‚³ãƒ¼ãƒ‰ã®è¡¨ç¤ºç”¨æ›¸å¼å®šç¾©
   
-* **USER_ERR_MESSAGE_MEMBER_CODE**  ŽÐˆõƒR[ƒh‚Ì‘Ž®ƒGƒ‰[ŽžƒƒbƒZ[ƒW
+* **USER_ERR_MESSAGE_MEMBER_CODE**  ç¤¾å“¡ã‚³ãƒ¼ãƒ‰ã®æ›¸å¼ã‚¨ãƒ©ãƒ¼æ™‚ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
   
-* **USER_GUIDE_MESSAGE_MEMBER_CODE_FORMAT**  ŽÐˆõƒR[ƒh‚Ì•\Ž¦—p‘Ž®’è‹`
+* **USER_GUIDE_MESSAGE_MEMBER_CODE_FORMAT**  ç¤¾å“¡ã‚³ãƒ¼ãƒ‰ã®è¡¨ç¤ºç”¨æ›¸å¼å®šç¾©
 
-#### Œ ŒÀ1`6–¼Ì
+#### éƒ¨ç½²ã‚¿ã‚¤ãƒ—1ï½ž3åç§°
 
-* **USER_AUTH_LV_NAME_1**  Œ ŒÀ1–¼Ì
+* **USER_POST_TYPE_NAME_1**  éƒ¨ç½²ã‚¿ã‚¤ãƒ—1
   
-* **USER_AUTH_LV_NAME_2**  Œ ŒÀ2–¼Ì
+* **USER_POST_TYPE_NAME_2**  éƒ¨ç½²ã‚¿ã‚¤ãƒ—2
   
-* **USER_AUTH_LV_NAME_3**  Œ ŒÀ3–¼Ì
-  
-* **USER_AUTH_LV_NAME_4**  Œ ŒÀ4–¼Ì
-  
-* **USER_AUTH_LV_NAME_5**  Œ ŒÀ5–¼Ì
-
-* **USER_AUTH_LV_NAME_6**  Œ ŒÀ6–¼Ì
-
-#### •”ƒ^ƒCƒv1`3–¼Ì
-
-* **USER_POST_TYPE_NAME_1**  •”ƒ^ƒCƒv1
-  
-* **USER_POST_TYPE_NAME_2**  •”ƒ^ƒCƒv2
-  
-* **USER_POST_TYPE_NAME_3**  •”ƒ^ƒCƒv3
+* **USER_POST_TYPE_NAME_3**  éƒ¨ç½²ã‚¿ã‚¤ãƒ—3
 
 
-### ¡ip‘Ñˆæ‚ÌƒtƒBƒ‹ƒ^ƒŠƒ“ƒOÝ’è (app/define/filter.txt)
+### â– ipå¸¯åŸŸã®ãƒ•ã‚£ãƒ«ã‚¿ãƒªãƒ³ã‚°è¨­å®š (app/define/filter.txt)
 
-ƒAƒNƒZƒX‰Â”\‚ÈIP‘Ñˆæ‚ð’è‹`
+ã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ãªIPå¸¯åŸŸã‚’å®šç¾©
 
-##### Ý’è•û–@
+##### è¨­å®šæ–¹æ³•
   
-$DEBUGˆÈ‰º‚ÉÚ‘±‚ð‹–‰Â‚·‚éIP‘Ñˆæ‚ð’è‹`‚µ‚Ü‚·B
-‚Ü‚½‘S‚Ä‚ÌƒAƒNƒZƒX‚ð‹–‰Â‚·‚éê‡‚Í*‚ðŽw’è‚µ‚Ä‰º‚³‚¢B
+$DEBUGä»¥ä¸‹ã«æŽ¥ç¶šã‚’è¨±å¯ã™ã‚‹IPå¸¯åŸŸã‚’å®šç¾©ã—ã¾ã™ã€‚
+ã¾ãŸå…¨ã¦ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’è¨±å¯ã™ã‚‹å ´åˆã¯*ã‚’æŒ‡å®šã—ã¦ä¸‹ã•ã„ã€‚
 
-Ý’è—á1j
-127.0.0.1‚Æ192.168.1.*‚©‚ç‚ÌƒAƒNƒZƒX‚ð‹–‰Â‚·‚éê‡
+è¨­å®šä¾‹1ï¼‰
+127.0.0.1ã¨192.168.1.*ã‹ã‚‰ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’è¨±å¯ã™ã‚‹å ´åˆ
 
     $DEBUG
     127.0.0.1/32
     192.168.1.0/24
 
-Ý’è—á2j
-‚·‚×‚Ä‚ÌƒAƒNƒZƒX‚ð‹–‰Â‚·‚éê‡
+è¨­å®šä¾‹2ï¼‰
+ã™ã¹ã¦ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’è¨±å¯ã™ã‚‹å ´åˆ
 
     $DEBUG
     *
 
-### ¡ƒVƒXƒeƒ€ƒƒSÝ’è
+### â– ã‚·ã‚¹ãƒ†ãƒ ãƒ­ã‚´è¨­å®š
 
-ƒVƒXƒeƒ€ƒƒSÝ’è iƒwƒbƒ_¶ãƒƒS‰æ‘œj‚Ì•ÏX‚ª‰Â”\‚Å‚·B
+ã‚·ã‚¹ãƒ†ãƒ ãƒ­ã‚´è¨­å®š ï¼ˆãƒ˜ãƒƒãƒ€å·¦ä¸Šãƒ­ã‚´ç”»åƒï¼‰ã®å¤‰æ›´ãŒå¯èƒ½ã§ã™ã€‚
 
-##### Ý’è•û–@
-  `app/html/img/logo_header.gif`‚Ì‰æ‘œ‚ð·‚µ‘Ö‚¦‚é‚±‚Æ‚Å•ÏX‰Â”\
+##### è¨­å®šæ–¹æ³•
+  `app/html/img/logo_header.gif`ã®ç”»åƒã‚’å·®ã—æ›¿ãˆã‚‹ã“ã¨ã§å¤‰æ›´å¯èƒ½

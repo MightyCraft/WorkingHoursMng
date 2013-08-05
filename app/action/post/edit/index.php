@@ -20,11 +20,7 @@ class _post_edit_index extends PostAndGetScene
 
 	function check()
 	{
-		// 権限が無い場合は工数入力画面に強制遷移
-		if (!checkAuthPostManagement($_SESSION['manhour']['member']['auth_lv'],$_SESSION['manhour']['member']['post']))
-		{
-			MCWEB_Util::redirectAction("/input/index/");
-		}
+
 	}
 
 	function task(MCWEB_InterfaceSceneOutputVars $access)

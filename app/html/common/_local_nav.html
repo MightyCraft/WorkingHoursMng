@@ -22,51 +22,92 @@ function subopen(tName){
 <div id="local-nav2">
 
 <dl>
+{if $session.manhour.member.auth.input_}
 <dt><div><div><div><a href="../input/index.html">工数入力</a></div></div></div></dt>
+{/if}
 </dl>
 
+{if $session.manhour.member.auth.list_member || $session.manhour.member.auth.list_project || $session.manhour.member.auth.list_member_manhour_ || $session.manhour.member.auth.list_project_manhour_ }
 <dl>
-<dt><div><div><div>工数照会</div></div></div></dt>
-<dd><a href="../list/member">社員毎</a></dd>
-<dd><a href="../list/project">ﾌﾟﾛｼﾞｪｸﾄ毎</a></dd>
+<dt style="width:150px;"><div><div><div>工数照会</div></div></div></dt>
+{if $session.manhour.member.auth.list_member}
+<dd><a href="../list/member">作業時間照会(社員毎)</a></dd>
+{/if}
+{if $session.manhour.member.auth.list_project}
+<dd><a href="../list/project">作業時間照会(ﾌﾟﾛｼﾞｪｸﾄ毎)</a></dd>
+{/if}
+{if $session.manhour.member.auth.list_member_manhour_}
+<dd><a href="../list/member/manhour/index">作業時間集計(社員別)</a></dd>
+{/if}
+{if $session.manhour.member.auth.list_project_manhour_}
+<dd><a href="../list/project/manhour/index">作業時間集計(ﾌﾟﾛｼﾞｪｸﾄ別)</a></dd>
+{/if}
 </dl>
+{/if}
 
+{if $session.manhour.member.auth.user_index || $session.manhour.member.auth.open_user_edit_mine}
 <dl>
 <dt><div><div><div>ｱｶｳﾝﾄ管理</div></div></div></dt>
-{if $session.manhour.member.auth.account}
+{if $session.manhour.member.auth.user_index}
 <dd><a href="../user/index">ｱｶｳﾝﾄ一覧</a></dd>
 {/if}
+{if $session.manhour.member.auth.open_user_edit_mine}
 <dd><a href="../user/edit/start?id={$session.manhour.member.id}">ﾏｲｱｶｳﾝﾄ編集</a></dd>
-</dl>
-{if $session.manhour.member.auth.project}
-<dl>
-<dt><div><div><div>ﾌﾟﾛｼﾞｪｸﾄ管理</div></div></div></dt>
-<dd><a href="../project/index?type=now">既存案件一覧</a></dd>
-<dd><a href="../project/index?type=end">終了案件一覧</a></dd>
+{/if}
 </dl>
 {/if}
-{if $session.manhour.member.auth.client}
+
+{if $session.manhour.member.auth.project_index || $session.manhour.member.auth.project_risk_ || $session.manhour.member.auth.project_memo || $session.manhour.member.auth.project_chart}
+<dl>
+<dt><div><div><div>ﾌﾟﾛｼﾞｪｸﾄ管理</div></div></div></dt>
+{if $session.manhour.member.auth.project_index}
+<dd><a href="../project/index?type=now">既存案件一覧</a></dd>
+<dd><a href="../project/index?type=end">終了案件一覧</a></dd>
+{/if}
+{if $session.manhour.member.auth.project_risk_}
+<dd><a href="../project/risk/index">危険案件一覧</a></dd>
+{/if}
+{if $session.manhour.member.auth.project_memo }
+<dd><a href="../project/memo/index">備考入力状況一覧</a></dd>
+{/if}
+</dl>
+{/if}
+
+{if $session.manhour.member.auth.client_index}
 <dl>
 <dt><div><div><div><a href="../client/index">ｸﾗｲｱﾝﾄ管理</a></div></div></div></dt>
 </dl>
 {/if}
 
-{if $session.manhour.member.auth.holiday || $session.manhour.member.auth.post}
+{if $session.manhour.member.auth.post_index || $session.manhour.member.auth.position_index || $session.manhour.member.auth.authority_index || $session.manhour.member.auth.member_type_index || $session.manhour.member.auth.member_type_index || $session.manhour.member.auth.member_cost_index || $session.manhour.member.auth.holiday_}
 <dl>
 <dt><div><div><div>その他ﾏｽﾀ管理</div></div></div></dt>
-{if $session.manhour.member.auth.post}
+{if $session.manhour.member.auth.post_index}
 <dd><a href="../post/index">部署管理</a></dd>
+{/if}
+{if $session.manhour.member.auth.position_index}
 <dd><a href="../position/index">役職管理</a></dd>
 {/if}
-{if $session.manhour.member.auth.holiday}
+{if $session.manhour.member.auth.authority_index}
+<dd><a href="../authority/index">権限管理</a></dd>
+{/if}
+{if $session.manhour.member.auth.member_type_index}
+<dd><a href="../member_type/index">社員ﾀｲﾌﾟ管理</a></dd>
+{/if}
+{if $session.manhour.member.auth.member_cost_index}
+<dd><a href="../member_cost/index">社員ｺｽﾄ管理</a></dd>
+{/if}
+{if $session.manhour.member.auth.holiday_}
 <dd><a href="../holiday/index">休日管理</a></dd>
 {/if}
 </dl>
 {/if}
 
+{if $session.manhour.member.auth.excel_}
 <dl>
 <dt><div><div><div><a href="../excel/index">ｴｸｾﾙ工数表</a></div></div></div></dt>
 </dl>
+{/if}
 
 <!-- /div#local-nav2 -->
 </div>

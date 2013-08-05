@@ -43,7 +43,6 @@ class _list_member extends PostAndGetScene
 	var $daily_total_data;	// 日別工数集計データ
 	var $weekends_holidays;	// カレンダー情報
 	var $self_flg;			// 自分自身の情報かの判別
-	var $auth_manhour_flg;	// 残工数、総工数情報の参照権限
 	var $post_list;			// 部署リストの取得
 
 	function check()
@@ -100,9 +99,6 @@ class _list_member extends PostAndGetScene
 		$obj_post			= new Post();
 		$obj_member			= new Member();
 
-		// 残工数、総工数の参照権限の取得
-		$this->auth_manhour_flg	= checkAuthTotalManhour($_SESSION['manhour']['member']['auth_lv'], $_SESSION['manhour']['member']['post']);
-
 		// 表示年月設定　TODO: ブラッシュアップ
 		$this->set_time		= $this->_date_Year . '-' . $this->_date_Month . '-01';
 
@@ -118,7 +114,7 @@ class _list_member extends PostAndGetScene
 		if (!empty($this->_member_id))
 		{
 			// 工数情報取得（$this->daily_totalは参照変数）
-			$this->monhour_data = $obj_common_list->getProjectListByUseridDate($this->_date_Year,$this->_date_Month,$this->_member_id,$this->daily_total_data,$this->auth_manhour_flg);
+			$this->monhour_data = $obj_common_list->getProjectListByUseridDate($this->_date_Year,$this->_date_Month,$this->_member_id,$this->daily_total_data);
 		}
 
 		// 表示年月のカレンダー情報取得（土日祝日埋め込み済）

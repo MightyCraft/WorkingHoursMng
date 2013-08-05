@@ -31,6 +31,7 @@
 <div id="tbody">
 <div>
 
+{*<!-- エラーメッセージ -->*}
  {if $_error}
 <div style="color:#ff0000;padding-left:15px;padding-top:5px;padding-bottom:5px;">
   {foreach from=$_error item=error_item}
@@ -41,10 +42,11 @@
 </div>
  {/if}
 
+{*<!-- 検索条件 -->*}
 <form action="../project/index" name="search" method="post">
 <table width="100%">
 <tr>
-<th align="left" colspan="2">{html_radios name="radio" options=$radio_list selected=$radio_id separator="<br />"}</th>
+<th align="left" colspan="2">{html_radios name="radio" options=$radio_list selected=$_radio separator="<br />"}</th>
 </tr>
 <tr>
 <td colspan="2"><input type="text" name="key_word" style="width:300px" value="{$_key_word}" >　（指定無しで全検索）</td>
@@ -64,23 +66,40 @@
 <tr>
 <th width="15%" align="left">総予算未設定</th>
 <td width="85%">
-{html_checkboxes name="total_budget_chk" values=1 selected=$total_budget_chk output="" separator="<br />"}
+ <input type="checkbox" name="total_budget_chk" value="1"  {if $_total_budget_chk}checked{/if}>
 </td>
 </tr>
 <tr>
-<th width="15%" align="left">タイプ</th>
+<th width="15%" align="left">開発終了日未設定</th>
 <td width="85%">
-{html_radios name="project_type" options=$project_type_list selected=$project_type style="vertical-align:middle;" separator=" "}
+ <input type="checkbox" name="project_end_date_chk" value="1"  {if $_project_end_date_chk}checked{/if}>
+</td>
+</tr>
+<tr>
+<th width="15%" align="left">プロジェクトタイプ</th>
+<td width="85%">
+{html_radios name="project_type" options=$project_type_list selected=$_project_type style="vertical-align:middle;" separator=" "}
+</td>
+</tr>
+<tr>
+<th width="15%" align="left">予算タイプ</th>
+<td width="85%">
+<label><input type="radio" name="budget_type" value="0" {if $_budget_type == 0}checked="checked" {/if}style="vertical-align:middle;" />全て</label>
+{html_radios name="budget_type" options=$budget_type_list selected=$_budget_type style="vertical-align:middle;" separator=" "}
 </td>
 </tr>
 <tr>
 <th width="15%" align="left">表示対象</th>
 <td width="85%">
-{html_radios name="display_type" options=$display_type_list selected=$display_type style="vertical-align:middle;" separator=" "}
+{html_radios name="display_type" options=$display_type_list selected=$_display_type style="vertical-align:middle;" separator=" "}
 </td>
 </tr>
 <tr>
-<td colspan="2"><input src="../img/button_search.gif" name="searchbutton" type="image" class="send" alt="検索" width="63" height="22" border="0" value="search"></td>
+<td colspan="2">
+<input src="../img/button_search.gif" name="searchbutton" type="image" class="send" alt="検索" width="63" height="22" border="0" value="search">
+<input type="hidden" name="ret_type" value=1>
+<input type="hidden" name="type" value="{$_type}">
+</td>
 </tr>
 </table>
 <input type="hidden" name="page" value="1" >
@@ -97,7 +116,11 @@
 <!-- /div#tfoot -->
 </div>
 
-<a href="new/index.html"><img src="../img/button_newadd.gif" alt="新規追加"></a>
+{if $session.manhour.member.auth.project_new_}
+<a href="new/index.html?type={$_type}"><img src="../img/button_newadd.gif" alt="新規追加"></a>
+{/if}
+
+{*<!-- 一覧表示 -->*}
 <div id="topic-path">
 {if $total > 0 && $list}
 {$now_page}/{$last_page}ページ　{$total}件
@@ -105,6 +128,7 @@
 <!-- /div#topic-path -->
 </div>
 <br />
+
 <!--.....ページ送り..... -->
 <div id="topic-path">
 {if $pager.back}{$pager.back} | {/if}{if $pager.pages}{$pager.pages}{/if}{if $pager.next} | {$pager.next}{/if}
@@ -115,46 +139,73 @@
 <div id="TAttr">
 <table width="100%">
 <tr>
-<th><a href="?column=project_type{if $_column == 'project_type' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">タイプ{if $_column == 'project_type'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
-<th><a href="?column=id{if $_column == 'id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">ID{if $_column == 'id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
-<th><a href="?column=project_code{if $_column == 'project_code' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">PJコード{if $_column == 'project_code'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
-<th><a href="?column=name{if $_column == 'name' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">プロジェクト名{if $_column == 'name'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
-<th><a href="?column=client_id{if $_column == 'client_id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">顧客名{if $_column == 'client_id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
-<th><a href="?column=total_budget_manhour{if $_column == 'total_budget_manhour' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">総割当工数{if $_column == 'total_budget_manhour'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
-<th><a href="?column=total_budget{if $_column == 'total_budget' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">総予算{if $_column == 'total_budget'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
-<th><a href="?column=project_end_date{if $_column == 'project_end_date' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">開発終了日付{if $_column == 'project_end_date'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
-<th><a href="?column=end_date{if $_column == 'end_date' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">案件終了予定{if $_column == 'end_date'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
-<th><a href="?column=member_id{if $_column == 'member_id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$query_parameter}">担当営業{if $_column == 'member_id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?type={$_type}&ret_type=3&column=project_type{if $_column == 'project_type' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}">PJ<br />ﾀｲﾌﾟ{if $_column == 'project_type'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?type={$_type}&ret_type=3&column=id{if $_column == 'id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}">ID{if $_column == 'id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?type={$_type}&ret_type=3&column=project_code{if $_column == 'project_code' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}">PJコード{if $_column == 'project_code'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?type={$_type}&ret_type=3&column=name{if $_column == 'name' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}">プロジェクト名{if $_column == 'name'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?type={$_type}&ret_type=3&column=client_id{if $_column == 'client_id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}">顧客名{if $_column == 'client_id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?type={$_type}&ret_type=3&column=budget_type{if $_column == 'budget_type' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}">予算<br />ﾀｲﾌﾟ{if $_column == 'budget_type'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?type={$_type}&ret_type=3&column=total_budget{if $_column == 'total_budget' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}">総予算{if $_column == 'total_budget'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?type={$_type}&ret_type=3&column=leftover_budget{if $_column == 'leftover_budget' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}">残ｺｽﾄ<br />予算{if $_column == 'leftover_budget'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?type={$_type}&ret_type=3&column=leftover_budget_manhour{if $_column == 'leftover_budget_manhour' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}">残ｺｽﾄ<br />工数{if $_column == 'leftover_budget_manhour'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?type={$_type}&ret_type=3&column=project_end_date{if $_column == 'project_end_date' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}">開発終了日{if $_column == 'project_end_date'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?type={$_type}&ret_type=3&column=end_date{if $_column == 'end_date' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}">案件終了日{if $_column == 'end_date'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?type={$_type}&ret_type=3&column=member_id{if $_column == 'member_id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}">担当営業{if $_column == 'member_id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+{if $session.manhour.member.auth.project_edit_}
 <th>更新</th>
+{/if}
+{if $session.manhour.member.auth.project_delete_}
 <th>削除</th>
+{/if}
 </tr>
 
 <!-- アカウントリストを表示 -->
 {foreach from=$list key=project_key item=project_item}
 
-{if $project_item.delete_flg}
+{if $project_item.delete_flg}{*<!-- 削除時の背景色 -->*}
 <tr onmouseover="setPointer(this, {$item.id}, 'over', '#AAAAAA', '#CCFFCC', '#FFCC99');" onmouseout="setPointer(this, {$item.id}, 'out', '#AAAAAA', '#CCFFCC', '#FFCC99');" bgcolor="#AAAAAA">
-{else}
-{if $project_item.project_type==$smarty.const.PROJECT_TYPE_REMOVAL}
+{elseif $project_item.project_type==$smarty.const.PROJECT_TYPE_REMOVAL}{*<!-- 廃止時の背景色 -->*}
 <tr onmouseover="setPointer(this, {$item.id}, 'over', '#dddddd', '#CCFFCC', '#FFCC99');" onmouseout="setPointer(this, {$item.id}, 'out', '#dddddd', '#CCFFCC', '#FFCC99');" bgcolor="#dddddd">
-{else}
-<tr {if $project_item.project_type == $project_type_informal}bgcolor="#F5C5C5"{else}onmouseover="setPointer(this, {$project_item.id}, 'over', '#F5F5F5', '#CCFFCC', '#FFCC99');" onmouseout="setPointer(this, {$project_item.id}, 'out', '#F5F5F5', '#CCFFCC', '#FFCC99');" bgcolor="#F5F5F5"{/if}>
-{/if}
-
+{elseif $project_item.project_type==$smarty.const.PROJECT_TYPE_INFORMAL}{*<!-- 仮時の背景色 -->*}
+<tr bgcolor="#F5C5C5">
+{else}{*<!-- 通常の背景色 -->*}
+<tr onmouseover="setPointer(this, {$project_item.id}, 'over', '#F5F5F5', '#CCFFCC', '#FFCC99');" onmouseout="setPointer(this, {$project_item.id}, 'out', '#F5F5F5', '#CCFFCC', '#FFCC99');" bgcolor="#F5F5F5">
 {/if}
 
 <td class="cel_l" align="center" nowrap>{if $project_item.project_type==$smarty.const.PROJECT_TYPE_INFORMAL}仮{elseif $project_item.project_type==$smarty.const.PROJECT_TYPE_BACK}後{elseif $project_item.project_type==$smarty.const.PROJECT_TYPE_REMOVAL}廃{/if}</td>
 <td class="cel_l" nowrap>{$project_item.id}</td>
 <td class="cel_l" nowrap>{$project_item.project_code}</td>
-<td class="cel_l"><a href="../list/project?project_id={$project_item.id}">{$project_item.name}</a></td>
-<td class="cel_l" nowrap>{if $client_list[$project_item.client_id]}{$client_list[$project_item.client_id].name}{else}不明な顧客{/if}</td>
-<td class="cel_l" align="right" nowrap>{$project_item.total_budget_manhour}</td>
-<td class="cel_l" align="right" nowrap>{$project_item.total_budget|number_format}</td>
-<td class="cel_l" nowrap>{$project_item.project_end_date}</td>
-<td class="cel_l" nowrap>{$project_item.end_date}</td>
+<td class="cel_l">
+{if $session.manhour.member.auth.list_project}
+<a href="../list/project?project_id={$project_item.id}">{$project_item.name}</a>
+{else}
+{$project_item.name}
+{/if}
+</td>
+<td class="cel_l">{if $client_list[$project_item.client_id]}{$client_list[$project_item.client_id].name}{else}不明な顧客{/if}</td>
+<td class="cel_l" nowrap>{$budget_type_list[$project_item.budget_type]}</td>
+{*<!-- 総予算 -->*}
+{if $project_item.total_budget == NULL}<td class="cel_r" style="color: #AAAAAA;" nowrap>未設定</td>{*<!-- 総予算未設定 -->*}
+ {else}<td class="cel_r"  nowrap>{$project_item.total_budget|number_format}</td>{/if}
+{*<!-- 残予算 -->*}
+{if $project_item.budget_type != $smarty.const.BUDGET_TYPE_CONTENTS}<td class="cel_r" style="color: #AAAAAA;" nowrap>管理外</td>{*<!-- 新規開発以外 -->*}
+ {elseif $project_item.total_budget == NULL}<td class="cel_r" style="color: #AAAAAA;" nowrap>未設定</td>{*<!-- 総予算未設定 -->*}
+ {elseif $project_item.leftover_budget == NULL}<td class="cel_r" style="color: #AAAAAA;" nowrap>未集計</td>{*<!-- 使用済コスト工数未集計 -->*}
+ {else}<td class="cel_r" {if $project_item.leftover_budget < 0}style="color: #FF0000;"{/if} nowrap>{$project_item.leftover_budget|number_format}</td>{/if}
+{*<!-- 残コスト工数 -->*}
+{if $project_item.budget_type != $smarty.const.BUDGET_TYPE_CONTENTS}<td class="cel_r" style="color: #AAAAAA;" nowrap>管理外</td>{*<!-- 新規開発以外 -->*}
+ {elseif $project_item.total_budget == NULL}<td class="cel_r" style="color: #AAAAAA;" nowrap>未設定</td>{*<!-- 総予算未設定 -->*}
+ {elseif $project_item.leftover_budget_manhour == NULL}<td class="cel_r" style="color: #AAAAAA;" nowrap>未集計</td>{*<!-- 使用済コスト工数未集計 -->*}
+ {else}<td class="cel_r" {if $project_item.leftover_budget_manhour < 0}style="color: #FF0000;"{/if} nowrap>{$project_item.leftover_budget_manhour|number_format:2}</td>{/if}
+<td class="cel_l" nowrap>{$project_item.project_end_date|date_format:"%Y/%m/%d"}</td>
+<td class="cel_l" nowrap>{$project_item.end_date|date_format:"%Y/%m/%d"}</td>
 <td class="cel_l">{if $member_list[$project_item.member_id]}{$member_list[$project_item.member_id].name}{else}未指定{/if}</td>
-<td class="cel_l" nowrap>{if !$project_item.delete_flg}<a href="edit/index.html?id={$project_item.id}" id="edit">編集</a>{/if}</td>
-<td class="cel_l" nowrap>{if !$project_item.delete_flg}<a href="delete/confirm.html?id={$project_item.id}" id="del">削除</a><br/>{else if}削除済{/if}</td>
+{if $session.manhour.member.auth.project_edit_}
+<td class="cel_l" nowrap>{if !$project_item.delete_flg}<a href="edit/index.html?id={$project_item.id}&type={$_type}" id="edit">編集</a>{/if}</td>
+{/if}
+{if $session.manhour.member.auth.project_delete_}
+<td class="cel_l" nowrap>{if !$project_item.delete_flg}<a href="delete/confirm.html?id={$project_item.id}&type={$_type}" id="del">削除</a><br/>{else if}削除済{/if}</td>
+{/if}
 </tr>
 {/foreach}
 </table>

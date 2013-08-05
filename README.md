@@ -1,40 +1,40 @@
-##�V�X�e����
-WEB�H���Ǘ��V�X�e��(WEB Working Hours Management System)
+##システム名
+WEB工数管理システム(WEB Working Hours Management System)
 
-##�V�X�e���T�v
-��ƍH�����Ǘ�����V�X�e���ł��B  
-��Ǝ҂ɖ����̍H���ɂ��ēo�^���Ă��炢�܂��B  
-�Ј����̖����̍�Ə󋵂̊m�F���ł��܂��B  
-�v���W�F�N�g���̌��ʂ̍H���󋵂�TOTAL�̍�ƍH���̊m�F���ł��܂��B  
-
-
-##�h�L�������g
-####�����菇�ɂ���  
-�_�E�����[�h��̓�����\�z�̎菇�ɂ��ēZ�߂Ă���܂��B  
-�����́uSETTING.md�v�����m�F�������B  
-
-####���t�@�����X�ɂ���  
-���p�҂̕��Őݒ肪�K�v�ȃt�@�C����ȒP�ȃf�B���N�g���������Z�߂Ă���܂��B  
-�����́uREFERENCE.md�v�����m�F�������B  
-
-####�g�����ɂ���  
-�ȒP�ɂł����uWEB�H���Ǘ��V�X�e��(WEB Working Hours Management System)�v�̎g������Z�߂Ă���܂��B  
-�����́uHELP.md�v�����m�F�������B  
+##システム概要
+作業工数を管理するシステムです。  
+作業者に毎日の工数について登録してもらいます。  
+社員毎の毎月の作業状況の確認ができます。  
+プロジェクト毎の月別の工数状況やTOTALの作業工数の確認ができます。  
 
 
-##���C�Z���X
-�{�v���O������ GPL(General Public License) �Ɋ�Â��z�z����܂��B  
-�����́uLICENSE.md�v��K�����m�F���������B  
+##ドキュメント
+####導入手順について  
+ダウンロード後の動作環境構築の手順について纏めてあります。  
+同梱の「SETTING.md」をご確認下さい。  
+
+####リファレンスについて  
+利用者の方で設定が必要なファイルや簡単なディレクトリ説明が纏めてあります。  
+同梱の「REFERENCE.md」をご確認下さい。  
+
+####使い方について  
+簡単にですが「WEB工数管理システム(WEB Working Hours Management System)」の使い方を纏めてあります。  
+同梱の「HELP.md」をご確認下さい。  
+
+
+##ライセンス
+本プログラムは GPL(General Public License) に基づき配布されます。  
+同梱の「LICENSE.md」を必ずご確認ください。  
   
-�v���O�����̃\�[�X���_�E�����[�h����ɂ́A�uGNU ��ʌ��O���p�����_�񏑁v ��  
-���ǂ݂��������A���ӂ��Ă����������Ƃ������ƂȂ�܂��B  
+プログラムのソースをダウンロードするには、「GNU 一般公衆利用許諾契約書」 を  
+お読みいただき、同意していただくことが条件となります。  
   
-�uGNU ��ʌ��O���p�����_�񏑁v  
+「GNU 一般公衆利用許諾契約書」  
 <http://www.opensource.jp/gpl/gpl.ja.txt>  
 
 
-##���₢���킹��
-������Ѓ}�C�e�B�[�N���t�g�@�y[���HP](http://www.m-craft.com/top.html)�z  
+##お問い合わせ先
+株式会社マイティークラフト　【[会社HP](http://www.m-craft.com/top.html)】  
 MAIL:<info-whm@m-craft.com>   
 
 

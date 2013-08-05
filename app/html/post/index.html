@@ -40,7 +40,9 @@ ID：{$_id} を修正しました。
 </div>
 
 {*<!-- 新規追加ボタン -->*}
+{if $session.manhour.member.auth.post_edit_}
 <div id="matches"><a href="edit/index.html"><img src="../img/button_newadd.gif" alt="新規追加"></a></div>
+{/if}
 <br />
 
 {*<!-- 一覧 -->*}
@@ -54,7 +56,9 @@ ID：{$_id} を修正しました。
 <th width="100px">部署タイプ</th>
 <th width="200px">部署名</th>
 <th width="80px">削除</th>
+{if $session.manhour.member.auth.post_edit_}
 <th width="80px">編集</th>
+{/if}
 </tr>
 
 {foreach from=$post_list key=post_key item=post_data}
@@ -67,7 +71,9 @@ ID：{$_id} を修正しました。
 <td class="cel_l" nowrap>{$post_type[$post_data.type]}</td>
 <td class="cel_l" nowrap>{$post_data.name}</td>
 <td align="center" nowrap>{if $post_data.delete_flg}使用不可{/if}
+{if $session.manhour.member.auth.post_edit_}
 <td align="center" nowrap><a href="edit/index.html?id={$post_data.id}" id="edit">編集</a></td>
+{/if}
 </td>
 </tr>
 {/foreach}

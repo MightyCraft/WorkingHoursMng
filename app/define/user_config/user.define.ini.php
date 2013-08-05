@@ -20,6 +20,15 @@ define('USER_SYSTEM_TITLE', 'WEB工数管理システム');
 // 部署マスタ関連
 define('USER_POST_NAME_MAX',		64);		// 部署名上限文字数
 
+// 権限マスタ関連
+define('USER_AUTHORITY_NAME_MAX',	64);		// 権限名上限文字数
+
+// 社員タイプマスタ関連
+define('USER_MEMBER_TYPE_NAME_MAX',	64);		// 社員タイプ名上限文字数
+
+// 社員コストマスタ関連
+define('USER_MEMBER_COST_NAME_MAX',	64);		// 社員コスト名上限文字数
+
 // 社員マスタ関連
 define('USER_MEMBER_CODE_MAX',		16);				// 社員コード上限文字数
 define('USER_MEMBER_CODE_MIN',		1);					// 　　　　　下限文字数
@@ -27,7 +36,7 @@ define('USER_MEMBER_CODE_FORMAT',	'/^[0-9]+$/');		// 　　　　　書式（正
 define('USER_MEMBER_NAME_MAX',		32);		// 社員名上限文字数
 define('USER_MEMBER_PASSWORD_MAX',	16);		// パスワード上限文字数
 
-// クライアント名
+// クライアントマスタ関連
 define('USER_CLIENT_NAME_MAX',		64);		// クライアント名上限文字数
 define('USER_CLIENT_MEMO_MAX',		5000);		// 備考上限文字数
 
@@ -36,9 +45,10 @@ define('USER_PROJECT_CODE_MAX',			10);																// プロジェクトコ�
 define('USER_PROJECT_CODE_MIN',			10);																// 　　　　　　　　　下限文字数
 define('USER_PROJECT_CODE_FORMAT',		'/^[a-zA-Z0-9\-]+$/');												// 　　　　　　　　　書式（正規表現/不要時は''をセット）
 define('USER_PROJECT_CODE_AUTO_CREATE',	'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-');	// 　　　　　　　　　自動コード生成（仮コード時に使用）
-define('USER_PROJECT_NAME_MAX',		256);		// プロジェクト名上限文字数
-define('USER_PROJECT_NOUKI_MAX',	20);		// 納期上限文字数
-define('USER_PROJECT_MEMO_MAX',		5000);		// 備考上限文字数
+define('USER_PROJECT_NAME_MAX',			256);		// プロジェクト名上限文字数
+define('USER_PROJECT_NOUKI_MAX',		20);	// 納期上限文字数
+define('USER_PROJECT_MEMO_MAX',			5000);	// 備考上限文字数
+define('USER_PROJECT_COST_RATE_BASE',	60);	// 原価率既定値
 
 // 工数データ関連
 define('USER_MANHOUR_MEMO_MAX',		128);		// 備考上限文字数
@@ -62,12 +72,10 @@ define('USER_CACHE_LOGIN_STATE',		60*60*24*30);
 
 
 /**
- * 総予算から総割当工数の算出する計算式
- * ・eval関数を使用して計算します。
- * ・「%1$d」の位置にプロジェクトマスタの総予算がセットされます
- * ・小数点以下は四捨五入されます
+ * 1日あたりの労働時間
+ * ・残業時間の算出にします
  */
-define('USER_TOTAL_BUDGET_MANHOUR_EQUATION', '%1$d / 10');
+define('USER_WORKING_HOURS_DAY', 8);
 
 
 ?>

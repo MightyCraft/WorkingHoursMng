@@ -29,11 +29,10 @@ class MessageManager
 		if (NULL == $s)
 		{
 			$s = new MessageManager();
+			// この時点で定義ファイル生成
+			self::buildMessageDefine();
+			require_once(self::$php_path);
 		}
-
-		// この時点で定義ファイル生成
-		self::buildMessageDefine();
-		require_once(self::$php_path);
 
 		return $s;
 	}
@@ -70,7 +69,7 @@ class MessageManager
 		$args = func_get_args();
 		array_shift($args);	// 先頭のメッセージIDを除外
 
-		return $this->vsprintfMessage($id, $args);
+		return $this->vsprintfMessageWithIndex($id, 0, $args);
 	}
 
 	/**
@@ -82,14 +81,52 @@ class MessageManager
 	 */
 	public function vsprintfMessage($id, $args)
 	{
+		return $this->vsprintfMessageWithIndex($id, 0, $args);
+	}
+
+	/**
+	 * インデックスを指定してメッセージ文字列を取得します
+	 *
+	 * @param int		$id			メッセージID
+	 * @param int		$index		メッセージインデックス
+	 * @param mixed		$args		可変長引数
+	 * @return object		インスタンス
+	 */
+	public function sprintfMessageWithIndex($id, $index)
+	{
+		$args = func_get_args();
+		array_shift($args);	// メッセージIDを除外
+		array_shift($args);	// メッセージインデックスを除外
+
+		return $this->vsprintfMessageWithIndex($id, $index, $args);
+	}
+
+	/**
+	 * メッセージ文字列を取得します
+	 *
+	 * @param int		$id			メッセージID
+	 * @param array		$args		配列
+	 * @return object		インスタンス
+	 */
+	public function vsprintfMessageWithIndex($id, $index, $args)
+	{
 		if(!isset(MessageDefine::$messages[$id]))
 		{
 			throw new Exception('MessageManager::getMessage メッセージIDの指定が不正です');
 		}
+		if(!isset(MessageDefine::$messages[$id][$index]))
+		{
+			throw new Exception('MessageManager::getMessage メッセージインデックスの指定が不正です');
+		}
 
-		$message = MessageDefine::$messages[$id];
+		$message = MessageDefine::$messages[$id][$index];
 
-		return vsprintf($message, $args);
+		if(0 < count($args))
+		{
+			return vsprintf($message, $args);
+		}
+
+		return $message;
 	}
 
 	/**
@@ -121,7 +158,7 @@ class MessageManager
 			}
 		}
 		if(!$regen_flg) return;
-		
+
 		$php_dir = dirname($php_path);
 		if (!file_exists($php_dir))	{mkdir($php_dir, 0777, true);	chmod($php_dir, 0777);}
 
@@ -139,22 +176,30 @@ class MessageManager
 			while(($data = self::fgetcsv_reg($fp, 0)) !== FALSE)
 			{
 				$row++;
-				$total++;
 				$num = count($data);
-				if($num != 2)
+				if($num < 2)
+				{
+				//	throw new Exception("ERROR! : {$csv_path} {$num} fields in line {$csv_path}({$row})\n");
+					// 非有効行はスキップとする
+					continue;
+				}
+				$total++;
+				$label = array_shift($data);
+
+				if(empty($label))
 				{
 				//	throw new Exception("ERROR! : {$csv_path} {$num} fields in line {$csv_path}({$row})\n");
 					// 非有効行はスキップとする
 					continue;
 				}
 
-				if(array_key_exists($data[0], $messages))
+				if(array_key_exists($label, $messages))
 				{
 					throw new Exception("ERROR! : {$data[0]} duplicate in line {$csv_path}({$row})\n");
 				}
 
-				$labels[$total] = $data[0];
-				$messages[$data[0]] = $data[1];
+				$labels[$total] = $label;
+				$messages[$label] = $data;
 			}
 			fclose($fp);
 		}
@@ -173,12 +218,18 @@ class MessageManager
 		}
 		$output .= "\n";
 		$output .= "\tstatic public \$messages = array(\n";
-		foreach($messages as $label => $message)
+		foreach($messages as $label => $message_array)
 		{
 			$label = mb_convert_encoding($label, "utf8", "sjis");
-			$message = mb_convert_encoding($message, "utf8", "sjis");
+			$message_cols = array();
+			foreach($message_array as $message)
+			{
+				$message = mb_convert_encoding($message, "utf8", "sjis");
+				$message_cols[] = "'{$message}'";
+			}
+			$message = implode(', ', $message_cols);
 
-			$output .= "\t\tself::{$label} => '{$message}',\n";
+			$output .= "\t\tself::{$label} => array({$message}),\n";
 		}
 		$output .= "\t);\n";
 		$output .= "}\n";
@@ -207,7 +258,7 @@ class MessageManager
 		//	テンポラリファイルをリネーム
 		rename($tmp, $filename);
 	}
-	
+
 	/**
 	 * ファイルポインタから行を取得し、CSVフィールドを処理する
 	 * @param resource handle

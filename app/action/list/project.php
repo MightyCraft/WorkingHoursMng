@@ -13,7 +13,7 @@ class _list_project extends PostAndGetScene
 	var $_date_Month;		// 選択月
 	var $_project_id;				// プロジェクト選択の指定プロジェクトID
 	var $_project_id_keyword;
-	
+
 	// 画面表示用
 	var $set_time;		// プルダウン用選択月
 
@@ -26,7 +26,6 @@ class _list_project extends PostAndGetScene
 	var $total_data;		// 各工数集計データ
 	var $weekly_data;		// 指定プロジェクトの週別の全工数データ
 	var $weekends_holidays;	// カレンダー情報
-	var $auth_manhour_flg;	// 表示権限フラグ
 
 	var $obj_client;	// クライアント
 	var $obj_project;	// プロジェクト
@@ -80,10 +79,10 @@ class _list_project extends PostAndGetScene
 				$this->_project_id	= 0;
 			}
 		}
-		
+
 		// 検索用プルダウンリスト生成
 		$this->project_list_by_client_id = $this->obj_project->getDataAllAddClient();
-		
+
 		// 表示年月設定　TODO: ブラッシュアップ
 		$this->set_time		= $this->_date_Year . '-' . $this->_date_Month . '-01';
 
@@ -117,9 +116,6 @@ class _list_project extends PostAndGetScene
 				}
 			}
 		}
-
-		// 残工数、総工数の参照権限の取得
-		$this->auth_manhour_flg	= checkAuthTotalManhour($_SESSION['manhour']['member']['auth_lv'], $_SESSION['manhour']['member']['post']);
 
 		// プロジェクトID
 		$this->project_id = $this->_project_id;

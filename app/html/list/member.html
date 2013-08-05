@@ -34,7 +34,7 @@
 <!--.....メインコンテンツ.....-->
 <div id="content">
 <div id="content-main">
-<h2>工数照会画面</h2>
+<h2>社員毎作業時間照会</h2>
 
 {include file="common/_list_search.html" _search_box='member'}
 
@@ -53,7 +53,7 @@
 <table border="1">
 {* 項目名 *}
 <tr>
-{if $self_flg}
+{if $self_flg && $session.manhour.member.auth.list_member_change_pj_}
 <th nowrap>PJ一括変更</th>
 {/if}
 <th nowrap>顧客名</th>
@@ -62,58 +62,39 @@
 {foreach from=$weekends_holidays key=calendar_key item=calendar_data}
 {strip}
 <th {if $calendar_data == 1}id="blue"{elseif ($calendar_data == 2) || ($calendar_data == 3)}id="red"{/if} nowrap>
-{if $self_flg}<a href="../input/index.html?work_year={$_date_Year}&work_month={$_date_Month}&work_day={$calendar_key}">{$calendar_key}</a>{else}{$calendar_key}{/if}
+{if $self_flg && $session.manhour.member.auth.input_}<a href="../input/index.html?work_year={$_date_Year}&work_month={$_date_Month}&work_day={$calendar_key}">{$calendar_key}</a>{else}{$calendar_key}{/if}
 </th>
 {/strip}
 {/foreach}
 <th nowrap>合計</th>
-{if $auth_manhour_flg}
-<th nowrap>総残工数</th>
-<th nowrap>総割当工数</th>
-{/if}
 </tr>
 
 {* 工数情報(8時間越えたら青字/総割り当て工数は権限付き) *}
 {foreach from=$monhour_data key=project_key item=project_data}
 <tr>
-{if $self_flg}
+{if $self_flg && $session.manhour.member.auth.list_member_change_pj_}
  {if !empty($project_data.project_id)}<td nowrap style="text-align:center;"><a href="member/change_pj/index.html?befor_project_id={$project_data.project_id}&date_Year={$_date_Year}&date_Month={$_date_Month}">確認</a></td>
  {else}<td style="text-align:center;">-</td>{/if}
 {/if}
 <td nowrap>{$project_data.client_name}</td>
 <td nowrap>{$project_data.project_code}</td>
-<td nowrap>{if !empty($project_data.project_id)}<a href="project?project_id={$project_data.project_id}&date_Year={$_date_Year}&date_Month={$_date_Month}">{$project_data.project_name}</a>{else}{$project_data.project_name}{/if}</td>
+<td nowrap>{if !empty($project_data.project_id) && $session.manhour.member.auth.list_project}<a href="project?project_id={$project_data.project_id}&date_Year={$_date_Year}&date_Month={$_date_Month}">{$project_data.project_name}</a>{else}{$project_data.project_name}{/if}</td>
  {foreach from=$weekends_holidays key=calendar_key item=calendar_data}
-<td nowrap {if $project_data[$calendar_key].man_hour > 8}style="color: #0000FF;"{/if}>{if !empty($project_data[$calendar_key].man_hour)}{$project_data[$calendar_key].man_hour}{/if}</td>
+<td nowrap style="text-align:right;" {if $project_data[$calendar_key].man_hour > 8}style="color: #0000FF;"{/if}>{if !empty($project_data[$calendar_key].man_hour)}{$project_data[$calendar_key].man_hour|number_format:2}{/if}</td>
  {/foreach}
-<td nowrap style="text-align:right;">{$project_data.total_manhour}</td>
-{if $auth_manhour_flg}
- {* 総割当工数が未設定の時：グレーで未設定表示、プロジェクトマスタ無しの時：グレーで「-」表示 *}
- {if ($project_data.total_budget_manhour==false) || ($project_data.total_budget_manhour=='0')}
-  {assign var=leftover_color value='color: #AAAAAA;'}
-  {assign var=total_color value='color: #AAAAAA;'}
- {else}
-  {if (int)$project_data.leftover_budget_manhour_now < 0}{assign var=leftover_color value='color: #FF0000;'}{else}{assign var=leftover_color value=''}{/if}
-  {assign var=total_color value=''}
- {/if}
- <td nowrap style="text-align:right; {$leftover_color}">{if $project_data.total_budget_manhour=='0'}未設定 {elseif $project_data.total_budget_manhour== false}- {else}{$project_data.leftover_budget_manhour_now}{/if}</td>
- <td nowrap style="text-align:right;{$total_color}">{if $project_data.total_budget_manhour=='0'}未設定 {elseif $project_data.total_budget_manhour==false}- {else}{$project_data.total_budget_manhour}{/if}</td>
-{/if}
+<td nowrap style="text-align:right;">{$project_data.total_manhour|number_format:2}</td>
 </tr>
 {/foreach}
 
 {* 縦合計行 *}
 <tr>
-{if $self_flg}<td></td>{/if}
+{if $self_flg && $session.manhour.member.auth.input_}<td></td>{/if}
 <td></td><td></td>
 <td style="text-align: right">【日計】</td>
  {foreach from=$weekends_holidays key=calendar_key item=calendar_data}
-<td nowrap {if $daily_total_data[$calendar_key].man_hour > 8}style="color: #0000FF;"{/if}>{if !empty($daily_total_data[$calendar_key].man_hour)}{$daily_total_data[$calendar_key].man_hour}{else}0{/if}</td>
+<td nowrap style="text-align:right;" {if $daily_total_data[$calendar_key].man_hour > 8}style="color: #0000FF;"{/if}>{if !empty($daily_total_data[$calendar_key].man_hour)}{$daily_total_data[$calendar_key].man_hour|number_format:2}{else}0.00{/if}</td>
  {/foreach}
-<td nowrap style="text-align:right;">{$daily_total_data.total_man_hour}</td>
-{if $auth_manhour_flg}
-<td nowrap colspan="2">（上記は案件全体/全期間の合計値です）</td>
-{/if}
+<td nowrap style="text-align:right;">{$daily_total_data.total_man_hour|number_format:2}</td>
 </tr>
 </table>
 <!-- /div#TAttr -->

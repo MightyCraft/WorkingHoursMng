@@ -70,7 +70,7 @@ function formProjectSubmit() {
 {/if}
 <tr>
 <th class="cel_r" style="width: 200px">PJコード</th>
-<td class="cel_l"><input type="text" name="project_code" style="width:300px" value="{$_project_code}" maxlength="{$smarty.const.USER_PROJECT_CODE_MAX}" {if $project_type_informal == $_project_type} disabled{/if}>{$guide_message_project_code}<span style="font-size:10px;color:red;">※仮登録コードで空白の場合はランダムに生成</span></td>
+<td class="cel_l"><input type="text" name="project_code" style="width:300px" value="{$_project_code}" maxlength="{$smarty.const.USER_PROJECT_CODE_MAX}" {if $project_type_informal == $_project_type} disabled{/if}>{$guide_message_project_code}<span style="font-size:10px;color: #0000FF;">※「{$project_type_name_informal}」で未入力の場合は仮PJコードの自動生成を行います</span></td>
 </tr>
 <tr>
 <th class="cel_r" style="width: 200px">プロジェクト名</th>
@@ -89,25 +89,16 @@ function formProjectSubmit() {
 </td>
 </tr>
 <tr>
-<th class="cel_r" style="width: 200px">PJコードタイプ</th>
+<th class="cel_r" style="width: 200px">プロジェクトタイプ</th>
 <td class="cel_l">
 <select name="project_type" onchange="changeProjectCodeDisabled(this);">
-{foreach from=$array_project_type item=array_project_type_item key=array_project_type_key}
-   <option value="{$array_project_type_key}"{if $array_project_type_key == $_project_type} selected{/if}>{$array_project_type_item}</option>
+{foreach from=$project_type_list item=project_type_list_item key=project_type_list_key}
+   <option value="{$project_type_list_key}"{if $project_type_list_key == $_project_type} selected{/if}>{$project_type_list_item}</option>
 {foreachelse}
 {/foreach}
 </select>
 </td>
 </tr>
-<tr>
-<th class="cel_r" style="width: 200px">総予算</th>
-<td class="cel_l">￥<input type="text" name="total_budget" style="width:100px" value="{$_total_budget}" maxlength="255">（半角数字）</td>
-</tr>
-<tr>
-<th class="cel_r" style="width: 200px">総割当工数</th>
-<td class="cel_l">{if $_total_budget_manhour}{$_total_budget_manhour}{else}0{/if}時間　（自動計算）</td>
-</tr>
-
 <tr>
 <th class="cel_r" style="width: 200px">開発開始日付</th>
 <td class="cel_l">
@@ -166,7 +157,7 @@ function formProjectSubmit() {
 {/section}
 </select>月
 &nbsp;&nbsp;未定<input type="checkbox" name="pending_end_date" value="1" onclick="changeEndDateDisabled(this);"{if $_pending_end_date} checked{/if}>
-　（翌月以降が終了案件扱いになります）
+　<span style="font-size:10px;color: #0000FF;">※翌月以降が終了案件扱いになります</span>
 </td>
 </tr>
 
@@ -176,8 +167,8 @@ function formProjectSubmit() {
 </tr>
 
 <tr>
-<th class="cel_r" style="width: 200px">工数入力時の備考入力必須</th>
-<td class="cel_l"><input type="checkbox" name="memo_flg" value="1" {if $_memo_flg}checked{/if}>（備考が必須な場合にチェックを入れてください）</td>
+<th class="cel_r" style="width: 200px">工数入力時備考必須入力</th>
+<td class="cel_l"><input type="checkbox" name="memo_flg" value="1" {if $_memo_flg}checked{/if}>　<span style="font-size:10px;color: #0000FF;">※工数入力時に備考入力が必須な場合にチェックを入れてください</span></td>
 </tr>
 
 <tr>
@@ -189,9 +180,60 @@ function formProjectSubmit() {
    <option value="{$member_list_item.id}"{if $member_list_item.id == $_member_id} selected{/if}>{$member_list_item.name}</option>
 {foreachelse}
 {/foreach}
+</select>（未選択可能）
 </td>
 </tr>
+</table>
+<br />
 
+■コスト管理関連<br />
+・「総予算」を設定する事でコスト管理が可能になります。<br />
+・残工数や残予算の管理は「予算タイプ：{$budget_type_name_contents}」のみ行えます。<br />
+<table width="100%">
+<th class="cel_r" style="width: 200px">予算タイプ</th>
+<td class="cel_l">
+<select name="budget_type">
+{foreach from=$budget_type_list item=budget_type_list_item key=budget_type_list_key}
+   <option value="{$budget_type_list_key}"{if $budget_type_list_key == $_budget_type} selected{/if}>{$budget_type_list_item}</option>
+{foreachelse}
+{/foreach}
+</select>
+</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">総予算</th>
+<td class="cel_l">￥<input type="text" name="total_budget" style="width:100px" value="{$_total_budget}" maxlength="255">（半角数字、小数不可）</td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">コスト管理外予算</th>
+<td class="cel_l">￥<input type="text" name="exclusion_budget" style="width:100px" value="{$_exclusion_budget}" maxlength="255">（半角数字、小数不可）　<span style="font-size:10px;color: #0000FF;">※外注費など総予算内でコスト計算に使用できない金額を設定します</span></td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">原価率</th>
+<td class="cel_l"><input type="text" name="cost_rate" style="width:100px" value="{$_cost_rate}" maxlength="255">％（半角数字、小数不可）　<span style="font-size:10px;color: #0000FF;">※既定値は「{$smarty.const.USER_PROJECT_COST_RATE_BASE}%」です</span></td>
+</tr>
+<tr>
+<th class="cel_r" style="width: 200px">基準社員コストID	</th>
+<td class="cel_l">
+<select name="mst_member_cost_id">
+   <option value="0">▼選択</option>
+{foreach from=$member_cost_list item=member_cost_list_item key=member_cost_list_key}
+   <option value="{$member_cost_list_item.id}"{if $member_cost_list_item.id == $_mst_member_cost_id} selected{/if}>{$member_cost_list_item.name}（\{$member_cost_list_item.cost}）</option>
+{foreachelse}
+{/foreach}
+</select>（選択必須）
+</td>
+</tr>
+<tr><th class="cel_r" style="width: 200px" rowspan="3">コスト関連項目（自動計算）</th>
+<td class="cel_l">コスト予算：{if $_cost_budget == NULL}未設定 {else}￥{$_cost_budget|number_format}{/if}　<span style="font-size:10px;color: #0000FF;">※総予算、コスト管理外予算、原価率より計算します</span></td></tr>
+<tr><td class="cel_l">総割当コスト工数：{if $_total_cost_manhour == NULL}未設定{else}{$_total_cost_manhour|number_format}時間{/if}　<span style="font-size:10px;color: #0000FF;">※コスト予算、基準社員コストIDより計算します</span></td></tr>
+<tr><td class="cel_l">使用済コスト工数：{if $_use_cost_manhour == NULL}未集計{else}{$_use_cost_manhour|number_format}時間{/if}　<span style="font-size:10px;color: #0000FF;">※日次集計で工数データより集計します</span></td></tr>
+
+</table>
+<br />
+
+■備考<br />
+<table width="100%">
 <tr>
 <th class="cel_r" style="width: 200px">備考</th>
 <td class="cel_l">
@@ -203,7 +245,15 @@ function formProjectSubmit() {
 </table>
  <!-- /div#TAttr -->
 </div>
-<input type="image" border="0" name="imageField" src="../../img/button_confirm.gif" alt="確認" class="send" onclick="formProjectSubmit();return;">
+
+<table border="0">
+<tr valign="top">
+<td><a href="index.html?type={$_type}"><img src="../img/button_back.gif" alt="戻る"></a></td>
+<td><input type="image" border="0" name="imageField" src="../../img/button_confirm.gif" alt="確認" class="send" onclick="formProjectSubmit();return;"></td>
+</tr>
+</table>
+<input type="hidden" name="type" value="{$_type}">
+
 </form>
 {literal}
 <script type="text/javascript">

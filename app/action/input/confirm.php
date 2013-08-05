@@ -157,6 +157,11 @@ class _input_confirm extends PostScene
 				{
 					$errors['hour'] = 'over';
 				}
+				// 工数範囲チェック 少数桁数2桁を超えていないか？
+				if(!isNumWithDecimal($this->_man_hour[$key],2))
+				{
+					$errors['hour'] = 'decimal';
+				}
 
 				// 備考チェック（入力があった場合は最大文字数以内がチェック）
 				if ($this->_memo[$key] != '')
@@ -363,7 +368,11 @@ class _input_confirm extends PostScene
 			{
 				if($errors['hour'] == 'over')
 				{
-					$error_msg['hour'] = '時間入力値には0以上25未満の値をご入力して下さい。';
+					$error_msg['hour'] = '時間入力値には0以上24以下の値を入力して下さい。';
+				}
+				if($errors['hour'] == 'decimal')
+				{
+					$error_msg['hour'] = '時間入力値には少数桁が2桁以内の値を入力して下さい。';
 				}
 			}
 

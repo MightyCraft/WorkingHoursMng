@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$smarty.const.USER_SYSTEM_TITLE}</title>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta name="copyright" content="(C) Mighty Craft, Inc." />
+<link rel="stylesheet" type="text/css" href="../../../css/import.css" media="all" />
+</head>
+<body>
+
+<div id="container">
+
+{include file="common/_header.html"}
+
+{*<!--.....メインコンテンツ.....-->*}
+<div id="content">
+<div id="content-main">
+<h2>社員別作業時間集計</h2>
+<br />
+
+{*<!-- エラーメッセージ -->*}
+{if $_error_msg == 'download_error'}
+<div id="matches" style="color: #FF6060;">
+ダウンロードに失敗しました。
+</div>
+{/if}
+
+<form name="search" method="post" action="index">
+
+{* 条件 *}
+<div id="thead">
+<div>
+<!-- /#thead div -->
+</div>
+<!-- /div#thead -->
+</div>
+
+<div id="tbody">
+<div>
+<table width="100%">
+<tr>
+<th align="left" width="18%">年月</th>
+<td>{html_select_date_time_plus prefix='date_' time=$smarty.now|date_format:"%D" start_year='-5' month_format='%m' display_days=false field_order='YMD' field_separator='／' time_format=$set_time}</td>
+</tr>
+<tr>
+<td colspan="2"><input src="../../../img/button_search.gif" name="searchbutton" type="image" class="send" alt="検索" width="63" height="22" border="0" value="search"></td>
+</tr>
+</table>
+<!-- /#tbody div -->
+</div>
+<!-- /div#tbody -->
+</div>
+
+<div id=tfoot>
+<div>
+<!-- /#tfoot div -->
+</div>
+<!-- /div#tfoot -->
+</div>
+
+{* エラーメッセージ *}
+{if isset($_error)}
+<br /><br />
+<span id="matches"  style="color: #ff9090;">{$_error}</span>
+{/if}
+</form>
+
+
+{* 処理 *}
+{if $manhour_list}
+{if $searched_Year && $searched_Month}
+<form name="search" method="post" action="download">
+<input type="image"  name="imageField" src="../../../img/button_dl.gif" alt="ダウンロード" class="send"/>
+<input type="hidden"  name="searched_Year" value="{$searched_Year}"/>
+<input type="hidden"  name="searched_Month" value="{$searched_Month}"/>
+<input type="hidden"  name="column" value="{$_column}"/>
+<input type="hidden"  name="order" value="{$_order}"/>
+</form>
+{/if}
+<div style="padding-top:20px;">
+<div id="matches">{$searched_Year}年{$searched_Month}月 一覧</div>
+<br/>
+</div>
+
+<div align="left" style = "width:40%;">
+
+<div id="topic-path">
+{if $total > 0 && $manhour_list}
+{$now_page}/{$last_page}ページ　{$total}件
+{/if}
+<!-- /div#topic-path -->
+</div>
+<br />
+<!--.....ページ送り..... -->
+<div id="topic-path">
+{if $pager.back}{$pager.back} | {/if}{if $pager.pages}{$pager.pages}{/if}{if $pager.next} | {$pager.next}{/if}
+<!-- /div#topic-path -->
+</div>
+
+{* 一覧 *}
+<div id="TAttr" >
+<table width="100%">
+<tr>
+<th><a href="?column=id{if $_column == 'id' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$add_parameter}">ID{if $_column == 'id'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=name{if $_column == 'name' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$add_parameter}">社員名{if $_column == 'name'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=total{if $_column == 'total' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$add_parameter}">総作業時間{if $_column == 'total'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+<th><a href="?column=over{if $_column == 'over' && $_order == 'ASC'}&order=DESC{else}&order=ASC{/if}{$add_parameter}">内残業時間{if $_column == 'over'}{if $_order == 'ASC'}▲{else}▼{/if}{/if}</a></th>
+</tr>
+
+<!-- アカウントリストを表示 -->
+{foreach from=$manhour_list item=manhour_item}
+<tr>
+<td class="cel_r" nowrap bgcolor="#F5F5F5" width="10%">{$manhour_item.id}</td>
+<td class="cel_l" nowrap bgcolor="#F5F5F5" width="60%">
+{if $session.manhour.member.auth.list_member}
+<a href="../list/member?member_id={$manhour_item.id}&date_Year={$searched_Year}&date_Month={$searched_Month}">{$manhour_item.name}</a>
+{else}
+{$manhour_item.name}
+{/if}
+</td>
+<td class="cel_r" nowrap bgcolor="#F5F5F5"  width="15%">{$manhour_item.total|number_format:2}</td>
+<td class="cel_r" nowrap bgcolor="#F5F5F5"  width="15%">{$manhour_item.over|number_format:2}</td>
+</tr>
+{/foreach}
+</table>
+<!-- /div#TAttr -->
+</div>
+<!--.....ページ送り..... -->
+<div id="topic-path">
+{if $pager.back}{$pager.back} | {/if}{if $pager.pages}{$pager.pages}{/if}{if $pager.next} | {$pager.next}{/if}
+<!-- /div#topic-path -->
+</div>
+
+</div>
+{else}
+<div style="color:#ff0000;padding-top:20px;">社員別工数情報を取得できませんでした。</div>
+{/if}
+
+<!-- /div#content-main -->
+</div>
+
+{include file="common/_footer.html"}
+
+<!-- /div#content -->
+</div>
+<!-- /div#container -->
+</div>
+
+</body>
+</html>

@@ -80,8 +80,8 @@ class _input_index extends PostAndGetScene
 			if (empty($this->_work_year) || empty($this->_work_month) || empty($this->_work_day))
 			{
 				$this->_work_year	= date('Y');
-				$this->_work_month	= date('m');
-				$this->_work_day	= date('d');
+				$this->_work_month	= date('n');
+				$this->_work_day	= date('j');
 			}
 		}
 
@@ -91,8 +91,8 @@ class _input_index extends PostAndGetScene
 		{
 			// 編集日付エラー時は当日日付を強制セット
 			$this->_work_year	= date('Y');
-			$this->_work_month	= date('m');
-			$this->_work_day	= date('d');
+			$this->_work_month	= date('n');
+			$this->_work_day	= date('j');
 
 			$this->session_error_flg	= true;		// SESSIONから取得の時は取得解除
 			$this->_ref_flg				= 0;		// 引用指定があった場合は引用解除
@@ -109,8 +109,8 @@ class _input_index extends PostAndGetScene
 		{
 			// 引用日付が未設定orエラーは当日日付を初期値セット
 			$this->_ref_year	= date('Y');
-			$this->_ref_month	= date('m');
-			$this->_ref_day		= date('d');
+			$this->_ref_month	= date('n');
+			$this->_ref_day		= date('j');
 
 			// 引用日付で引用表示を行う時はエラー処理
 			if (($this->_ref_flg) && ($this->_ref_type == 2))
@@ -127,8 +127,8 @@ class _input_index extends PostAndGetScene
 			// 引用遷移や編集中の遷移以外(=編集日付指定遷移の時)は引用情報をリセット
 			$this->_ref_type = 1;
 			$this->_ref_year	= date('Y');
-			$this->_ref_month	= date('m');
-			$this->_ref_day		= date('d');
+			$this->_ref_month	= date('n');
+			$this->_ref_day		= date('j');
 		}
 
 	}
